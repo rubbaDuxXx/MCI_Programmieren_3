@@ -1,0 +1,13 @@
+#include "mcigraph.hpp"
+
+using namespace std;
+
+int main(int argc, char *argv[]) {
+  ___MCILOOPSTART___
+
+    draw_rect(200, 300, 200, 100);
+
+  ___MCILOOPEND___
+      
+  return 0;
+}

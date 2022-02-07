@@ -1,0 +1,44 @@
+#    -*- mode: org -*-
+
+
+Archived entries from file /home/paethon/Dropbox/20_20_ss/programmieren_3/slides/slides_02-strukturen/slides_02.org
+
+
+* Rückgabe von Strukturen von Funktionen --- Beispiel
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2020-03-06 Fri 16:33
+  :ARCHIVE_FILE: ~/Dropbox/20_20_ss/programmieren_3/slides/slides_02-strukturen/slides_02.org
+  :ARCHIVE_OLPATH: Mit den Datentypen arbeiten
+  :ARCHIVE_CATEGORY: slides_02
+  :END:
+#+BEGIN_SRC C :results output :exports both
+  #include <stdio.h>
+
+  typedef struct Complex {
+    double real;
+    double imag;
+  } Complex;
+
+  void print(Complex num) { printf("%f + %fi\n", num.real, num.imag); }
+
+  Complex add(Complex c1, Complex c2) {
+    Complex res;
+    res.real = c1.real + c2.real;
+    res.imag = c2.imag + c2.imag;
+    return res;
+  }
+
+  int main() {
+    Complex c1 = {1.2, 0.234};
+    Complex c2 = {12.5, -1.33};
+    Complex c3 = add(c1, c2);
+    print(c3);
+    // Ohne Zwischenspeicherung in Variable
+    print(add(c1, c2));
+  }
+#+END_SRC
+
+#+RESULTS:
+: 13.700000 + -2.660000i
+: 13.700000 + -2.660000i
+

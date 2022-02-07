@@ -1,0 +1,446 @@
+#+TITLE:     Strukturen
+#+AUTHOR:    Sebastian Stabinger, Thomas Hausberger
+#+EMAIL:     sebastian@stabinger.name
+#+DATE:      SS2021
+** Datentypen
+*** Standarddatentypen
+- C bietet eine Reihe von Standarddatentypen an
+- ~int~
+- ~double~
+- ...
+*** Benutzerdefinierte Datentypen
+- In vielen Fällen ist es sinnvoll, *eigene Datentypen* zu definieren
+- z.B. Komplexe Zahlen, Koordinaten, Vektoren/Matrizen, Spielfigur, ...
+** Wie werden solche Datentypen normalerweise verwendet?
+- Es wird ein *neuer Datentyp* definiert (z.B. Komplexe Zahl)
+  - Hier wird entschieden welche Daten gespeichert werden müssen
+  - Für komplexe Zahl z.B. *Real- und Imaginärteil* als ~double~
+- Man entscheided wie diese *Daten verarbeitet* werden
+  -  z.B. zwei komplexe Zahlen addieren, multiplizieren, formatiert
+    auf dem Bildschirm ausgeben, ...
+*** Implementierung in C
+- Ein *neuer Datentyp* wird mittels *Strukturen* implementiert
+- Die *Verarbeitung* dieser Daten wird über *Funktionen* realisiert
+  welche Strukturen entgegennehmen und zurück geben
+* Neuer Datentyp
+** Strukturen
+*** Syntax
+#+BEGIN_SRC C
+  struct Name {
+    // Enthaltene Daten im Format:
+    // datentyp name;
+  };
+#+END_SRC
+*** Beispiel                                               :B_exampleblock:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:END:
+Wir definieren einen  neuen Typ namens ~Complex~:
+#+BEGIN_SRC C
+  struct Complex {
+    double real;
+    double imag;
+  };
+#+END_SRC
+~real~ und ~imag~ sind Teil des neuen Datentyps
+*** Hinweis :B_alertblock:
+:PROPERTIES:
+:BEAMER_env: alertblock
+:END:
+Strukturen werden vor der ~main~-Funktion deklariert!
+** Strukturen --- Erzeugen von Variablen
+*** Erzeugen einer uninitialisierten Variable :B_exampleblock:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:END:
+#+BEGIN_SRC C
+  #include <stdio.h>
+
+  struct Complex {
+    double real;
+    double imag;
+  };
+
+  int main() {
+    // Deklaration einer Variablen des neuen Typs
+    struct Complex c;
+  }
+#+END_SRC
+
+** Typealias
+Es ist etwas unpraktisch, dass man bei einem Strukturdatentyp immer
+explizit ~struct~ davor schreiben muss (Hinweis: In C++ ist dies nicht
+mehr der Fall)
+*** Lösung mit ~typedef~
+- Mit Hilfe des Befehls ~typedef~ können alternative Namen (ein
+  sogenannter Typealias) für Datentypen vergeben werden
+Format: ~typedef datentyp neuer_name;~
+** Typealias --- Beispiel
+#+BEGIN_SRC C
+  #include <stdio.h>
+
+  struct Complex {
+    double real;
+    double imag;
+  };
+
+  typedef struct Complex Complex; // "Complex" -> "struct Complex"
+
+  int main() {
+    Complex c; // Statt struct Complex c
+  }
+#+END_SRC
+** Struktur und Typealias in einem Rutsch
+Die Deklaration einer Struktur und die Vergabe eines Typealias können
+auch *in einem Rutsch* erledigt werden
+*** Beispiel :B_exampleblock:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:END:
+#+BEGIN_SRC C
+  #include <stdio.h>
+
+  // Typealias und Deklaration der Struktur in einem Schritt
+  typedef struct Complex {
+    double real;
+    double imag;
+  } Complex;
+
+  int main() {
+    Complex c;
+  }
+#+END_SRC
+** Zugriff auf Komponenten einer Struktur
+Geschieht mittels Punkt (~.~) zwischen Variablenname und
+Komponentenname der Struktur:
+*** Beispiel :B_exampleblock:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:END:
+#+BEGIN_SRC C :results output :exports both
+  #include <stdio.h>
+
+  typedef struct Complex {
+    double real;
+    double imag;
+  } Complex;
+
+  int main() {
+    Complex c;
+    // Schreibender Zugriff
+    c.real = 12.3;
+    c.imag = 2.3;
+    // Lesender Zugriff
+    printf("%f + %fi", c.real, c.imag);
+  }
+#+END_SRC
+
+#+RESULTS:
+: 12.300000 + 2.300000i
+
+** Initialisierung
+- Wie die meisten anderen Datentypen auch sind Variablen mit einem
+  Strukturdatentyp nicht automatisch initialisiert
+- Häufig steht 0 in den Komponenten einer Struktur, aber *man kann
+  sich nicht drauf verlassen*!
+*** Beispiel :B_exampleblock:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:END:
+#+BEGIN_SRC C
+  #include <stdio.h>
+
+  typedef struct Complex {
+    double real;
+    double imag;
+  } Complex;
+
+  int main() {
+    Complex c;
+    // Ausgabe an dieser Stelle kann alles sein ...
+    printf("%f + %fi", c.real, c.imag);
+  }
+#+END_SRC
+** Initialisierung
+- Beim Deklarieren einer Variable (*und nur dort*) mit einem
+  Strukturdatentyp können Startwerte in Form einer
+  *Initialisierungsliste* (wie bei Arrays) angegeben werden.
+- Es gilt die *gleiche Reihenfolge* wie bei der Definition der
+  Struktur
+*** Beispiel :B_exampleblock:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:END:
+#+BEGIN_SRC C :results output :exports both
+  #include <stdio.h>
+
+  typedef struct Complex {
+    double real;
+    double imag;
+  } Complex;
+
+  int main() {
+    Complex c = {1.2, 0.234};
+    printf("%f + %fi", c.real, c.imag);
+  }
+#+END_SRC
+
+#+RESULTS:
+: 1.200000 + 0.234000i
+** Übung
+:PROPERTIES:
+:ID:       0633dede-9a84-458e-8ea0-5ae29bb9bc9c
+:END:
+Wir schreiben unseren Spieleprototyp so um, dass die Informationen
+einer Spielfigur in einer Struktur gespeichert sind
+#+ATTR_LATEX: :width 0.5\textwidth
+[[file:data/06/33dede-9a84-458e-8ea0-5ae29bb9bc9c/screenshot-20200306-160024.png]]
+* Mit den Datentypen arbeiten
+** Strukturen als Datenpaket
+- Die Verwendung von Strukturen als *eine Sammlung von
+  zusammengehörenden Variablen* ist an sich schon nützlich
+- Strukturen werden aber speziell dann ein mächtiges Werkzeug zur
+  Abstraktion, wenn die Verarbeitung von den darin enthalteten Daten
+  in Funktionen passiert.
+** Strukturen als Parameter von Funktionen
+So wie sie einen ~int~ als Parameter in eine Funktion schicken können,
+können Sie auch eine Struktur als Parameter an eine Funktion
+übergeben.
+*** Beispiel :B_exampleblock:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:END:
+#+BEGIN_SRC C
+  #include <stdio.h>
+
+  typedef struct Complex {
+    double real;
+    double imag;
+  } Complex;
+
+  void print(Complex num) { printf("%f + %fi\n", num.real, num.imag); }
+
+  int main() {
+    Complex c = {1.2, 0.234};
+    print(c);
+  }
+#+END_SRC
+** Rückgabe von Strukturen von Funktionen
+Genauso wie Sie einen ~int~ von einer Funktion mittels ~return~
+zurückgeben können, können Sie auch eine Struktur mit ~return~ zurück
+geben
+*** Beispiel :B_exampleblock:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:ID:       b1ec1282-fa9f-4a02-abc6-b8b219020ccc
+:END:
+\center
+Nächstes Slide
+#+ATTR_LATEX: :width 0.3\textwidth
+[[file:data/b1/ec1282-fa9f-4a02-abc6-b8b219020ccc/screenshot-20200306-173506.png]]
+
+** Rückgabe von Strukturen von Funktionen --- Beispiel
+#+BEGIN_SRC C
+  #include <stdio.h>
+
+  typedef struct Complex {
+    double real;
+    double imag;
+  } Complex;
+
+  void print(Complex num) { printf("%f + %fi\n", num.real, num.imag); }
+
+  Complex add(Complex c1, Complex c2) {
+    Complex res;
+    res.real = c1.real + c2.real;
+    res.imag = c1.imag + c2.imag;
+    return res;
+  }
+
+  int main() {
+    Complex c1 = {1.2, 0.234};
+    Complex c2 = {12.5, -1.33};
+    Complex c3 = add(c1, c2);
+    print(c3);
+    // Ohne Zwischenspeicherung in Variable
+    print(add(c1, c2));
+  }
+#+END_SRC
+** Rückgabe --- Beispiel ohne temporäre Variable
+#+BEGIN_SRC C
+  #include <stdio.h>
+
+  typedef struct Complex {
+    double real;
+    double imag;
+  } Complex;
+
+  void print(Complex num) { printf("%f + %fi\n", num.real, num.imag); }
+
+  Complex add(Complex c1, Complex c2) {
+    return (Complex){c1.real + c2.real, c1.imag + c2.imag};
+  }
+
+  int main() {
+    Complex c1 = {1.2, 0.234};
+    Complex c2 = {12.5, -1.33};
+    Complex c3 = add(c1, c2);
+    print(c3);
+    // Ohne Zwischenspeicherung in Variable
+    print(add(c1, c2));
+  }
+#+END_SRC
+** Rückgabe --- Beispiel komplett ohne Variablen
+#+BEGIN_SRC C
+  #include <stdio.h>
+
+  typedef struct Complex {
+    double real;
+    double imag;
+  } Complex;
+
+  void print(Complex num) { printf("%f + %fi\n", num.real, num.imag); }
+
+  Complex add(Complex c1, Complex c2) {
+    return (Complex){c1.real + c2.real, c1.imag + c2.imag};
+  }
+
+  int main() {
+      print(add((Complex){1.2, 0.234}, (Complex){12.5, -1.33}));
+  }
+#+END_SRC
+** Ändern der Werte einer Struktur innerhalb einer Funktion
+Wenn Sie Strukturen als Parameter an eine Funktion übergeben, können
+Sie die Werte darin zwar ändern, aber *diese Änderungen haben keine
+Auswirkungen außerhalb der Funktion*
+*** Beispiel :B_exampleblock:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:END:
+#+BEGIN_SRC C :results output :exports both
+  #include <stdio.h>
+
+  typedef struct Complex {
+    double real;
+    double imag;
+  } Complex;
+
+  void print(Complex num) { printf("%f + %fi\n", num.real, num.imag); }
+  void init(Complex num) { num.real = num.imag = 0.0; }
+
+  int main() {
+    Complex c = {23.0, 42.27};
+    init(c);
+    // c ist immer noch 23.0 + 42.27i und nicht 0.0 + 0.0i !
+    print(c);
+  }
+#+END_SRC
+** Übergabe von Strukturen als Zeiger
+Um Werte in einer Struktur nach aussen hin sichtbar zu ändern, muss
+die Struktur als Zeiger an die Funktion übergeben werden
+#+BEGIN_SRC C :results output :exports both
+  #include <stdio.h>
+
+  typedef struct Complex {
+    double real;
+    double imag;
+  } Complex;
+
+  void print(Complex num) { printf("%f + %fi\n", num.real, num.imag); }
+  void init(Complex *num) { (*num).real = (*num).imag = 0.0; }
+
+  int main() {
+    Complex c = {23.0, 42.27};
+    init(&c);
+    // c ist jetzt 0.0 + 0.0i !
+    print(c);
+  }
+#+END_SRC
+** Zugriff auf Komponenten eines Strukturzeigers
+- Der Zugriff mit einem Punkt nach dem Dereferenzieren (z.B.
+  ~(*num).real~) ist etwas umständlich.
+- Syntactic Sugar um das ganze leserlicher zu machen:
+  - Statt ~(*num).real~ kann auch ~num->real~ geschrieben werden
+*** Beispiel :B_exampleblock:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:END:
+#+BEGIN_SRC C
+  #include <stdio.h>
+
+  typedef struct Complex {
+    double real;
+    double imag;
+  } Complex;
+
+  void print(Complex num) { printf("%f + %fi\n", num.real, num.imag); }
+  void init(Complex *num) { num->real = num->imag = 0.0; }
+
+  int main() {
+    Complex c = {23.0, 42.27};
+    init(&c);
+    print(c);
+  }
+#+END_SRC
+** Übung
+Schreiben Sie folgende Funktionen für unser auf Strukturen umgeschriebenes Spielebeispiel:
+- ~draw_figure~ :: Zeichnet die Figur mit der richtigen Grafik an der richtigen Stelle
+- ~are_colliding~ :: Übernimmt zwei Figur-Strukturen und überprüft ob diese gerade kollidieren
+- ~move_up~, ~move_down~, ~move_left~, ~move_right~ :: Bewegt eine
+     Figur nach Oben, Unten, Links, Rechts und stellt sicher, dass
+     sich diese nicht vom Spielfeld bewegt
+#+ATTR_LATEX: :width 0.3\textwidth
+[[file:data/06/33dede-9a84-458e-8ea0-5ae29bb9bc9c/screenshot-20200306-160024.png]]
+Verwenden Sie die geschriebenen Funktionen an geeigneter Stelle in
+unserem Spiel
+* Export settings etc.                                             :noexport:
+#+LANGUAGE:  ger
+#+OPTIONS:   texht:t H:2 toc:nil
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+STARTUP: beamer
+
+#+LATEX_CLASS: beamer
+
+#+LATEX_HEADER: \usepackage[utf8]{inputenc}
+#+LATEX_HEADER: \usepackage{color}
+#+LATEX_HEADER: \usetheme[height=7mm]{Rochester}
+
+#+LATEX_HEADER: \setbeamertemplate{footline}[frame number]
+#+LATEX_HEADER: \usecolortheme[accent=red, light]{solarized}
+#+LATEX_HEADER: \setbeamercolor{frametitle}{bg=solarizedRebase02,fg=solarizedAccent}
+#+LATEX_HEADER: \setbeamercolor{author in head/foot}{bg=solarizedRebase02,fg=solarizedRebase01}
+#+LATEX_HEADER: \setbeamercolor{title in head/foot}{bg=solarizedRebase02,fg=solarizedRebase01}
+#+LATEX_HEADER: \setbeamercolor{block title}{bg=solarizedRebase0,fg=solarizedRebase02}
+#+LATEX_HEADER: \setbeamercolor{block body}{bg=solarizedRebase02,fg=solarizedRebase0}
+#+LATEX_HEADER: \setbeamercolor{item}{bg=solarizedRebase02,fg=solarizedAccent}
+
+#+LATEX_HEADER: \beamertemplatenavigationsymbolsempty
+
+#+LATEX_HEADER: \usemintedstyle{manni}
+
+#+LATEX_HEADER: \AtBeginSection[]{
+#+LATEX_HEADER:   \begin{frame}
+#+LATEX_HEADER:   \vfill
+#+LATEX_HEADER:   \centering
+#+LATEX_HEADER:   \begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
+#+LATEX_HEADER:     \Huge\insertsectionhead\par%
+#+LATEX_HEADER:   \end{beamercolorbox}
+#+LATEX_HEADER:   \vfill
+#+LATEX_HEADER:   \end{frame}
+#+LATEX_HEADER: }
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;; Allow binding of emacs variables on export. You might have to evaluate that so that #+BIND: works
+  (setq org-export-allow-bind-keywords t)
+  ;; Set F12 to compile
+  (global-set-key (kbd "<f12>") 'org-beamer-export-to-pdf)
+
+  ;; Export all verbatim text in certain color
+  (defun latex-export-colored-verbatim (contents backend info)
+    (when (eq backend 'beamer)
+      (concat "{\\color{solarizedYellow}" contents "}")))
+  ;; Register
+  (add-to-list 'org-export-filter-code-functions
+               'latex-export-colored-verbatim)
+#+END_SRC

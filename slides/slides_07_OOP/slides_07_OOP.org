@@ -1,0 +1,478 @@
+#+TITLE:     Objektorientierung
+#+AUTHOR:    Sebastian Stabinger
+#+EMAIL:     sebastian@stabiner.name
+#+DATE:      SS2020
+* Strukturen
+** COMMENT Datentypen
+*** Standarddatentypen
+- C++ bietet eine Reihe von Standarddatentypen an
+- ~int~
+- ~double~
+- ...
+*** Benutzerdefinierte Detentypen
+- In vielen Fällen ist es sinnvoll, eigene Datentypen zu definieren
+- C++ ermöglicht Kapselung von Daten
+  - Gewisse Daten werden meist gemeinsam verwendet (z.b. Vor- und
+    Nachname bei Personendaten)
+  - Zusammenfassung dieser Daten zu eigenem Datentyp
+  - ~struct~ von C übernommen, ~class~ neu in C++
+** COMMENT Strukturen
+*** Syntax
+#+BEGIN_SRC C++
+  struct <name> {
+    // Enthaltene Daten
+  };
+#+END_SRC
+*** Beispiel                                               :B_exampleblock:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:END:
+Wir definieren einen  neuen Typs namens ~person~:
+#+BEGIN_SRC C++
+  struct Person {
+    int age;
+    string first_name;
+    string last_name;
+  };
+#+END_SRC
+~age~, ~first_name~ und ~last_name~ sind Teil des neuen Typs
+** COMMENT Strukturen - Verwendung
+*** Initialisierung von ~struct~                           :B_exampleblock:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:END:
+#+BEGIN_SRC C++
+  // Deklaration einer Variablen des neuen Typs
+  Person a;
+  // Mit Initialisierung
+  Person simon = {28, "simon", "hangl"};
+  Person sebastian = {55, "sebastian", "stabinger"};
+#+END_SRC
+*** Zugriff auf Werte
+Geschieht mittels ~.~ zwischen Variablenname und Element des ~struct~:
+#+BEGIN_SRC C++
+  // Lesender Zugriff
+  cout << simon.age << " " << simon.first_name << " "
+    << simon.last_name << endl;
+
+  // Schreibender Zugriff
+  sebastian.age = 34;
+#+END_SRC
+** COMMENT Strukturen - Funktionieren wie andere Variablen auch
+#+BEGIN_SRC C++
+  #include <iostream>
+  using namespace std;
+
+  struct Point {
+      int x;
+      int y;
+  };
+
+  void print(Point p) { cout << "x=" << p.x << ", y=" << p.y << endl; }
+
+  Point addpoints(Point p1, Point p2) {
+      Point res = {p1.x + p2.x, p1.y + p2.y};
+      return res;
+  }
+
+  int main() {
+      Point p = {2, 3};
+      print(p);
+      // Direkte Angabe eines Werts ist auch möglich!
+      print(addpoints(p, Point{1, 2}));
+  }
+#+END_SRC
+** Strukturen - Nachteile
+*** Sichtbarkeit
+Es gibt keine Kontrolle wer auf Daten Zugriff hat: Jede Funktion kann
+auf *alle Elemente* der Struktur zugreifen. Das ist oft nicht
+erwünscht.
+*** Initialisierung
+Wir haben keine Möglichkeit eine Struktur *automatisch zu
+initialisieren*.
+*** Hierarchien
+Es gibt keine Möglichkeiten *Abhängigkeiten zwischen Strukturen
+abzubilden*. z.B. wird eine Struktur welche Komplexe Zahlen abbildet
+mehr mit einer Struktur zu tun haben welche Rationale Zahlen abbildet
+wie mit einer Struktur welche Personendaten abbildet. Solche
+Abhängigkeiten (welche Programmieraufwand sparen können) kann man mit
+Strukturen nicht abbilden.
+** Strukturen - Beispiel
+Wir wollen einen Datentypen definieren welcher verwendet werden kann
+um den Durchschnitt mehrerer Werte auszurechnen.
+*** Code                                                     :B_exampleblock:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:END:
+#+BEGIN_SRC C++
+  struct Average {
+    double sum;
+    int count;
+    double avg;
+  };
+
+  void add(Average *avg, double val) {
+      avg->sum += val;
+      avg->count++;
+      avg->avg = avg->sum / avg->count;
+  }
+#+END_SRC
+** Strukturen - Komplettes Beispiel
+#+BEGIN_SRC C++
+  #include <iostream>
+  using namespace std;
+
+  struct Average {
+    double sum;
+    int count;
+    double avg;
+  };
+
+  void add(Average *avg, double val) {
+      avg->sum += val;
+      avg->count++;
+      avg->avg = avg->sum / avg->count;
+  }
+
+  int main() {
+      Average avg = {0.0, 0, 0.0};
+      add(&avg, 2.3);
+      cout << avg.avg << endl;
+      add(&avg, 323.2);
+      add(&avg, 503.43);
+      cout << avg.avg << endl;
+  }
+  // Ausgabe:
+  // 2.3
+  // 276.31
+#+END_SRC
+
+** Strukturen - Nachteile an Hand des Beispiels
+*** Sichtbarkeit
+~sum~ und ~count~ sind für den Benutzer nicht wichtig, aber man kann
+trotzdem drauf zugreifen.
+*** Operationen
+Bei Funktionen müssen wir immer einen Zeiger auf die ~struct~
+übergeben um Werte davon ändern zu können. Zudem haben wir eine
+Funktion ~add~ bei der nicht sofort klar ist auf was sie sich
+bezieht.
+*** Initialisierung
+Wir möchten, dass ~sum~, ~count~ und ~avg~ einer neuen Variable auf
+~0.0~ gesetzt werden. Falls wir ~sum~ und ~count~ bereits haben
+hätten wir gerne, dass ~avg~ bei der Initialisierung berechnet wird.
+* Klassen
+** Von der Struktur zur Klasse
+In C++ werden die vorher genannten Probleme von Strukturen mit Hilfe
+von *Klassen* gelöst. Eine objektorientierte Sprache muss keine
+Klassen haben, es ist aber sehr üblich.
+- Definition von Sichtbarkeiten (z.B. ~public~, ~private~) 
+- Definition von Funktionen einer Klasse (*Member Functions*)
+- Initialisierung mittels *Konstruktoren*
+- Abhängigkeiten werden mittels *Vererbung* abgebildet
+*** Syntax
+#+BEGIN_SRC C++
+  class X { // X ist Name der Klasse
+  private:
+    // Nur innerhalb der Klasse sichtbar
+
+    // Enthält Sachen die nur für die 
+    // Implementierung intern benötigt werden
+  public:
+    // Sichtbar für alle
+
+    // Implementiert das sogenannte "Interface"
+    // welches Benutzer der Klasse verwenden
+  };
+#+END_SRC
+
+** Klassen
+*** ~struct~ von Vorher als Klasse                           :B_exampleblock:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:END:
+#+BEGIN_SRC C++
+  class Average {
+  public:
+    double sum;
+    int count;
+    double avg;
+  };
+#+END_SRC
+*** Einschränkung der Sichtbarkeit                         :B_exampleblock:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:END:
+#+BEGIN_SRC C++
+  class Average {
+  private:
+    double sum;
+    int count;
+
+  public:
+    double avg;
+  };
+#+END_SRC
+~Average avg; avg.sum = 100;~ funktioniert nicht mehr.
+** Klassen - Member Functions
+
+*** ~add~-Funktion von Vorher                              :B_exampleblock:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:END:
+#+BEGIN_SRC C++
+  void add(Average *avg, double val) {
+    avg->sum += val;
+    avg->count++;
+    avg->avg = avg->sum / avg->count;
+  }
+#+END_SRC
+*** Out                                                   :B_ignoreheading:
+:PROPERTIES:
+:BEAMER_env: ignoreheading
+:END:
+- Die vorher definierte Funktion ~add~ wird nicht mehr funktionieren
+  weil wir von außerhalb der Klasse keinen Zugriff auf ~sum~ und
+  ~count~ haben.
+
+- Dies löst man mit Hilfe von Funktionen welche innerhalb der Klasse
+  definiert werden. Solche Funktionen bezeichnet man als *Member
+  Functions*.
+** Klassen - Member Functions
+#+BEGIN_SRC C++
+  class Average {
+  private:
+    // Häufig lässt man private Variablen mit einem Unterstrich beginnen!
+    double _avg;
+    double _sum;
+    int _count;
+
+  public:
+    void add(double val) {
+      _sum += val;
+      _count++;
+      _avg = _sum / _count;
+    }
+
+    double get_avg() { return _avg; }
+  };
+#+END_SRC
+Innerhalb einer Member Function haben wir Zugriff auf *alle Elemente*
+der Klasse (auch die, welche als ~private~ deklariert sind)
+** Klassen - Member Functions - Aufruf
+Member Functions einer Klasse werden aufgerufen indem *an den Variablennamen einer Klasse ein Punkt angehängt wird, gefolgt von dem
+Funktionsaufruf*
+
+z.B. für das vorherige Beispiel:
+#+BEGIN_SRC C++
+  Average a;
+  a.add(12.4);
+  a.add(23.7);
+  cout << a.get_avg();
+#+END_SRC
+** Klassen - Getter und Setter
+- Um lesend und/oder schreibend auf private Variablen einer Klasse
+  zugreifen zu können, müssen wir Member Functions verwenden.
+- Man bezeichnet solche Funktionen üblicherweise als *Getter--* und
+  *Setter--* Funktionen weil sie üblicherweise mit dem Zusatz ~get_~
+  bzw. ~set_~ anfangen.
+- Über diese Funktionen lässt sich der *Zugriff* auf Variablen
+  *genauer steuern*:
+  - Nur eine ~get_~ Funktion: Wir können die Variable nur lesen
+  - Nur eine ~set_~ Funktion: Wir können die Variable nur schreiben
+- Welchen Vorteil haben wir mit einer privaten Variable und einer
+  ~get_~ und ~set_~ Funktion (Warum nicht einfach ~public~)?
+  - Wir können prüfen ob geschriebene Werte gültig sind
+  - Wir können Werte während des Lesens oder Schreibens konvertieren
+  - ...
+** Klassen - Getter und Setter - Vorteil beim Avg-Beispiel
+Wir können uns z.B. im *Nachhinein entscheiden*, dass der Durchschnitt
+erst ausgerechnet wird wenn er angefordert wird. *Code der die Klasse
+verwendet muss nicht geändert werden!*
+*** Beispiel :B_exampleblock:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:END:
+
+#+BEGIN_SRC C++
+  class Average {
+  private:
+    // Häufig lässt man private Variablen mit einem Unterstrich beginnen!
+    double _sum;
+    int _count;
+
+  public:
+    void add(double val) {
+      _sum += val;
+      _count++;
+    }
+
+    double get_avg() { return _sum / _count; }
+  };
+#+END_SRC
+** Klassen - Initialisierung
+- Die Initialisierung einer Klasse geschieht mittels eines sogenannten
+  *Konstruktors*
+- Konstruktoren sind Member Functions welche den *gleichen Namen wie
+  die Klasse* und *keinen Rückgabetyp* haben
+- Der Konstruktor wird ausgeführt, wenn man eine neue Instanz einer
+  Klasse erzeugt. Also z.B. eine neue Variable dieser Klasse erzeugt.
+- Der Konstruktor mit *leerer Parameterliste* wird als
+  *Standardkonstruktor* (default constructor) bezeichnet und wird
+  ausgeführt wenn man eine Variable der Klasse ohne Parameter anlegt.
+  z.B. ~Average a;~
+- Man kann *beliebig viele Konstruktoren* definieren solange die
+  Parameter unterschiedliche Typen haben (siehe *Funktionsüberladung*)
+** Klassen - Konstruktor Beispiel
+#+BEGIN_SRC C++
+  class Average {
+    // ...
+
+  public:
+    // ...
+
+    Average() { // Standardkonstruktor
+      _sum = 0;
+      _count = 0;
+      _avg = 0;
+    }
+
+    Average(double sum, int count) { // Weiterer Konstruktor
+      _sum = sum;
+      _count = count;
+      _avg = _sum / _count;
+    }
+    // ... get_avg() ...
+  };
+  // In main:
+#+END_SRC
+#+BEGIN_SRC C++
+  Average a;        // Standardkonstruktor
+  Average c(12, 6); // Zweiter Konstruktor (sum=12, count=6, avg=2)
+  cout << a.get_avg() << " " << c.get_avg() << endl;
+  a.add(5); a.add(12); c.add(12); 
+  cout << a.get_avg() << " " << c.get_avg() << endl;
+#+END_SRC
+** COMMENT Defaultparameter
+In C++ ist es möglich bei den Parametern einer Funktion Standardwerte
+anzugeben. Diese werden verwendet falls beim Aufruf der Funktion
+dieser Parameter ausgelassen wird.
+*** Beispiel                                               :B_exampleblock:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:END:
+#+BEGIN_SRC C++
+  int add(int a, int b = 0) { return a + b; }
+
+  cout << add(12, 13) << " ";
+  cout << add(24) << endl;
+  // Ausgabe: 25 24
+#+END_SRC
+*** Out                                                   :B_ignoreheading:
+:PROPERTIES:
+:BEAMER_env: ignoreheading
+:END:
+Defaultwerte können auch bei *Konstruktoren von Klassen* verwendet
+werden!
+* Übungen
+** Gemeinsame Übung
+Wir implementieren gemeinsam eine *Klasse für komplexe Zahlen*
+#+ATTR_LATEX: :width 0.5\textwidth
+[[file:complex_numbers.jpg]]
+** COMMENT Temperaturkonvertierung
+Implementieren Sie eine Klasse welche zwischen *Fahrenheit*, *Celsius*
+und *Kelvin* konvertieren kann und umgekehrt.
+*** Funktionalität
+Sie sollen die Temperatur der Klasse in Fahrenheit, Celsius und Kelvin
+setzten können. Sie sollen die Temperatur in Fahrenheit, Celsius und
+Kelvin auslesen können.
+*** Konvertierungsfunktionen
+$$Kelvin = 0.5555556 \cdot (Fahrenheit + 459.67)$$
+$$Fahrenheit = 1.8 \cdot Kelvin - 459.67$$
+$$Kelvin = Celsius + 273.15$$
+$$Celsius = Kelvin - 273.15$$
+** Aufgabe: Umschreiben des Spiels
+- Schreiben Sie die Version des Spiels von der letzten Einheit
+  (Speichern von Monstern in einem ~vector~) so um, dass ~Figure~
+  keine Struktur sondern eine Klasse ist und wandeln sie alle nötigen
+  Funktionen in Member Functions um.
+- Überlegen Sie: Welche Variablen sollten ~private~, welche ~public~
+  sein?
+- Können Sie mehrere Konstruktoren sinnvoll einsetzen?
+#+ATTR_LATEX: :width 0.5\textwidth
+[[file:screenshot-20200406-225138.png]]
+
+** COMMENT Gridworld
+*** Die Welt
+- Wir haben eine Spielwelt welche in regelmäßige Felder aufgeteilt ist
+- Wir wollen eine Spielfigur in dieser Welt bewegen (auf den Feldern)
+*** Unser Ziel
+- Schreiben Sie eine Klasse welche eine Startposition, eine
+  anzuzeigende Grafik, eine Feldgröße in x/y und die Anzahl an Feldern
+  in x/y entgegennimmt
+- Die Klasse hat die Funktionen ~moveleft~, ~moveright~, ~moveup~,
+  ~movedown~ welche die aktuelle Position der Figur verschieben
+- Die Klasse hat auch eine Funktion ~draw~ welche das Bild an der
+  aktuell korrekten Position anzeigt
+
+* COMMENT Hausübung
+** Personenverwaltung
+- Implementieren Sie eine Klasse zur Verwaltung von Personendaten
+- Speichern Sie Vorname, Nachname, Adresse, Alter
+- Deklarieren Sie das Alter als ~private~ (Benutzer sollten aber
+  trotzdem das Alter abrufen können)
+- Schreiben Sie sinnvolle Konstruktoren
+- Schreiben Sie eine Member Funktion ~print~ welche die Informationen
+  einer Person auf dem Bildschirm ausgibt.
+- An dem Geburtstag einer Person soll das Alter angepasst werden.
+  Schreiben Sie eine Member Function dafür.
+* Export settings etc.                                             :noexport:
+#+LANGUAGE:  ger
+#+OPTIONS:   texht:t H:2 toc:nil
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+STARTUP: beamer
+
+#+LATEX_CLASS: beamer
+
+#+LATEX_HEADER: \usepackage[utf8]{inputenc}
+#+LATEX_HEADER: \usepackage{color}
+#+LATEX_HEADER: \usetheme[height=7mm]{Rochester}
+
+#+LATEX_HEADER: \setbeamertemplate{footline}[frame number]
+#+LATEX_HEADER: \usecolortheme[accent=red, light]{solarized}
+#+LATEX_HEADER: \setbeamercolor{frametitle}{bg=solarizedRebase02,fg=solarizedAccent}
+#+LATEX_HEADER: \setbeamercolor{author in head/foot}{bg=solarizedRebase02,fg=solarizedRebase01}
+#+LATEX_HEADER: \setbeamercolor{title in head/foot}{bg=solarizedRebase02,fg=solarizedRebase01}
+#+LATEX_HEADER: \setbeamercolor{block title}{bg=solarizedRebase0,fg=solarizedRebase02}
+#+LATEX_HEADER: \setbeamercolor{block body}{bg=solarizedRebase02,fg=solarizedRebase0}
+#+LATEX_HEADER: \setbeamercolor{item}{bg=solarizedRebase02,fg=solarizedAccent}
+
+#+LATEX_HEADER: \beamertemplatenavigationsymbolsempty
+
+#+LATEX_HEADER: \usemintedstyle{manni}
+
+#+LATEX_HEADER: \AtBeginSection[]{
+#+LATEX_HEADER:   \begin{frame}
+#+LATEX_HEADER:   \vfill
+#+LATEX_HEADER:   \centering
+#+LATEX_HEADER:   \begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
+#+LATEX_HEADER:     \Huge\insertsectionhead\par%
+#+LATEX_HEADER:   \end{beamercolorbox}
+#+LATEX_HEADER:   \vfill
+#+LATEX_HEADER:   \end{frame}
+#+LATEX_HEADER: }
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;; Allow binding of emacs variables on export. You might have to evaluate that so that #+BIND: works
+  (setq org-export-allow-bind-keywords t)
+  ;; Set F12 to compile
+  (global-set-key (kbd "<f12>") 'org-beamer-export-to-pdf)
+
+  ;; Export all verbatim text in certain color
+  (defun latex-export-colored-verbatim (contents backend info)
+    (when (eq backend 'beamer)
+      (concat "{\\color{solarizedYellow}" contents "}")))
+  ;; Register
+  (add-to-list 'org-export-filter-code-functions
+               'latex-export-colored-verbatim)
+ #+END_SRC

@@ -1,0 +1,188 @@
+#+TITLE: Klasse zum Konvertieren von Temperaturen
+#+AUTHOR: Sebastian Stabinger
+#+EMAIL: sebastian@stabinger.name
+#+OPTIONS: toc:nil
+
+* Angabe
+Implementieren Sie eine Klasse welche zwischen *Fahrenheit*, *Celsius*
+und *Kelvin* konvertieren kann und umgekehrt.
+** Funktionalität
+Sie sollen die Temperatur der Klasse in Fahrenheit, Celsius und Kelvin
+setzten können. Sie sollen die Temperatur in Fahrenheit, Celsius und
+Kelvin auslesen können.
+** Frage
+Welchen Vorteil hat diese Vorgehensweise gegenüber der Definition von
+Funktionen zum Konvertieren?
+** Konvertierungsfunktionen
+$Kelvin = (Fahrenheit + 459.67)\cdot\frac{5}{9}$
+
+$Fahrenheit = Kelvin \cdot\frac{9}{5} - 459.67$
+
+$Kelvin = Celsius + 273.15$
+
+$Celsius = Kelvin - 273.15$
+* Lösung
+Generell werden wir das Problem folgendermaßen lösen: Beim setzen der
+Temperatur in einer bestimmten Einheit rechnen wir diese sofort in
+Kelvin um und speichern gleich die Temperatur in Kelvin. Beim Abfragen
+der Temperatur müssen wir diese nur noch von Kelvin in die gewünschte
+Einheit umrechnen. Dadurch benötigen wir nur eine Variable in der
+Klasse und jeweils eine Funktion zum setzen und auslesen der
+Temperatur pro Einheit.
+
+Wir starten mit der Definition der Klasse.
+#+NAME: class_start
+#+BEGIN_SRC C++ 
+  class Tempconv {
+#+END_SRC
+
+** Variablen
+Wir wollen die aktuelle Temperatur der Klasse in Kelvin speichern und
+sinnvollerweise wählen wir ~double~ als Typ. Von Außerhalb der Klasse
+soll kein direkter Zugriff auf diese Variable möglich sein, daher
+definieren wir sie im ~private~ Bereich der Klasse. Variablen im
+~private~ Bereich beginnen üblicherweise mit einem Unterstrich um sie
+als private zu kennzeichnen.
+#+NAME: private
+#+BEGIN_SRC C++ 
+  private:
+    double _kelvin;
+#+END_SRC
+
+Alle folgenden Dinge der Klasse sollen von Außerhalb zugänglich sein.
+Wir starten daher den ~public~ Bereich der Klasse.
+#+NAME: public
+#+BEGIN_SRC C++ 
+  public:
+#+END_SRC
+
+** Konstruktoren
+Wenn wir eine neue Instanz der Klasse erzeugen (z.B. eine Variable
+dieser Klasse definieren) wollen wir, dass die Temperatur der Klasse
+Null Grad Kelvin beträgt. Wir schreiben daher einen
+Standardkonstruktor welcher ~_kelvin~ auf ~0~ setzt. Zur Erinnerung:
+Ein Konstruktor ist eine Memberfunktion welche den *gleichen Namen*
+wie die Klasse und *keinen Rückgabetyp* hat. Der Standardkonstruktor
+hat zusätzlich eine *leere Parameterliste*.
+#+NAME: default_constructor
+#+BEGIN_SRC C++ 
+  Tempconv() { _kelvin = 0; }
+#+END_SRC
+
+** Memberfunktionen
+Im nächsten Schritt definieren wir die ganzen Funktionen der Klasse
+(sogenannte Memberfunktionen).
+
+*** Setzen der Temperatur
+In den Funktionen zum setzen der Temperatur rechnen wir die übergebene
+Temperatur nach Kelvin um und speichern diesen Wert in der privaten
+Variable ~_kelvin~.
+**** Setzen der Temperatur in Kelvin
+Da die Temperatur bereits in der korrekten Einheit übergeben wurde
+müssen wir nichts umrechnen.
+#+NAME: set_kelvin
+#+BEGIN_SRC C++ 
+  void set_kelvin(double kelvin) { _kelvin = kelvin; }
+#+END_SRC
+**** Setzen der Temperatur in Celsius
+Wir verwenden die Umrechnungsfunktion von Oben: $Kelvin = Celsius + 273.15$
+#+NAME: set_celsius
+#+BEGIN_SRC C++ 
+  void set_celsius(double celsius) { _kelvin = celsius + 273.15; }
+#+END_SRC
+**** Setzen der Temperaturen in Fahrenheit
+Wir verwenden die Umrechnungsfunktion von Oben: $Kelvin = (Fahrenheit + 459.67)\cdot\frac{5}{9}$
+#+NAME: set_fahrenheit
+#+BEGIN_SRC C++ 
+  void set_fahrenheit(double fahrenheit) {
+    _kelvin = (fahrenheit + 459.67) * (5.0 / 9.0);
+  }
+#+END_SRC
+*** Auslesen der Temperatur
+In den Funktionen zum Auslesen der Temperatur konvertieren wir die in
+Kelvin gespeicherte Temperatur in die jeweils geforderte Einheit und
+liefern das Ergebnis der Konvertierung als Ergebnis der Funktion
+zurück.
+**** Ausgeben der Temperatur in Kelvin
+Da die Temperatur bereits in Kelvin gespeichert ist brauchen wir
+nichts weiter zu machen als den Inhalt von ~_kelvin~ zurückzuliefern.
+#+NAME: get_kelvin
+#+BEGIN_SRC C++ 
+  double get_kelvin() { return _kelvin; }
+#+END_SRC
+**** Ausgeben der Temperatur in Celsius
+Wir verwenden die Umrechnungsfunktion von Oben: $Celsius = Kelvin - 273.15$
+#+NAME: get_celsius
+#+BEGIN_SRC C++ 
+  double get_celsius() { return _kelvin - 273.15; }
+#+END_SRC
+**** Ausgeben der Temperatur in Celsius
+Wir verwenden die Umrechnungsfunktion von Oben: $Fahrenheit = Kelvin \cdot\frac{9}{5} - 459.67$
+#+NAME: get_fahrenheit
+#+BEGIN_SRC C++ 
+  double get_fahrenheit() {
+    return _kelvin * (9.0 / 5.0) - 459.67;
+  }
+#+END_SRC
+** Main
+Damit haben wir die Klasse zum Konvertieren fertig geschrieben und
+müssen nur noch eine ~main~ Funktion schreiben um die Funktionalität
+der neuen Klasse testen.
+
+Wir erzeugen eine neue Instanz unserer Klasse und testen ob die
+anfängliche Temperatur tatsächlich Null Grad Kelvin beträgt.
+#+NAME: check_initial_temperature
+#+BEGIN_SRC C++ 
+  Tempconv a;
+  cout << "Anfang:" << endl;
+  cout << "Temp: " << a.get_kelvin() << "K" << endl;
+  cout << "Temp: " << a.get_celsius() << "C" << endl;
+  cout << "Temp: " << a.get_fahrenheit() << "F" << endl << endl;
+#+END_SRC
+-40 Fahrenheit und -40 Grad Celsius sollte etwa die gleiche Temperatur
+ sein. Überprüfen wir das!
+#+NAME: check_cf_same
+#+BEGIN_SRC C++ 
+  a.set_celsius(-40);
+  cout << "-40C = " << a.get_fahrenheit() << "F" << endl;
+#+END_SRC
+Als Ausgaben bekommen wir folgendes. Die Klasse scheint also korrekt
+zu funktionieren.
+#+BEGIN_SRC text 
+Anfang:
+Temp: 0K
+Temp: -273.15C
+Temp: -459.67F
+
+-40C = -40F
+#+END_SRC
+* Kompletter Sourcecode 
+#+NAME: whole_source
+#+BEGIN_SRC C++ :tangle temperature_conversion.cpp :noweb yes :exports code :results raw
+  #include <iostream>
+  using namespace std;
+
+  <<class_start>>
+  <<private>>
+
+  <<public>>
+    <<default_constructor>>  // Standardkonstruktor
+
+    // Memberfunktionen zum Setzen der Temperatur
+    <<set_kelvin>>
+    <<set_celsius>>
+    <<set_fahrenheit>>
+
+    // Memberfunktionen zum Auslesen der Temperatur
+    <<get_kelvin>>
+    <<get_celsius>>
+    <<get_fahrenheit>>
+  }; // Ende der Tempconv-Klasse
+
+  int main() {
+    <<check_initial_temperature>>
+
+    <<check_cf_same>>
+  }
+#+END_SRC
+

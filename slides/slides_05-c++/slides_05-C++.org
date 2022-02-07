@@ -1,0 +1,283 @@
+#+TITLE:     Einführung in C++, Namespaces und Ein-/Ausgabe
+#+AUTHOR:    Sebastian Stabinger
+#+EMAIL:     sebastian@stabinger.name
+#+DATE:      SS2020
+
+* Hintergründe von C++
+** Zeitleiste
+*** Zeitleiste                                                      :BMCOL:
+:PROPERTIES:
+:BEAMER_col: 0.5
+:END:
+- 1979 :: Arbeit an "C with classes" beginnt
+- 1983 :: Umbenennung in C++
+- 1998 :: Erster ISO C++ Standard
+- 2011 :: *Neuer ISO C++ Standard*
+- 2014 :: Minor Revision
+- 2017 :: Major Revision
+- 2020 :: Major Revision
+*** Stroustrup                                                      :BMCOL:
+:PROPERTIES:
+:BEAMER_col: 0.5
+:ID:       ae50aadc-3e16-4ac9-9f73-cf048cdfa434
+:END:
+#+CAPTION: Bjarne Stroustrup. Erster Entwickler von C++
+#+ATTR_LATEX: :width 0.7\textwidth
+[[file:data/ae/50aadc-3e16-4ac9-9f73-cf048cdfa434/screenshot-20160217-143616.png]]
+** Abhängigkeiten
+   :PROPERTIES:
+   :ID:       2b515ad4-e3c4-4834-a7be-e95147807c04
+   :END:
+#+CAPTION: Abhängigkeiten von C++
+#+ATTR_LATEX: :height 0.8\textheight
+[[file:data/2b/515ad4-e3c4-4834-a7be-e95147807c04/screenshot-20160217-144741.png]]
+** Warum C++?
+- Sehr *schnell*
+- *Hardwarenahe Programmierung* ist möglich
+- Problemloses verwenden von *C-Libraries*
+- *Flexibel*: Vom Microcontroller über Spiele bis zum High Performance
+  Cluster.
+- Im Gegensatz zu C ist auch ein *hohes Maß an Abstraktion* möglich
+  (OOP, Templates, Meta Template Programming, ...). Das macht das
+  Programmieren letztlich *einfacher*.
+- *Grössere Standardbibliothek* (aber immer noch klein im Vergleich zu
+  Java, Python, C#, etc.) (Container, ~all_of~, ~find~, ...)
+- Existiert seit *35 Jahren* und wird auch weiterhin seinen Platz haben
+- *Große Code Base* (Fast alle Anwendungsprogramme sind z.B. in C++
+  geschrieben)
+** Was können wir durchmachen?
+- C++ ist wesentlich komplexer als C
+  - C Standardwerk: 270 Seiten
+  - C++ Standardwerk: *1400 Seiten!*
+- Wenn man C++ so programmiert wie man es Heute verwenden sollte, hat
+  es nicht mehr sehr viel mit C zu tun.
+  - In sehr vielen Firmen wird allerdings auch kein modernes C++
+    programmiert!
+- Wir werden nur Zeit haben uns ein paar Konzepte von C++ anzusehen
+  und für den Rest werden wir weiter C verwenden!
+  - Das ist nicht ideal, aber für mehr reicht die Zeit leider nicht
+    aus
+** Hello World
+Zur Erinnerung: Ein Hello World Programm in C:
+*** C
+#+BEGIN_SRC C
+  #include <stdio.h>
+  int main() {
+    printf("Hello World\n");
+  }
+#+END_SRC
+*** Out                                                   :B_ignoreheading:
+:PROPERTIES:
+:BEAMER_env: ignoreheading
+:END:
+Hier das äquivalente Programm in C++:
+*** C++
+#+BEGIN_SRC C++
+  #include <iostream>
+  int main() {
+    std::cout << "Hello World" << std::endl;
+  }
+#+END_SRC
+* Ein und Ausgabe
+** \texttt{cout} (\textbf{c}haracter \textbf{out}put)
+- Verwendbar nach ~#include <iostream>~
+- Dient der *Ausgabe* von Daten auf dem Bildschirm: \newline ~std::cout << <daten>;~
+- ~cout~ gibt einen Wert *automatisch korrekt* aus. ~%d, %f, ...~
+  ist nicht notwendig.
+- Ausgaben können durch wiederholtes ~<<~ aneinandergereiht werden.\newline
+  ~std::cout << "Hello " << "World" << "!\n";~
+- ~std::endl~ fügt einen Zeilenumbruch ein. Als Alternative kann auch
+  ~\n~ wie in C verwendet werden
+*** Beispiel
+#+NAME: cout
+#+BEGIN_SRC C++ :includes '("<iostream>" "<complex>" "<string>") :results raw :export both
+  int a = 23; std::string b = "Bla"; double c = 42.47; char d = 'Z';
+  std::complex<int> e = {4, 2};
+
+  std::cout << a << " " << b << " " << c << " " << d << " " << e;
+  // Ausgabe: 23 Bla 42.47 Z (4,2)
+#+END_SRC
+
+** \texttt{cin} (\textbf{c}haracter \textbf{in}put)
+- Verwendbar nach ~#include <iostream>~
+- Dient der *Eingabe* von Daten durch den Benutzer: \newline ~std::cin >> <daten>;~
+- Weiß wie ~cout~ welcher Datentyp eingelesen werden soll
+*** Beispiel
+#+BEGIN_SRC C++ :includes '("<iostream>" "<complex>" "<string>") :results raw :export both
+  int a; std::string b; double c; char d; std::complex<double> e;
+  std::cin >> a; // Liest Ganzzahl
+  std::cin >> b; // Liest String (ohne Leerzeichen)
+  std::cin >> c; // Liest Fließkommazahl
+  std::cin >> d; // Liest einzelnes Zeichen
+  std::cin >> e; // Liest Komplexe Zahl im Format (real, imag)
+#+END_SRC
+** Eingabe - Nützliches Tipps
+*** Einlesen einer ganzen Zeile in einen String mit Leerzeichen etc.
+#+BEGIN_SRC C++
+  std::string str;
+  std::getline(std::cin, str);
+#+END_SRC
+*** Eingabebuffer löschen
+#+BEGIN_SRC C++
+  #include <limits>
+  // ...
+  std::cin.clear();
+  std::cin.ignore(std::numeric_limits<std::streamsize>::max())
+#+END_SRC
+** \texttt{cin/cout} - Beispiel
+#+INCLUDE: "cinout.cpp" src C++
+* Namespaces
+** Namespace - Das Problem in C
+Namespace auf Deutsch:
+*Namensraum* [fn::[[https://de.wikipedia.org/wiki/Namensraum][https://de.wikipedia.org/wiki/Namensraum]]]
+*** Beispiel
+- Angenommen wir haben zwei Bibliotheken (~control.h~ und ~cpu.h~)
+- Beide implementieren eine Funktion ~int check_state();~
+#+BEGIN_SRC C
+  #include "control.h"
+  #include "cpu.h"
+
+  if (check_state() == 42) {
+    printf("Status ok\n");
+  }
+#+END_SRC
+*** Out                                                   :B_ignoreheading:
+:PROPERTIES:
+:BEAMER_env: ignoreheading
+:END:
+Dieser Code wird *nicht funktionieren*. Woher soll der Compiler
+wissen, welche der beiden Funktionen ~check_state~ aufgerufen werden
+soll?
+** Namespace - Die Lösung in C++
+- C++ löst dieses Problem durch die Einführung sogenannter *Namespaces*
+  (*Namensräume*)
+- Namespaces definieren *benannte Gültigkeitsbereiche* von Funktionen,
+  Variablen, Klassen, ...
+- Um von außerhalb eines Namespaces auf dessen Inhalt zugreifen zu
+  können muss dessen *Name explizit genannt* werden.
+Das vorherige Beispiel könnte gelöst werden indem die beiden
+Funktionen in unterschiedlichen Namespaces deklariert werden
+*** Beispiel: Lösung in C++                                  :B_exampleblock:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:END:
+#+BEGIN_SRC C++
+  #include "control.h" // Verwendet z.B. den Namespace ccont 
+  #include "cpu.h" // Verwendet z.B. den Namespace cpu_n
+
+  if (cpu_n::check_state() == 42) { std::cout << "CPU ok\n"; }
+  if (ccont::check_state() == 47) { std::cout << "Controller ok\n"; }
+#+END_SRC
+** Namespace - Deklaration
+Die Deklaration eines Namespaces folgt dem Muster:
+
+~namespace <name> { <code> }~
+*** Beispiel
+#+BEGIN_SRC C++
+  namespace ccont {
+  int ok = 47;
+  int check_state() { return ok; } // Unser Controller is immer OK :-)
+  } // namespace ccont
+#+END_SRC
+Die Variable ~ok~ und die Funktion ~check_state~ befinden sich somit
+im Namensraum ~ccont~
+*** Out                                                   :B_ignoreheading:
+:PROPERTIES:
+:BEAMER_env: ignoreheading
+:END:
+- Ein Namespace muss nicht am Stück deklariert werden. Wir können
+  jederzeit durch einen neuen ~namespace~ Block einem bereits
+  existierenden Namensraum *Elemente hinzufügen*. Auch in
+  *unterschiedlichen Dateien*!
+** Namespace - Zugriff
+Auf Elemente eines Namensraums wird folgendermaßen zugegriffen:
+~<namespace>::<element>~
+*** Beispiel
+Wir wollen ausserhalb von ~ccont~ auf die Funktion ~check_status()~
+zugreifen.
+#+BEGIN_SRC C++
+  std::cout << ccont::check_state(); // Gibt 47 zurück
+#+END_SRC
+*** Standardnamensraum
+Alle Standardfunktionen von C++ liegen im Namensraum ~std~ (für
+Standard).
+** Namespace - Import
+Manchmal möchte man den Namespace nicht immer explizit angeben
+(besonders beim ~std~ Namensraum üblich)
+*** ~using~
+#+BEGIN_SRC C++
+  std::cout << "Hello World!" << std::endl;
+  using std::cout; // Ab hier können wir einfach cout verwenden
+  cout << "Hello Simple World!" << std::endl;
+#+END_SRC
+*** ~using namespace~
+#+BEGIN_SRC C++
+  using namespace std; // Ab hier können wir überall std:: weglassen
+  cout << "Hello Really Simple World!" << endl;
+#+END_SRC
+*** Out                                                   :B_ignoreheading:
+:PROPERTIES:
+:BEAMER_env: ignoreheading
+:END:
+- ~using~ importiert ein Element
+- ~using namespace~ importiert den ganzen Namensraum
+- Man muss mit ~using namespace~ vorsichtig sein, da man die ganzen
+  Vorteile von Namespaces verliert!
+** Namespace - Verschachtelung
+Ein Namespace kann innerhalb eines anderen Namespaces deklariert
+werden. Wir greifen auf verschachtelte Namensräume durch wiederholtes
+~::~ zu. Z.b. ~ns1::ns2::ns3::function()~.
+*** Beispiel
+#+INCLUDE: "namespace.cpp" src C++
+
+* Export settings etc.                                             :noexport:
+#+LANGUAGE:  ger
+#+OPTIONS:   texht:t H:2 toc:nil
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+STARTUP: beamer
+
+#+LATEX_CLASS: beamer
+
+#+LATEX_HEADER: \usepackage[utf8]{inputenc}
+#+LATEX_HEADER: \usepackage{color}
+#+LATEX_HEADER: \usetheme[height=7mm]{Rochester}
+
+#+LATEX_HEADER: \setbeamertemplate{footline}[frame number]
+#+LATEX_HEADER: \usecolortheme[accent=red, light]{solarized}
+#+LATEX_HEADER: \setbeamercolor{frametitle}{bg=solarizedRebase02,fg=solarizedAccent}
+#+LATEX_HEADER: \setbeamercolor{author in head/foot}{bg=solarizedRebase02,fg=solarizedRebase01}
+#+LATEX_HEADER: \setbeamercolor{title in head/foot}{bg=solarizedRebase02,fg=solarizedRebase01}
+#+LATEX_HEADER: \setbeamercolor{block title}{bg=solarizedRebase0,fg=solarizedRebase02}
+#+LATEX_HEADER: \setbeamercolor{block body}{bg=solarizedRebase02,fg=solarizedRebase0}
+#+LATEX_HEADER: \setbeamercolor{item}{bg=solarizedRebase02,fg=solarizedAccent}
+
+#+LATEX_HEADER: \beamertemplatenavigationsymbolsempty
+
+#+LATEX_HEADER: \usemintedstyle{manni}
+
+#+LATEX_HEADER: \AtBeginSection[]{
+#+LATEX_HEADER:   \begin{frame}
+#+LATEX_HEADER:   \vfill
+#+LATEX_HEADER:   \centering
+#+LATEX_HEADER:   \begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
+#+LATEX_HEADER:     \Huge\insertsectionhead\par%
+#+LATEX_HEADER:   \end{beamercolorbox}
+#+LATEX_HEADER:   \vfill
+#+LATEX_HEADER:   \end{frame}
+#+LATEX_HEADER: }
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;; Allow binding of emacs variables on export. You might have to evaluate that so that #+BIND: works
+  (setq org-export-allow-bind-keywords t)
+  ;; Set F12 to compile
+  (global-set-key (kbd "<f12>") 'org-beamer-export-to-pdf)
+
+  ;; Export all verbatim text in certain color
+  (defun latex-export-colored-verbatim (contents backend info)
+    (when (eq backend 'beamer)
+      (concat "{\\color{solarizedYellow}" contents "}")))
+  ;; Register
+  (add-to-list 'org-export-filter-code-functions
+               'latex-export-colored-verbatim)
+#+END_SRC

@@ -1,0 +1,500 @@
+#+TITLE:     Einführung in C++: Strings, Vektoren, ...
+#+AUTHOR:    Sebastian Stabinger
+#+EMAIL:     sebastian@stabinger.name
+#+DATE:      SS2020
+
+* Strings
+** Strings in C
+:PROPERTIES:
+:ID:       cbfcc991-bddd-49c7-a9fb-fff24aa41a8b
+:END:
+- Ein Array vom Typ ~char~
+- Wir müssen uns selbst um die Größe kümmern
+- Ende des Strings ist durch das Zeichen ~\0~ gekennzeichnet
+*** Beispiel für einen C String im Speicher
+#+BEGIN_SRC C++
+  char str[] = "PROGRAM";
+#+END_SRC
+[[file:data/cb/fcc991-bddd-49c7-a9fb-fff24aa41a8b/screenshot-20160221-203103.png]]
+** Strings in C: Ein Beispiel
+Wir wollen den Inhalt von zwei Strings ~str1~ und ~str2~
+aneinanderhängen und das Ergebnis in ~str3~ speichern.
+*** Beispiel                                               :B_exampleblock:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:END:
+#+BEGIN_SRC C
+  #include <stdio.h>
+  #include <string.h>
+
+  // Wir müssen uns selbst darum kümmern, dass str3 groß genug ist
+  char str1[100], str2[100], str3[200];
+  strcpy(str1, "Hello ");
+  // str1 = "Hello " funktioniert nicht!
+  strcpy(str2, "World");
+  // Hänge str1 und str2 zusammen und speichere in str3
+  strcpy(str3, str1);
+  strcat(str3, str2);
+  // Gib str3 auf Bildschirm aus
+  printf("%s", str3);  // Wir müssen den Typ von str3 angeben (%s)
+#+END_SRC
+*** Out                                                   :B_ignoreheading:
+:PROPERTIES:
+:BEAMER_env: ignoreheading
+:END:
+Man sieht: Die Verwendung ist *umständlich und unnatürlich*
+** Strings in C++
+- Ein eigener Datentyp names ~std::string~
+- Die Größe wird dynamisch angepasst
+- Verhält sich wie man es erwarten würde!
+*** Beispiel                                               :B_exampleblock:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:END:
+#+BEGIN_SRC C++
+  #include <iostream>
+  #include <string>
+  using namespace std;
+
+  string str1, str2, str3; // Platz für beliebig viele Zeichen
+  str1 = "Hello ";         // Wir können einfach zuweisen
+  str2 = "World";
+  // Hänge str1 und str2 zusammen und speichere in str3
+  str3 = str1 + str2;
+  // Gib str3 auf Bildschirm aus
+  cout << str3 << endl; // Der Compiler kennt den Typ!
+#+END_SRC
+*** Out                                                   :B_ignoreheading:
+:PROPERTIES:
+:BEAMER_env: ignoreheading
+:END:
+- Falls wir z.B. ~str3~ als C-String benötigen:  ~str3.c_str()~
+** Vergleichen von Strings
+Um zu testen, ob zwei Strings gleich sind muss in C eine spezielle
+Funktion (~strcmp~) verwendet werden. In C++ erfolgt der Vergleich
+ganz natürlich mit dem Vergleichsoperator ~==~, wie bei allen anderen
+Datentypen auch.
+*** C                                                      :B_exampleblock:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:END:
+#+BEGIN_SRC C
+  if (strcmp(str1, str2) == 0) {
+    printf("String 1 und 2 sind gleich");
+  }
+#+END_SRC
+*** C++                                                    :B_exampleblock:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:END:
+#+BEGIN_SRC C++
+  if (str1 == str2) {
+    std::cout << "String 1 und 2 sind gleich";
+  }
+#+END_SRC
+** Konvertierungen
+*** ... in einen String
+Zahlen können mittels der Funktion ~to_string~ in einen ~string~
+konvertiert werden.
+#+BEGIN_SRC C++
+  string s = to_string(42);  // s enthält den String "42"
+#+END_SRC
+*** ... von einem String
+Ein String welcher eine Zahl enthält kann mit folgenden Funktionen in
+eine Zahl konvertiert werden:
+- ~stoi~, ~stol~, ~stoll~ für Integer, Long und Long Long
+- ~stof~, ~stod~, ~stold~ für Float, Double und Long Double
+#+BEGIN_SRC C++
+  int i = stoi("42"); // i enthält die Zahl 42
+#+END_SRC
+*** Out                                                   :B_ignoreheading:
+:PROPERTIES:
+:BEAMER_env: ignoreheading
+:END:
+Für komplexere Umwandlungen verwendet man einen ~stringstream~.
+** Daten formatieren mit ~stringstream~ [optional]
+- Man erzeugt einen *String Stream* mittels ~stringstream~ (benötigt
+  ~sstream~ als Include)
+- Schreiben wie in ~cout~
+- Um daraus einen String zu erzeugen: ~.str()~
+*** Beispiel                                               :B_exampleblock:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:END:
+#+INCLUDE: "sstring_out.cpp" src C++
+** Daten extrahieren mit ~stringstream~ [optional]
+- ~stringstream ss(string)~ erzeugt einen Stringstream namens ~ss~ aus
+  einem bereits existierenden String.
+- Aus einem ~stringstream~ können wie mittels ~cin~ Daten ausgelesen
+  werden
+*** Beispiel                                               :B_exampleblock:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:END:
+#+INCLUDE: "sstring_in.cpp" SRC C++
+
+* ~vector~ als Array-Alternative
+** COMMENT Fundamentale Arrays (identisch zu C)
+Arrays werden genauso definiert wie in C
+- Mit bekannter Größe: :: ~<datentyp> <name>[<größe>]~
+- Mit bekannten Werten: :: ~<datentyp> <name>[] = {<werte>}~
+
+Zugriff ebenfalls wie in C: ~<name>[<index>]~
+*** Beispiel                                               :B_exampleblock:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:END:
+#+NAME: arrays
+#+BEGIN_SRC C++ :includes '(<iostream>) :flags -std=c++11 :exports all
+  int a[100]; // Array mit Platz für 100 Integer Werte
+  // Array mit den Zahlen 1 bis 5
+  int b[] = {1, 2, 3, 4, 5};
+  // Ausgabe des ersten Elements von a und fünften von b
+  cout << "a[0]=" << a[0] << " b[4]=" << b[4] << endl;
+  // Ausgabe   a[0]=-1857352332 b[4]=5
+#+END_SRC
+*** Achtung!                                                   :B_alertblock:
+:PROPERTIES:
+:BEAMER_env: alertblock
+:END:
+Fundamentale Arrays sollten in C++ *nicht* verwendet werden!
+** Fundamentale Arrays --- Einige Probleme
+*** Größe ist nicht Teil des Datentyps
+#+BEGIN_SRC C++
+  int sum(int *a, int length) {
+    // Länge muss explizit mitgegeben werden
+    int sum = 0;
+    for (int i = 0; i < length; i++) {
+      sum += a[i];
+    }
+    return sum;
+  }
+#+END_SRC
+*** Keine Überprüfung von Indexfehlern
+#+BEGIN_SRC C++
+  int a[10];
+  a[20] = 47; // Ouch! Kein Fehler!!
+#+END_SRC
+*** Out                                                   :B_ignoreheading:
+:PROPERTIES:
+:BEAMER_env: ignoreheading
+:END:
+- Die Größe muss vorab bekannt sein wenn man nicht dynamische
+  Speicherverwaltung verwenden will!
+** ~vector~ --- Die C++ Alternative
+Verwendbar mittels ~#include <vector>~
+
+Vorteile:
+- Automatisches Speichermanagement
+- Dynamische Größe
+- Überprüft auf Indexfehler (wenn man das will)
+- Bietet viele komfortable Funktionen
+*** Arraybeispiel mit ~vector~ implementiert                 :B_exampleblock:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:END:
+#+BEGIN_SRC C++
+  vector<int> a(100); // Vektor mit Platz für 100 Integer Werte
+  // Vektor mit den Zahlen 1 bis 5
+  vector<int> b = {1, 2, 3, 4, 5};
+  // Ausgabe des ersten Elements von a und fünften von b
+  cout << "a[0]=" << a[0] << " b[4]=" << b[4] << endl;
+  // Ausgabe: a[0]=0 b[4]=5
+#+END_SRC
+** ~vector~ mit bekannter Größe
+Ein Vektor mit bekannter Größe kann folgendermaßen deklariert werden: ~vector<typ> name(größe);~
+*** Beispiel                                               :B_exampleblock:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:END:
+#+BEGIN_SRC C++
+  vector<int> a(100); vector<double> bla(400);
+#+END_SRC
+*** Out                                                   :B_ignoreheading:
+:PROPERTIES:
+:BEAMER_env: ignoreheading
+:END:
+Im Gegensatz zu einem Fundamentalen Array kann die Größe aber auch
+erst *zur Laufzeit* festgelegt werden. D.h. *als Größe kann auch eine
+Variable* angegeben werden (in C seit C99 auch möglich) und die
+*Größe* kann problemlos *zur Laufzeit verändert werden*.
+*** Beispiel                                               :B_exampleblock:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:END:
+Angenommen ~get_num~ fragt den Benutzer nach einer Zahl und gibt
+diese zurück
+#+BEGIN_SRC C++
+  int size = get_num();
+  vector<int> vec(size);
+  // vec hat die Größe welche der Benutzer eingegeben hat
+#+END_SRC
+** Der leere Vektor
+Für die Verwendung von ~vector~ muss die benötigte *Größe nicht von
+Anfang an bekannt sein*. Wir lassen die Größe einfach weg und erzeugen
+damit einen leeren Vektor: ~vector<typ> name;~
+*** Beispiel                                               :B_exampleblock:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:END:
+#+BEGIN_SRC C++
+  vector<int> a; vector<double> bla;
+#+END_SRC
+*** Vorsicht!                                                :B_alertblock:
+:PROPERTIES:
+:BEAMER_env: alertblock
+:END:
+Sie dürfen nicht auf Elemente eines Vektors zugreifen wenn diese nicht
+existieren!
+#+BEGIN_SRC C++
+  vector<int> a; // Vektor hat Größe 0
+  a[0] = 10; // Im besten Fall ein Speicherfehler ...
+  cout << a[0] << endl; // ... im ungünstigsten Fall unvorhersehbar
+#+END_SRC
+** Wofür ein leerer Vektor?
+Wenn man nicht auf Elemente eines leeren Vektors zugreifen kann, wofür
+ist er dann nützlich?
+*** Späteres Festlegen der Größe mit ~resize~              :B_exampleblock:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:END:
+#+BEGIN_SRC C++
+  vector<int> a;
+  a.resize(100); // Vektor a hat jetzt Platz für 100 Integer
+  a.resize(200); // Vektor a hat jetzt Platz für 200 Integer
+#+END_SRC
+*** Anhängen von Elementen mit ~push_back~                 :B_exampleblock:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:END:
+#+BEGIN_SRC C++
+  vector<int> a;
+  a.push_back(12);
+  a.push_back(23);
+  a.push_back(42);
+  // a enthält nun {12, 23, 42}
+#+END_SRC
+** Zugriff auf Elemente
+#+BEGIN_SRC C++
+  vector<int> vec;
+  vec.push_back(23); vec.push_back(42); vec.push_back(7);
+#+END_SRC
+*** Ohne Bounds Checking (schneller)
+Funktioniert wie bei Arrays mittels ~[index]~
+#+BEGIN_SRC C++
+  vec[0]; // == 23
+  vec[2]; // == 7
+  vec[5]; // == ?? keinerlei Garantien
+#+END_SRC
+\tiny VisualStudio macht bei Debug Builds auch hier ein Bounds
+Checking! Kann bei den meinsten Compilern eingestellt werden (z.B. für
+gcc mit dem Compilerflag ~-D_GLIBCXX_DEBUG~)
+*** Mit Bounds Checking (sicherer)
+Mit Hilfe der Funktion ~.at(index)~
+#+BEGIN_SRC C++
+  vec.at(0); // == 23
+  vec.at(2); // == 7
+  vec.at(5); // Wirft zur Laufzeit zuverlässig eine Exception
+#+END_SRC
+*** Out                                                   :B_ignoreheading:
+:PROPERTIES:
+:BEAMER_env: ignoreheading
+:END:
+Beide Versionen können auch für die Zuweisung von Werten verwendet
+werden: ~vec[1] = 10;~ bzw. ~vec.at(1) = 10;~
+** Löschen von Elementen
+- Es ist möglich *einzelne Elemente* aus einem Vektor mit folgender
+  Funktion zu *löschen*:
+~vektorname.erase(vektorname.begin() + position)~
+- Falls ein anderes Element als das letzte im Vektor gelöscht wird ist
+  die Operation *relativ langsam* (~list~ ist für solche Fälle eine
+  bessere Alternative zu ~vector~)
+- In den allermeisten Fällen aber trotzdem *schnell genug*!
+
+** Löschen von Elementen --- Beispiel
+*** Beispiel 
+#+BEGIN_SRC C++ :includes '(<iostream> <vector>) :flags -std=c++11 :exports all
+  #include <iostream>
+  #include <vector>
+  using namespace std;
+
+  int main() {
+    vector<int> vec = {2, 6, 1, 28, 42, 23, 47, 7};
+
+    vec.erase(vec.begin() + 3);
+
+    for (int &i : vec)
+      cout << i << " ";
+  }
+#+END_SRC
+
+*** Ausgabe
+#+RESULTS:
+: 2 6 1 42 23 47 7
+
+** Weitere Nützliche Funktionen
+- ~.size()~ Gibt die Anzahl an Elementen zurück
+- ~.empty()~ Gibt ~true~ zurück falls der Vektor keine Elemente enthält
+- ~.data()~ Gibt ein C-Array auf die Daten des Vektors zurück. Wichtig
+  falls man mit C-Code interagieren muss.
+- ~.pop_back()~ Löscht das letzte Element vom Vektor. Gegenstück zu
+  ~.push_back(element)~.
+- ~.back()~ Gibt letztes Element des Vektors zurück ohne es zu löschen
+- ~==~ Zwei Vektoren können mittels ~==~ verglichen werden. Die
+  Vektoren gelten als gleich falls sie die gleiche Größe haben und die
+  selben Elemente enthalten. ~if(vec1 == vec2);~
+** Vector --- Beispiel
+#+INCLUDE: "vector.cpp" src C++
+*** Ausgabe
+#+BEGIN_SRC text
+Größe von vec: 0
+Größe von vec: 4
+23 13 42 7 
+#+END_SRC
+** COMMENT Arrays in C++
+- Falls man in C++ unbedingt ein Array mit fixer Größe haben will
+  sollte man ~std::array~ verwenden (Es gibt relativ selten einen
+  Grund dafür)
+- Vorteil: Im Gegensatz zu Arrays im C-Stil ist die *Größe Teil des
+  Typs* \rightarrow Man muss die Größe nicht separat mitteilen (z.B.
+  bei Funktionsaufrufen).
+#+INCLUDE: array.cpp src C++
+* for-each
+** ~for~ - each (neu in C++11)
+Iteriert automatisch über alle Elemente eines "Containers" z.B. Array,
+Vector, etc.
+*** Beispiel
+#+NAME: foreach
+#+BEGIN_SRC C++ :includes '(<iostream> <vector>) :flags -std=c++11 :exports all
+  std::vector<int> vec = {23, 12, 42, 13, -40}; // Ein Array
+
+  for (int i : vec) {
+    std::cout << i << " ";
+  }
+#+END_SRC
+*** Ausgabe
+#+RESULTS: foreach
+: 23 12 42 13 -40
+** ~for~ - each --- Zuweisung
+Um in einer for-each Schleife Werte in ein Array zu schreiben, muss
+der Laufvariable ein ~&~ vorangestellt werden. Dies kennzeichnet die
+Variable als eine sogenannte *Referenz* (eine Alternative zu Zeigern
+in C++)
+*** Beispiel 1
+#+NAME: foreach_assign1
+#+BEGIN_SRC C++ :includes '(<iostream> <vector>) :flags -std=c++11 :exports all
+  std::vector<int> vec(100); // Ein Array der Größe 100
+
+  // Wir füllen das ganze Array mit dem Wert 23
+  for (int &i : vec) {
+    i = 23;
+  }
+#+END_SRC
+** ~for~ - each --- Zuweisung
+*** Beispiel 2
+#+NAME: foreach_assign2
+#+BEGIN_SRC C++ :includes '(<iostream> <vector>) :flags -std=c++11 :exports all
+  std::vector<int> vec = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+
+  // Quadriert alle Einträge in arr
+  for (int &i : vec) {
+    i = i * i;
+  }
+
+  for (int i : vec) {
+    std::cout << i << " ";
+  }
+#+END_SRC
+
+#+RESULTS: foreach_assign2
+: 1 4 9 16 25 36 49 64 81 100
+* Funktionsüberladung
+** Funktionsüberladung
+- Es können mehrere Funktionen mit *gleichem Namen* deklariert werden
+  so lange die *Datentypen der Argumente eindeutig* sind
+- Der *Compiler wählt die korrekte Funktion* anhand der Datentypen der
+  an die Funktion übergebenen Argumente aus
+*** OK
+#+BEGIN_SRC C++
+  int f(int a);
+  double f(double a);
+  int f(short a);
+  int f(int a, int b); // Parameteranzahl ist auch wichtig
+#+END_SRC
+*** Fehlerhaft
+#+BEGIN_SRC C++
+  int f(int a);
+  int f(int b); // Error: nur der Typ zählt
+  double f(int a); // Error: Der Rückgabetyp wird ignoriert
+#+END_SRC
+** Funktionsüberladung --- Beispiel
+#+INCLUDE: "function_overloading.cpp" src C++
+*** Ausgabe
+#+BEGIN_SRC text
+int: 25 double: 20 short: 8
+#+END_SRC
+* ~auto~
+** ~auto~ (neu in C++11)
+- Seit C++11 unterstützt C++ eine einfache Form der sogenannten
+  *Typinferenz* [fn::[[https://de.wikipedia.org/wiki/Typinferenz][https://de.wikipedia.org/wiki/Typinferenz]]]
+- Bedeutet: Falls der Compiler den Typ einer Variable selbst
+  herausfinden kann, muss man ihn nicht angeben.
+- Um Typinferenz zu verwenden schreibt man ~auto~ statt des
+  eigentlichen Datentyps.
+*** Beispiel
+#+BEGIN_SRC C++
+  auto i = 10;    // i ist vom Typ int
+  auto tmp = f(); // tmp hat den Typ welcher von f
+                  // zurückgegeben wird
+#+END_SRC
+* Export settings etc.                                             :noexport:
+#+LANGUAGE:  ger
+#+OPTIONS:   texht:t H:2 toc:nil
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+STARTUP: beamer
+
+#+LATEX_CLASS: beamer
+
+#+LATEX_HEADER: \usepackage[utf8]{inputenc}
+#+LATEX_HEADER: \usepackage{color}
+#+LATEX_HEADER: \usetheme[height=7mm]{Rochester}
+
+#+LATEX_HEADER: \setbeamertemplate{footline}[frame number]
+#+LATEX_HEADER: \usecolortheme[accent=red, light]{solarized}
+#+LATEX_HEADER: \setbeamercolor{frametitle}{bg=solarizedRebase02,fg=solarizedAccent}
+#+LATEX_HEADER: \setbeamercolor{author in head/foot}{bg=solarizedRebase02,fg=solarizedRebase01}
+#+LATEX_HEADER: \setbeamercolor{title in head/foot}{bg=solarizedRebase02,fg=solarizedRebase01}
+#+LATEX_HEADER: \setbeamercolor{block title}{bg=solarizedRebase0,fg=solarizedRebase02}
+#+LATEX_HEADER: \setbeamercolor{block body}{bg=solarizedRebase02,fg=solarizedRebase0}
+#+LATEX_HEADER: \setbeamercolor{item}{bg=solarizedRebase02,fg=solarizedAccent}
+
+#+LATEX_HEADER: \beamertemplatenavigationsymbolsempty
+
+#+LATEX_HEADER: \usemintedstyle{manni}
+
+#+LATEX_HEADER: \AtBeginSection[]{
+#+LATEX_HEADER:   \begin{frame}
+#+LATEX_HEADER:   \vfill
+#+LATEX_HEADER:   \centering
+#+LATEX_HEADER:   \begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
+#+LATEX_HEADER:     \Huge\insertsectionhead\par%
+#+LATEX_HEADER:   \end{beamercolorbox}
+#+LATEX_HEADER:   \vfill
+#+LATEX_HEADER:   \end{frame}
+#+LATEX_HEADER: }
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;; Allow binding of emacs variables on export. You might have to evaluate that so that #+BIND: works
+  (setq org-export-allow-bind-keywords t)
+  ;; Set F12 to compile
+  (global-set-key (kbd "<f12>") 'org-beamer-export-to-pdf)
+
+  ;; Export all verbatim text in certain color
+  (defun latex-export-colored-verbatim (contents backend info)
+    (when (eq backend 'beamer)
+      (concat "{\\color{solarizedYellow}" contents "}")))
+  ;; Register
+  (add-to-list 'org-export-filter-code-functions
+               'latex-export-colored-verbatim)
+#+END_SRC

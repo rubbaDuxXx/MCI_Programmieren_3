@@ -1,0 +1,248 @@
+#+TITLE:     Programmaufteilung
+#+AUTHOR:    Sebastian Stabinger, Thomas Hausberger
+#+EMAIL:     sebastian@stabinger.name
+#+DATE:      SS2021
+
+* Wozu sollte man ein Programm aufteilen?
+** Hintergrund
+- In C und C++ kann man prinzipiell beliebig große Programme in einer
+  Datei schreiben (das geht nicht in allen Sprachen)
+- Größere Programme schreibt man aber üblicherweise auf mehrere (oft
+  sehr viele) Dateien aufgeteilt
+  - Der Linux Kernel hat aktuell z.B. knapp 60.000 Dateien mit
+    24.000.000 Zeilen Code
+*** Vorteile einer Aufteilung
+- Einfacheres Zusammenarbeiten mit anderen Programmierern
+- Übersichtlicher
+- Die Compilezeiten verringern sich sehr
+** Zusammenarbeiten
+- Es ist relativ schwierig eine Datei mit mehreren Leuten gleichzeitig
+  zu bearbeiten
+- Häufig muss man für die Implementierung einer neuen Funktion das
+  Programm *kurzzeitig in einen ungültigen Zustand bringen* (das
+  Programm compiliert nicht mehr). Das wäre für andere Beteiligte
+  relativ unpraktisch.
+- Üblicherweise verwendet man ein *Version Control System* um die
+  Änderungen in einem Projekt nachvollziehen zu können und mehreren
+  Programmierern Änderungen zu erlauben. Das populärste VCS ist
+  aktuell ~git~ https://en.wikipedia.org/wiki/Git
+** Beispiel git
+Änderungsverlauf des git-Repositories dieser Lehrveranstaltung
+#+ATTR_LATEX: :width 1.0\textwidth
+[[file:img/screenshot-20180608-171423.png]]
+** Übersichtlicher
+- Es ist wesentlich einfacher bestimmte Teile eines Programms zu
+  finden wenn mehrere Dateien verwendet werden
+- Wenn z.B. jede Klasse in einer eigenen Datei liegt findet man diese
+  sehr einfach über den Klassennamen
+- Mit einer modernen IDE ist das kein so großes Problem mehr wie früher
+  - Es gibt z.B. üblicherweise eine eigene Klassenansicht die
+    unabhängig von Dateien arbeitet
+  - Es kommt aber immer wieder vor, dass man ohne IDE auskommen muss,
+    oder externe Tools verwendet werden die mit einer Aufteilung auf
+    Dateien übersichtlicher werden
+** Compilezeiten
+- Große Projekte können *Stunden* für einen kompletten Compilevorgang
+  benötigen. Daduch kann das Programmieren extrem ineffizient werden
+- Wenn ein Programm auf mehrere Dateien aufgeteilt ist müssen nur die
+  Dateien neu compiliert werden die sich *geändert* haben
+#+ATTR_LATEX: :width 0.5\textwidth
+file:img/compiling.png
+\tiny \center
+https://xkcd.com/303/
+* Wie teilt man Programme auf mehrere Dateien auf?
+** Das generelle Prinzip
+- Wir wollen also Teile unseres Programms aus der Hauptdatei (in der
+  die ~main~--Funktion liegt) auslagern
+- In C/C++ müssen für ausgelagerte Teile immer zwei Dateien
+  geschrieben werden. Die *Headerdatei* und die eigentliche
+  *Quellcodedatei*
+*** Headerdatei
+Definiert *welche Funktionalität* der ausgelagerte Teil anbietet. z.B.
+Funktionen und Klassen
+*** Quellcodedatei
+*Implementiert* die in der Headerdatei definierte Funktionalität
+** Die Headerdatei
+- Enthält einen sogenannten *Include Guard* der verhindert, dass die
+  selbe Headerdatei öfter als ein mal inkludiert werden kann
+- Enthält *Signaturen* aller Funktionen und Klassen
+- Enthält Namen von *Konstanten* und *globalen Variablen*
+- Enthält ~#include~ für anderen Headerdateien
+*** Include Guard
+#+BEGIN_SRC C++
+  #ifndef EINDEUTIGER_NAME
+  #define EINDEUTIGER_NAME
+
+  // Alles andere kommt hier hin!
+
+  #endif
+#+END_SRC
+*** Signaturen?
+Signaturen teilen dem Compiler mit welche Funktionen und Klassen es
+gibt, ohne die Funktionalität bereits zu implementieren
+** Was macht ~#include~ eigentlich?
+- ~#include~ ersetzt die Zeile in der ~#include~ steht mit dem Inhalt
+  der angegebenen Datei
+- Der *Include Guard* verhindert, dass der Inhalt einer Datei nicht
+  öfters verwendet wird.
+*** Beispiel
+#+BEGIN_SRC C++
+  #include <iostream>
+  #include <iostream>
+  #include <iostream>
+#+END_SRC
+Die wiederholten Einfügungen von ~iostream~ werden vor dem compilieren
+wieder gelöscht.
+
+** Signaturen von Funktionen
+Bestehen einfach aus dem *Teil einer Funktion vor den ~{ }~*
+*** Beispiele
+#+BEGIN_SRC C++
+  int add(int a, int b);
+  bool is_even(int number);
+  void print_my_stuff(MyClass &c);
+  // ...
+#+END_SRC
+*** Parameternamen
+Die Signatur einer Funktion muss prinzipiell *keine Parameternamen*
+enthalten. Es ist für den Compiler nur wichtig, dass die Typen alle
+korrekt sind:
+#+BEGIN_SRC C++
+  int add(int, int);
+  bool is_even(int);
+  void print_my_stuff(MyClass &);
+  // ...
+#+END_SRC
+Der Übersichtlichkeit halber *verwendet man sie generell aber trotzdem*!
+** Signaturen von Klassen
+Die Signatur einer Klasse ist aufgebaut wie eine Klasse die wir bis
+jetzt gesehen haben, *enthält aber statt der Funktionen nur die
+Funktionssignaturen*.
+*** Beispiel für die ursprüngliche Player Klasse
+#+BEGIN_SRC C++
+  class Player {
+  private:
+      int _posx, _posy;      
+      string _img;           
+      int _fieldsx, _fieldsy;
+      int _sizex, _sizey;    
+
+  public:
+      Player(int posx, int posy, string img, int fieldsx,
+             int fieldsy, int sizex, int sizey);
+
+      void move_left();
+      void move_right();
+      void move_up();
+      void move_down();
+      void draw();
+  };
+#+END_SRC
+** Die Quellcodedatei
+- Inkludiert die zuvor beschriebene Headerdatei mit ~#include
+  "dateiname.h"~ (*Achtung:* Die Anführungszeichen sind wichtig!)
+- Implementiert die Funktionen und die Memberfunktionen von Klassen
+  die wir in der Headerdatei beschrieben haben (siehe die folgenden
+  beiden Beispiele)
+** Auslagern von Funktionen --- Beispiel
+Wir wollen ~is_prime~ des folgenden Programms auslagern:
+------
+#+INCLUDE: main_original.cpp SRC C++
+** Auslagern von Funktionen --- Beispiel
+*** prime.hpp
+#+INCLUDE: prime.hpp SRC C++
+*** prime.cpp
+#+INCLUDE: prime.cpp SRC C++
+** Auslagern von Funktionen --- Beispiel
+*** main.cpp
+#+INCLUDE: main.cpp SRC C++
+
+** Auslagern von Klassen --- Beispiel
+Wir wollen ~Average~ des folgenden Programms auslagern:
+#+INCLUDE: main_class_original.cpp SRC C++
+** Auslagern von Klassen --- Beispiel
+*** average.hpp
+#+INCLUDE: average.hpp SRC C++
+** Auslagern von Klassen --- Beispiel
+*** average.cpp
+#+INCLUDE: average.cpp SRC C++
+*** main.cpp
+#+INCLUDE: main_class.cpp SRC C++
+** Globale Variablen
+Globale Variablen müssen in der Headerdatei mit ~extern~ markiert und
+in der Quellcodedatei erzeugt werden
+*** Header
+#+BEGIN_SRC C++
+  // ...
+  extern int meine_globale_variable;
+  // ...
+#+END_SRC
+*** Quellcodedatei
+#+BEGIN_SRC C++
+  #include "header.hpp"
+  int meine_globale_variable = 42;
+#+END_SRC
+*** Main
+#+BEGIN_SRC C++
+  #include "header.cpp"
+  #include <iostream>
+
+  int main() { 
+    std::cout << meine_globale_variable << std::endl; 
+  }
+#+END_SRC
+** Übung
+- Laden Sie sich die Datei ~split_off.cpp~ aus Sakai
+- Lagern Sie alles bis auf die ~main~-Funktion in eine Header- und
+  Quellcodedatei aus
+* Export settings etc.                                             :noexport:
+#+LANGUAGE:  ger
+#+OPTIONS:   texht:t H:2 toc:nil
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+STARTUP: beamer
+
+#+LATEX_CLASS: beamer
+
+#+LATEX_HEADER: \usepackage[utf8]{inputenc}
+#+LATEX_HEADER: \usepackage{color}
+#+LATEX_HEADER: \usetheme[height=7mm]{Rochester}
+
+#+LATEX_HEADER: \setbeamertemplate{footline}[frame number]
+#+LATEX_HEADER: \usecolortheme[accent=red, light]{solarized}
+#+LATEX_HEADER: \setbeamercolor{frametitle}{bg=solarizedRebase02,fg=solarizedAccent}
+#+LATEX_HEADER: \setbeamercolor{author in head/foot}{bg=solarizedRebase02,fg=solarizedRebase01}
+#+LATEX_HEADER: \setbeamercolor{title in head/foot}{bg=solarizedRebase02,fg=solarizedRebase01}
+#+LATEX_HEADER: \setbeamercolor{block title}{bg=solarizedRebase0,fg=solarizedRebase02}
+#+LATEX_HEADER: \setbeamercolor{block body}{bg=solarizedRebase02,fg=solarizedRebase0}
+#+LATEX_HEADER: \setbeamercolor{item}{bg=solarizedRebase02,fg=solarizedAccent}
+
+#+LATEX_HEADER: \beamertemplatenavigationsymbolsempty
+
+#+LATEX_HEADER: \usemintedstyle{manni}
+
+#+LATEX_HEADER: \AtBeginSection[]{
+#+LATEX_HEADER:   \begin{frame}
+#+LATEX_HEADER:   \vfill
+#+LATEX_HEADER:   \centering
+#+LATEX_HEADER:   \begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
+#+LATEX_HEADER:     \Huge\insertsectionhead\par%
+#+LATEX_HEADER:   \end{beamercolorbox}
+#+LATEX_HEADER:   \vfill
+#+LATEX_HEADER:   \end{frame}
+#+LATEX_HEADER: }
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;; Allow binding of emacs variables on export. You might have to evaluate that so that #+BIND: works
+  (setq org-export-allow-bind-keywords t)
+  ;; Set F12 to compile
+  (global-set-key (kbd "<f12>") 'org-beamer-export-to-pdf)
+
+  ;; Export all verbatim text in certain color
+  (defun latex-export-colored-verbatim (contents backend info)
+    (when (eq backend 'beamer)
+      (concat "{\\color{solarizedYellow}" contents "}")))
+  ;; Register
+  (add-to-list 'org-export-filter-code-functions
+               'latex-export-colored-verbatim)
+#+END_SRC

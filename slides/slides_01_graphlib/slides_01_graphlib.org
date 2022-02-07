@@ -1,0 +1,296 @@
+#+TITLE:     MCIGraph Grafikbibliothek
+#+SUBTITLE: Installation und Verwendung
+#+AUTHOR:    Sebastian Stabinger, Thomas Hausberger
+#+DATE:      SS2021
+
+* Installation
+** Installation von MCIGraph --- Visual Studio, Code::Blocks
+*** Visual Studio
+- Auf Sakai finden Sie die Datei ~MCIGraphTemplate_visualstudio.zip~
+- Entpacken Sie diese
+- Öffnen Sie die Datei ~MCIGraphTemplate.sln~ in Visual Studio
+- Nach Ausführung sollten Sie ein Beispielfenster sehen
+*** Code::Blocks
+- Auf Sakai finden Sie die Datei ~MCIGraphTemplate_codeblocks.zip~
+- Entpacken Sie diese
+- Öffnen Sie die Datei ~MCIGraph.cbp~ als Projekt in Code::Blocks
+- Nach Ausführung sollten Sie ein Beispielfenster sehen
+** Linux
+- Installieren sie die SDL2 Developer Library mit dem Paketmanager
+  ihrer Distribution
+- Laden sie die Datei ~mcigraph.hpp~ von Sakai und speichern sie diese
+  im selben Verzeichnis wie ihre Quellcodedatei.
+- Compilieren Sie ihr Programm mittels:
+#+BEGIN_SRC sh
+  g++ -std=c++11 main.cpp $(sdl2-config --cflags --libs) -lpthread
+#+END_SRC
+** COMMENT Installation in Code::Blocks in Windows -- Teil 1
+- Auf der Seite http://libsdl.org/download-2.0.php laden Sie die Datei
+  ~SDL2-devel-2.0.8-mingw.tar.gz~ herunter (die Versionsnummer kann
+  sich unter umständen geändert haben)
+- Entpacken Sie die Datei und kopieren Sie den Inhalt des Unterordners
+  ~i686-w64-mingw32~ an einen von ihnen gewünschten Ort.
+- Erstellen Sie ein leeres C++ Projekt
+- Gehen Sie auf Project/Build Options/Search Directories
+- Unter ~Compiler~ klicken Sie auf Add und wählen ~include/SDL2~ des
+  kopierten Unterordners
+- Äquivalent wählen Sie unter ~Linker~ das Unterverzeichnis ~lib~
+- Im Reiter ~Linker Settings~ tragen Sie bei ~Other linker options~
+  die Zeile ~-lmingw32 -lSDL2main -lSDL2~ ei
+** COMMENT Installation in Code::Blocks in Windows -- Teil 2
+- Kopieren Sie die Datei ~SDL2.dll~ des kopierten Unterordners (zu
+  finden in ~bin~) in ihr Projektverzeichnis
+- Klicken Sie File/New/File... im Menü, wählen Sie C/C++ Source, C++
+  und verwenden Sie ~main.cpp~ als Dateiname und ersetzen Sie den Text
+  dieser Datei mit dem Hello World Programm auf diesen Slides
+- Laden Sie sich die Datei ~mcigraph.hpp~ von Sakai und kopieren Sie
+  diese Datei in das selbe Verzeichnis wie die so eben erstellte
+  ~main.cpp~
+- Anschließend sollte das Programm korrekt compilieren und ein weißes
+  Fenster mit einem schwarzen Rechteck anzeigen
+- https://www.youtube.com/watch?v=QV6bOYbT_-I zeigt das gesamte Setup
+  (auf Englisch)
+** Installation von MCIGraph --- MacOS X
+- Installieren Sie Homebrew indem sie folgendes am Terminal eingeben
+  (alles in einer Zeile und mit Leerzeichen zwischen ~-fsSL~ und
+  ~https...~):
+#+BEGIN_SRC sh
+  /usr/bin/ruby -e "$(curl -fsSL
+  https://raw.githubusercontent.com/Homebrew/install/master/install)"
+#+END_SRC
+- Anschließend installieren Sie SDL2 mit dem Befehl
+#+BEGIN_SRC sh
+  brew install sdl2
+#+END_SRC
+- Laden sie die Datei ~mcigraph.hpp~ von Sakai und speichern Sie diese
+  im selben Verzeichnis wie ihre Quellcodedatei.
+- Falls ihre Quellcodedatei ~test.cpp~ heißt, compilieren Sie ihr
+  Programm mittels
+#+BEGIN_SRC sh
+  g++ -std=c++11 test.cpp $(sdl2-config --cflags --libs) -lpthread
+#+END_SRC
+- Sie können dann ihr Programm mittels ~./a.out~ starten
+** Installation von MCIGraph --- XCode auf MacOS X
+- Installieren Sie ~SDL2~ mit Homebrew (siehe vorherige Folie)
+- Öffnen Sie XCode und erzeugen Sie ein neues Projekt
+- Wählen Sie als Template eine macOS Kommandozeilenanwendung aus:
+#+ATTR_LATEX: :width 0.7\textwidth
+[[file:xcode_images/template.png]]
+** Installation von MCIGraph --- XCode auf MacOS X
+- Stellen Sie als Sprache C++ ein:
+#+ATTR_LATEX: :width 0.5\textwidth
+[[file:xcode_images/language.png]]
+- Führen Sie auf dem Terminal den Befehl ~sdl2-config --cflags~ aus und
+  kopieren Sie das Ergebnis in die C++ Flags der Build Optionen
+[[file:xcode_images/cflags.png]]
+** Installation von MCIGraph --- XCode auf MacOS X
+- Führen Sie auf dem Terminal den Befehl ~sdl2-config --libs~ aus und
+  kopieren Sie das Ergebnis in die Linker Flags der Build Optionen
+[[file:xcode_images/linkerflags.png]]
+** Installation von MCIGraph --- XCode auf MacOS X
+- Fügen Sie die Datei ~mcigraph.hpp~ aus Sakai ihrem Projekt hinzu:
+#+ATTR_LATEX: :width 0.5\textwidth
+[[file:xcode_images/addfiles.png]]
+** COMMENT Installation von MCIGraph --- MacOS X
+- Laden Sie https://www.libsdl.org/release/SDL2-2.0.5.dmg herunter und
+  öffnen Sie die Datei
+- Kopieren Sie die Datei ~SDL2.framework~ in den Ordner
+  ~/Library/Frameworks~
+- Laden sie die Datei ~mcigraph.hpp~ von Sakai und speichern sie diese
+  im selben Verzeichnis wie ihre Quellcodedatei.
+- Falls ihre Quellcodedatei ~test.cpp~ heißt, compilieren Sie ihr
+  Programm mit ~g++ -std=c++11 test.cpp -g -pthread
+  -I/Library/Frameworks/SDL2.framework/Headers -framework SDL2~
+- Sie können dann ihr Programm mittels ~./a.out~ starten
+- Sollte das nicht funktionieren können Sie probieren beim compilieren
+  noch zusätzlich ~-framework Cocoa~ anzugeben
+** Installation von MCIGraph --- Generell
+- Laden Sie die für ihr System passenden Bibliotheken von
+  https://www.libsdl.org/download-2.0.php
+- Suchen Sie im Internet wie sie ihre Entwicklungsumgebung für SDL2
+  einrichten können.
+- Laden sie die Datei ~mcigraph.hpp~ von Sakai und speichern sie diese
+  im selben Verzeichnis wie ihre Quellcodedatei.
+* Verwendung
+** Hello World
+*** Source Code
+#+INCLUDE: "mcigraph_hello_world.cpp" src C++
+*** Resultat
+:PROPERTIES:
+:ID:       1480e905-1de5-4f8b-a64b-5545534fed55
+:END:
+#+ATTR_LATEX: :width 0.25\textwidth
+[[file:data/14/80e905-1de5-4f8b-a64b-5545534fed55/screenshot-20170303-163618.png]]
+** Das verwendete Koordinatensystem
+:PROPERTIES:
+:ID:       162a5cf8-7d19-417f-b610-b412a11366f8
+:END:
+#+ATTR_LATEX: :width 0.7\textwidth
+[[file:data/16/2a5cf8-7d19-417f-b610-b412a11366f8/screenshot-20170303-173401.png]]
+Wir haben Koordinaten von ~0~ bis ~1023~ auf der x-Achse und von ~0~
+bis ~767~ in der y-Achse!
+** Zeichne Linie
+#+BEGIN_SRC C++
+  draw_line(int x1, int y1, int x2, int y2, [int red, int green, int blue])
+#+END_SRC
+- ~x1~ und ~y1~ : Startkoordinate der Linie
+- ~x2~ und ~y2~ : Endkoordinate der Linie
+- ~red~, ~green~ und ~blue~ : Optionale Farbe der Linie. Jeder
+  Farbparameter kann Werte zwischen ~0~ und ~255~ annehmen.
+** Zeichne Linie --- Beispiel
+#+INCLUDE: "draw_line.cpp" src C++
+** Zeichne Linie --- Resultat
+:PROPERTIES:
+:ID:       6754d5a4-1fe1-408b-ba0f-9b700d82c738
+:END:
+#+ATTR_LATEX: :width 0.8\textwidth
+[[file:data/67/54d5a4-1fe1-408b-ba0f-9b700d82c738/screenshot-20170314-211231.png]]
+** Zeichne Linie --- Beispiel 2
+#+INCLUDE: "draw_random_line.cpp" src C++
+** Zeichne Linie --- Resultat 2
+:PROPERTIES:
+:ID:       db8df584-32dc-4f72-b1aa-c747e47dac71
+:END:
+[[file:data/db/8df584-32dc-4f72-b1aa-c747e47dac71/screenshot-20170314-212846.png]]
+** Zeichne Punkt
+#+BEGIN_SRC C++
+  draw_point(int x, int y, [int red, int green, int blue])
+#+END_SRC
+- ~x~ und ~y~ : Koordinaten des Punkts
+- ~red~, ~green~ und ~blue~ : Optionale Farbe des Punkts. Jeder
+  Farbparameter kann Werte zwischen ~0~ und ~255~ annehmen.
+** Zeichne Punkt --- Beispiel
+#+INCLUDE: "draw_point.cpp" src C++
+** Zeichne Punkt --- Resultat
+:PROPERTIES:
+:ID:       8691cde7-2819-4d36-b0ad-c8c6603fdd88
+:END:
+[[file:data/86/91cde7-2819-4d36-b0ad-c8c6603fdd88/screenshot-20170314-214117.png]]
+** Zeichne Rechteck
+#+BEGIN_SRC C++
+  draw_rect(int x, int y, int width, int height,
+            [bool outline, int red, int green, int blue])
+#+END_SRC
+- ~x~ und ~y~ : Koordinate des linken oberen Punkts
+- ~width~ und ~height~ : Breite und Höhe des Rechtecks in Pixeln
+- ~outline~ : Wenn ~false~ wird ein gefülltes Rechteck gezeichnet
+- ~red~, ~green~ und ~blue~ : Optionale Farbe des Punkts. Jeder
+  Farbparameter kann Werte zwischen ~0~ und ~255~ annehmen.
+** Zeichne Rechteck --- Beispiel
+#+INCLUDE: "draw_rect.cpp" src C++
+** Zeichne Rechteck --- Resultat
+:PROPERTIES:
+:ID:       74625dc0-aca5-4a77-8341-259d37547f94
+:END:
+[[file:data/74/625dc0-aca5-4a77-8341-259d37547f94/screenshot-20170316-143436.png]]
+** Zeige Bild
+#+BEGIN_SRC C++
+  draw_image(std::string filename, int x, int y)
+#+END_SRC
+- ~filename~ : Dateiname des Bilds
+- ~x~ und ~y~ : Koordinate des linken oberen Punkts
+*** Mitgelieferte Bilder
+Auf Sakai finden Sie die Datei ~tiles.zip~ welche viele Bilder im
+Format $16 \times 16$ Pixel enthält. Hier eine Auswahl:
+[[file:tiles.png]]
+Die Bereiche in Pink werden von MCIGraph transparent dargestellt
+** Zeige Bild --- Beispiel
+#+INCLUDE: "draw_image.cpp" src C++
+** Zeige Bild --- Resultat
+:PROPERTIES:
+:ID:       34e7b7d1-9fa0-4cb5-a8fb-42825d77a5f2
+:END:
+[[file:data/34/e7b7d1-9fa0-4cb5-a8fb-42825d77a5f2/screenshot-20170316-144857.png]]
+** Frage Tastendrücke ab
+#+BEGIN_SRC C++
+  bool is_pressed(int keycode)
+#+END_SRC
+- ~keycode~ : Gibt an welche Taste man abfragen will
+- Die Funktion gibt ~true~ zurück falls die Taste mit ~keycode~
+  aktuell gedrückt ist
+*** Keycodes
+- ~KEY_LEFT~, ~KEY_RIGHT~, ~KEY_UP~, ~KEY_DOWN~
+- ~KEY_SPACE~
+- ~KEY_W~, ~KEY_S~, ~KEY_A~, ~KEY_D~
+- ~KEY_0~ ... ~KEY_9~
+** Frage Tastendrücke ab --- Beispiel
+#+INCLUDE: "get_keypress.cpp" src C++
+** Frage Tastendrücke ab --- Resultat
+:PROPERTIES:
+:ID:       d7603d4d-1dca-45a9-8bea-d56ae35d3f81
+:END:
+[[file:data/d7/603d4d-1dca-45a9-8bea-d56ae35d3f81/screenshot-20170316-150157.png]]
+** Frage Tastendrücke ab 2
+Alternativ zu ~is_pressed~ gibt es auch die Funktion ~was_pressed(int
+keycode)~. Im Gegensatz zu ~is_pressed~ liefert diese Funktion nur
+~true~ zurück wenn die Taste seit dem letzten Aufruf erneut gedrückt
+wurde. Damit verhält sich diese Funktion eher so wie man es von einer
+normalen Tastatureingabe gewöhnt ist.
+*** Versuch
+Ersetzen Sie alle ~is_pressed~-Aufrufe im letzten Programm durch
+~was_pressed~- Aufrufe und beobachten Sie das geänderte Verhalten.
+** Zusätzliche Funktionalität
+- Mit ~set_delay(int x)~ kann eingestellt werden wie schnell das
+  Programm läuft (wie häufig der Code ausgeführt wird). Ein höherer
+  Wert führt zu einer langsameren Ausführung.
+** Übung
+:PROPERTIES:
+:ID:       075f8661-1d63-4374-98be-36d9b786a222
+:END:
+1) Erweitern Sie das vorherige Programm so, dass zwei Figuren angezeigt werden
+2) Sorgen sie dafür, dass die zweite Figur mit den Tasten WSAD steuerbar ist
+3) Verhindern Sie für beide Figuren, dass sie aus dem Spielfeld laufen können
+4) Verhindern Sie, dass beide Figuren auf dem selben Feld stehen können
+#+ATTR_LATEX: :width 0.5\textwidth
+[[file:data/07/5f8661-1d63-4374-98be-36d9b786a222/screenshot-20200228-142923.png]]
+* Export settings etc.                                             :noexport:
+#+LANGUAGE:  ger
+#+OPTIONS:   texht:t H:2 toc:nil
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+STARTUP: beamer
+
+#+LATEX_CLASS: beamer
+
+#+LATEX_HEADER: \usepackage[utf8]{inputenc}
+#+LATEX_HEADER: \usepackage{color}
+#+LATEX_HEADER: \usetheme[height=7mm]{Rochester}
+
+#+LATEX_HEADER: \setbeamertemplate{footline}[frame number]
+#+LATEX_HEADER: \usecolortheme[accent=red, light]{solarized}
+#+LATEX_HEADER: \setbeamercolor{frametitle}{bg=solarizedRebase02,fg=solarizedAccent}
+#+LATEX_HEADER: \setbeamercolor{author in head/foot}{bg=solarizedRebase02,fg=solarizedRebase01}
+#+LATEX_HEADER: \setbeamercolor{title in head/foot}{bg=solarizedRebase02,fg=solarizedRebase01}
+#+LATEX_HEADER: \setbeamercolor{block title}{bg=solarizedRebase0,fg=solarizedRebase02}
+#+LATEX_HEADER: \setbeamercolor{block body}{bg=solarizedRebase02,fg=solarizedRebase0}
+#+LATEX_HEADER: \setbeamercolor{item}{bg=solarizedRebase02,fg=solarizedAccent}
+
+#+LATEX_HEADER: \beamertemplatenavigationsymbolsempty
+
+#+LATEX_HEADER: \usemintedstyle{manni}
+
+#+LATEX_HEADER: \AtBeginSection[]{
+#+LATEX_HEADER:   \begin{frame}
+#+LATEX_HEADER:   \vfill
+#+LATEX_HEADER:   \centering
+#+LATEX_HEADER:   \begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
+#+LATEX_HEADER:     \Huge\insertsectionhead\par%
+#+LATEX_HEADER:   \end{beamercolorbox}
+#+LATEX_HEADER:   \vfill
+#+LATEX_HEADER:   \end{frame}
+#+LATEX_HEADER: }
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;; Allow binding of emacs variables on export. You might have to evaluate that so that #+BIND: works
+  (setq org-export-allow-bind-keywords t)
+  ;; Set F12 to compile
+  (global-set-key (kbd "<f12>") 'org-beamer-export-to-pdf)
+
+  ;; Export all verbatim text in certain color
+  (defun latex-export-colored-verbatim (contents backend info)
+    (when (eq backend 'beamer)
+      (concat "{\\color{solarizedYellow}" contents "}")))
+  ;; Register
+  (add-to-list 'org-export-filter-code-functions
+               'latex-export-colored-verbatim)
+#+END_SRC

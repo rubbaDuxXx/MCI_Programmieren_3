@@ -1,0 +1,187 @@
+#+TITLE:     Ausnahmebehandlung
+#+AUTHOR:    Sebastian Stabinger, Thomas Hausberger
+#+EMAIL:     sebastian@stabinger.name
+#+DATE:      SS2021
+
+** Was versteht man unter Ausnahmebehandlung?
+- Ausnahmebehandlung (engl. Exception Handeling) beschreibt die
+  Methoden und Systeme die man verwendet um mit Fehlern *zur Laufzeit*
+  umzugehen
+- Wir wollen also nicht, dass unser Programm einfach abstürzt, wir
+  *wollen auf den Fehler sinnvoll reagieren*
+*** Beispiele
+- Wir haben eine Division durch Null
+- Wir wollen den Durchschnitt eines Vektors berechnen, aber der Vektor
+  ist leer
+- Wir öffnen eine Datei zum Lesen, aber die Datei existiert nicht
+- Wir versuchen eine Verbindung zu einem Server aufzubauen, aber der
+  Server meldet sich nicht
+- ...
+* Ausnahmebehandlung in C
+** Ausnahmebehandlung in C
+- In C gibt es *kein spezielles System* um mit Laufzeitfehlern
+  umzugehen
+- Man muss also *existierende Sprachelemente nutzen*
+*** Möglichkeiten der Fehlerbehandlung:
+- Über den *Rückgabewert*
+- Über *globale Variablen*
+- Über *einen Zeiger* der als Parameter übergeben wird
+** Beispiel mit Rückgabewert
+#+INCLUDE: returnval.c SRC C
+** Beispiel mit globaler Variable
+#+INCLUDE: globalvar.c SRC C
+** Beispiel mit Zeiger
+#+INCLUDE: pointer.c SRC C
+** Vor- und Nachteile der unterschiedlichen Varianten
+- *Mit Rückgabewert:* Funktioniert gut, wenn wir den Rückgabewert der
+  Funktion nicht für etwas anderes benötigen, oder wenn es
+  Rückgabewerte gibt, die normalerweise nicht vorkommen können.
+- *Mit globaler Variable:* Kann auch verwendet werden, wenn der
+  Rückgabewert benötigt wird. Unübersichtlich und funktioniert nicht,
+  wenn die gleiche Funktion parallel öfter aufgerufen wird (was Heute
+  immer häufiger ist)
+- *Mit Zeiger:* Die sauberste Variante, aber etwas aufwändig, da man
+  eine Variable erzeugen muss etc.
+*** Genereller Nachteil
+Wir müssen jeden einzelnen Fehler immer manuell mit einer
+~if~-Bedingung abfangen
+* Ausnahmebehandlung in C++
+** Überblick
+*** Ausnahme ~exception~
+Ein beliebiges Objekt. Üblicherweise aber eine *Instanz einer Klasse*
+die von der Klasse ~exception~ abgeleitet ist.
+*** Werfen ~throw~
+- Entdecken wir einen Fehler, können wir eine *Ausnahme werfen* (engl.
+  /to throw an exception/)
+*** Fangen ~catch~
+- Wir können für einen bestimmten Teil unseres Codes angeben was
+  passieren soll falls während der Ausführung eine Ausnahme auftritt.
+  Man spricht davon, dass die *Ausnahme gefangen* wird (engl. /to
+  catch an exception/)
+- Wir können auch angeben *welche Fehler* wir fangen wollen und was bei
+  unterschiedlichen Fehlern passieren soll
+** Das Werfen einer Ausnahme
+- Das Werfen einer Ausnahme geschieht mit dem Schlüsselwort ~throw~
+- ~throw~ funktioniert ähnlich wie ~return~, wir müssen uns aber nicht
+  auf einen Rückgabetyp festlegen
+- Üblicherweise wirft man aber Klassen die von ~std::exception~
+  abgeleitet sind
+*** Beispiel
+#+BEGIN_SRC C++
+  void ein_fehler() {
+    // Wir haben einfach immer einen Fehler
+    throw 23; // Wirft 23 als Ausnahme
+  }
+#+END_SRC
+Man sieht: Obwohl der Rückgabewert der Funktion ~void~ ist, können wir
+mit ~throw~ einen Integer als Ausnahme zurück geben.
+** Vordefinierte Exceptions
+Verfügbar mit ~#include <exception>~
+#+ATTR_LATEX: :width 0.5\textwidth
+file:img/cpp_exceptions.jpg
+\tiny
+Von https://www.tutorialspoint.com/cplusplus/cpp_exceptions_handling.htm
+** Das Werfen einer Ausnahme 
+#+INCLUDE: throw_class.cpp SRC C++
+- Man kann einer Ausnahme üblicherweise einen *String* mitgeben der
+  *näher erklärt* was genau passiert ist
+- Wenn man eine *Ausnahme nicht fängt*, *stürzt das Programm ab* und
+  man erfährt welche Ausnahme dafür verantwortlich war und welchen
+  String sie enthalten hat
+** Das Fangen einer allgemeinen Ausnahme
+- Das Stück Code in dem eine Ausnahme gefangen werden soll wird in ein
+  ~try { }~ eingeschlossen
+- Anschließend wird mit ~catch(...) { }~ angegeben *welcher Code* im
+  Fall einer Ausnahme ausgeführt werden soll
+*** Beispiel
+#+BEGIN_SRC C++
+  try {
+    cout << "Alles OK" << endl;
+    eine_funktion();
+    cout << "Immer noch alles OK" << endl;
+  } catch (...) {
+    cout << "Ouch: Irgendwo oben gab es eine Ausnahme!" << endl;
+  }
+#+END_SRC
+** Das Fangen einer speziellen Ausnahme
+- ~catch(...)~ bedeutet, dass bei *jeder Ausnahme* reagiert werden
+  soll
+- Falls wir nur auf *spezielle Ausnahmen* reagieren wollen schreiben
+  wir in die Klammern *welche Ausnahme* das sein soll und wie das
+  Ausnahmeobjekt bezeichnet werden soll
+- Wir können mehrere ~catch~ Anweisungen hintereinander hängen
+*** Beispiel
+#+BEGIN_SRC C++
+  try {
+    cout << "Alles OK" << endl;
+    eine_funktion();
+    cout << "Immer noch alles OK" << endl;
+  } catch (overflow_error &e) {
+    cout << "Ouch: Irgendwo oben gab es einen runtime_error!" << endl;
+    cout << "Nachricht war: " << e.what() << endl;
+  } catch (range_error &e) {
+      cout << "Ouch: Irgendwo oben gab es einen range_error!" << endl;
+      cout << "Nachricht war: " << e.what() << endl;
+  }
+#+END_SRC
+** Beispiel
+#+INCLUDE: exception.cpp SRC C++
+** Übung
+- Implementieren Sie Ihre *eigene Divisionsfunktion* ~double
+  mydiv(double a, double b)~ welche das Ergebnis von ~a~ geteilt durch
+  ~b~ zurück gibt.
+- Falls eine Division durch 0 droht, soll die Funktion eine Ausnahme
+  (~domain_error~) zurück liefern.
+- Testen Sie ihren Code an ein paar Beispielen und fangen Sie mögliche
+  Ausnahmen mit ~try~ und ~catch~ ab
+* Export settings etc.                                             :noexport:
+#+LANGUAGE:  ger
+#+OPTIONS:   texht:t H:2 toc:nil
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+STARTUP: beamer
+
+#+LATEX_CLASS: beamer
+
+#+LATEX_HEADER: \usepackage[utf8]{inputenc}
+#+LATEX_HEADER: \usepackage{color}
+#+LATEX_HEADER: \usetheme[height=7mm]{Rochester}
+
+#+LATEX_HEADER: \setbeamertemplate{footline}[frame number]
+#+LATEX_HEADER: \usecolortheme[accent=red, light]{solarized}
+#+LATEX_HEADER: \setbeamercolor{frametitle}{bg=solarizedRebase02,fg=solarizedAccent}
+#+LATEX_HEADER: \setbeamercolor{author in head/foot}{bg=solarizedRebase02,fg=solarizedRebase01}
+#+LATEX_HEADER: \setbeamercolor{title in head/foot}{bg=solarizedRebase02,fg=solarizedRebase01}
+#+LATEX_HEADER: \setbeamercolor{block title}{bg=solarizedRebase0,fg=solarizedRebase02}
+#+LATEX_HEADER: \setbeamercolor{block body}{bg=solarizedRebase02,fg=solarizedRebase0}
+#+LATEX_HEADER: \setbeamercolor{item}{bg=solarizedRebase02,fg=solarizedAccent}
+
+#+LATEX_HEADER: \beamertemplatenavigationsymbolsempty
+
+#+LATEX_HEADER: \usemintedstyle{manni}
+
+#+LATEX_HEADER: \AtBeginSection[]{
+#+LATEX_HEADER:   \begin{frame}
+#+LATEX_HEADER:   \vfill
+#+LATEX_HEADER:   \centering
+#+LATEX_HEADER:   \begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
+#+LATEX_HEADER:     \Huge\insertsectionhead\par%
+#+LATEX_HEADER:   \end{beamercolorbox}
+#+LATEX_HEADER:   \vfill
+#+LATEX_HEADER:   \end{frame}
+#+LATEX_HEADER: }
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;; Allow binding of emacs variables on export. You might have to evaluate that so that #+BIND: works
+  (setq org-export-allow-bind-keywords t)
+  ;; Set F12 to compile
+  (global-set-key (kbd "<f12>") 'org-beamer-export-to-pdf)
+
+  ;; Export all verbatim text in certain color
+  (defun latex-export-colored-verbatim (contents backend info)
+    (when (eq backend 'beamer)
+      (concat "{\\color{solarizedYellow}" contents "}")))
+  ;; Register
+  (add-to-list 'org-export-filter-code-functions
+               'latex-export-colored-verbatim)
+#+END_SRC

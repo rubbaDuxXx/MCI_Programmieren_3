@@ -1,0 +1,99 @@
+#+TITLE:     Programmieren 3
+#+SUBTITLE:  Erweiterte Konzepte in C, Einführung in objektorientierte Programmierung
+#+AUTHOR:    Sebastian Stabinger, Thomas Hausberger
+#+EMAIL:     sebastian.stabinger@mci.edu
+#+DATE:      SS 2021
+
+* Allgemeine Info
+** COMMENT Zu meiner Person
+- Sebastian Stabinger
+- Email: sebastian.stabinger@mci.edu
+*** Kurze Info zu mir
+- PhD Student an der Uni Innsbruck an der Intelligent and Interactive
+  Research Group (Künstliche Intelligenz, Computer Vision, Robotik)
+- Projektmitarbeiter am MCI (Natural Language Processing)
+- R&D bei Kjero (Natural Language Processing)
+** COMMENT Ablauf der Lehrveranstaltung
+*** Genereller Ablauf
+- Viel Hausaufgaben (leider nicht zu vermeiden)
+- Dafür muss man wenig auswendig lernen
+*** Benotung
+- Hausaufgaben werden in einem Onlinesystem gelöst und gleich
+  kontrolliert
+- Etwas größeres Projekt gegen Ende des Semesters
+- *Kein Test!*
+** Ziele
+- Verwendung einer Grafikbibliothek
+- Erweiterte Konzepte in C
+  - Dynamische Speicherverwaltung
+  - Strukturen
+- Einführung in C++ und die objektorientierte Programmierung
+*** COMMENT Am wichtigsten                                           :B_alertblock:
+:PROPERTIES:
+:BEAMER_env: alertblock
+:END:
+Ihr sollt in der Lage sein praktische Probleme mittels C++ zu lösen
+*** Die schlechte Nachricht
+- C Standardwerk: 270 Seiten
+- C++ Standardwerk: *1400 Seiten!*
+- *Bedeutet:* Eine Sinnvolle Einführung in C++ geht sich in einem
+  Semester nicht aus!
+- Wir werden also weiterhin C programmieren und einige Erweiterungen
+  von C++ verwenden
+- Machen in der Praxis viele Programmierer, ist aber *eigentlich keine
+  gute Idee*!
+*** COMMENT Die gute Nachricht
+In der Praxis ist C++ meistens einfacher zu verwenden als C
+** Literatur
+*** Left                                                            :BMCOL:
+:PROPERTIES:
+:BEAMER_col: 0.5
+:ID:       c71e3834-c422-44c9-8ab3-d4dca4a8fe08
+:END:
+[[file:stroustrup.jpg]]
+*** Right                                                           :BMCOL:
+:PROPERTIES:
+:BEAMER_col: 0.5
+:ID:       3be402ec-1a4e-49a2-aee3-4243ad12dd23
+:END:
+[[file:schroedinger.jpg]]
+* Export settings etc.                                             :noexport:
+#+LANGUAGE:  ger
+#+OPTIONS:   texht:t H:2 toc:nil
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+STARTUP: beamer
+
+#+LATEX_CLASS: beamer
+
+#+LATEX_HEADER: \usepackage[utf8]{inputenc}
+#+LATEX_HEADER: \usepackage{color}
+#+LATEX_HEADER: \usetheme{Rochester}
+
+#+LATEX_HEADER: \setbeamertemplate{footline}[frame number]
+#+LATEX_HEADER: \usecolortheme[accent=red, light]{solarized}
+#+LATEX_HEADER: \setbeamercolor{frametitle}{bg=solarizedRebase02,fg=solarizedAccent}
+#+LATEX_HEADER: \setbeamercolor{author in head/foot}{bg=solarizedRebase02,fg=solarizedRebase01}
+#+LATEX_HEADER: \setbeamercolor{title in head/foot}{bg=solarizedRebase02,fg=solarizedRebase01}
+#+LATEX_HEADER: \setbeamercolor{block title}{bg=solarizedRebase0,fg=solarizedRebase02}
+#+LATEX_HEADER: \setbeamercolor{block body}{bg=solarizedRebase02,fg=solarizedRebase0}
+#+LATEX_HEADER: \setbeamercolor{item}{bg=solarizedRebase02,fg=solarizedAccent}
+
+#+LATEX_HEADER: \beamertemplatenavigationsymbolsempty
+
+#+LaTeX_HEADER: \usemintedstyle{manni}
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;; Allow binding of emacs variables on export. You might have to evaluate that so that #+BIND: works
+  (setq org-export-allow-bind-keywords t)
+  ;; Set F12 to compile
+  (global-set-key (kbd "<f12>") 'org-beamer-export-to-pdf)
+
+  ;; Export all verbatim text in certain color
+  (defun latex-export-colored-verbatim (contents backend info)
+    (when (eq backend 'beamer)
+      (concat "{\\color{solarizedYellow}" contents "}")))
+  ;; Register
+  (add-to-list 'org-export-filter-code-functions
+               'latex-export-colored-verbatim)
+#+END_SRC
