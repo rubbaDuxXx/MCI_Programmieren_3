@@ -1,0 +1,2 @@
+* Homework
+This only contains a little bit of sample code for a few of the homeworks. The complete set can be found here: https://stepik.org/course/67130
