@@ -1,0 +1,1026 @@
+% Created 2018-03-21 Wed 00:12
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fixltx2e}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{marvosym}
+\usepackage{wasysym}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\tolerance=1000
+\usepackage{minted}
+\author{Sebastian Stabinger\thanks{sebastian@stabinger.name}}
+\date{\today}
+\title{C++ By Example}
+\hypersetup{
+  pdfkeywords={},
+  pdfsubject={},
+  pdfcreator={Emacs 25.3.1 (Org mode 8.2.10)}}
+\begin{document}
+
+\maketitle
+\setcounter{tocdepth}{2}
+\tableofcontents
+
+
+\section{Einführung}
+\label{sec-1}
+Dieses Skriptum soll es Ihnen erleichtern dem Stoff der
+Lehrveranstaltung \emph{Programmieren 3} zu folgen. Es ist umfangreicher
+als die Folien und enthält zudem mehr Beispiele als in der
+Lehrveranstaltung selbst besprochen werden können. Zudem enthält das
+Skriptum auch Teile die Ihnen bereits aus Ihren Lehrveranstaltungen zu
+C bekannt sein sollten und für die in \emph{Programmieren 3} keine Zeit zur
+Wiederholung ist.
+
+Ich bin der Auffassung, dass gerade Programmieranfänger von einer
+großen Anzahl an präsentierten Beispielen profitieren. Ich versuche
+daher zu jedem theoretisch eingeführten Konzept eine Vielzahl an
+ausführlich kommentierten Beispielen zu präsentieren.
+
+Bedenken Sie bitte, dass dieses Skriptum kein Buch zum Thema C++
+ersetzen kann. Aus zeitlichen Gründen muss ich viele Themenbereiche
+entweder komplett auslassen, oder bin nur dazu in der Lage sie kurz
+anzuschneiden. Sollten Sie Interesse an der Programmierung in C++
+haben ist es sinnvoll sich weiterführende Literatur zum Thema zu
+besorgen.
+\subsection{Geschichte von C++}
+\label{sec-1-1}
+\begin{description}
+\item[{1979}] Bjarne Stroustrup beginnt mit der Arbeit an "C with classes"
+(C mit Klassen). Es war als eine Erweiterung zu C gedacht welche
+die objektorientierte Programmierung in C erleichtert.
+\item[{1983}] Umbenennung in C++
+\item[{1998}] Erster ISO C++ Standard. C++ ist eine der wenigen Sprachen
+die offiziell standardisiert ist. Andere Beispiele sind C und
+Fortran. Es gibt keinen offiziellen Compiler für C++ (so wie es
+z.B. eine offizielle Version von Matlab, Java oder Python gibt).
+Daher war es wichtig einen Standard zu schaffen an den sich
+unterschiedliche Compiler halten können.
+\item[{2011}] Ein neuer ISO Standard wird veröffentlicht, der recht viel
+an der Sprache ändert. \textbf{Der C++11 Standard ist der Standard den
+wir in dieser Lehrveranstaltung verwenden werden.}
+\item[{2014}] ISO C++ 14. Kleine Änderungen am Standard. Betreffen uns in
+dieser Lehrveranstaltung nicht.
+\item[{2017}] ISO C++17. Größere Änderungen, aber nichts was uns in dieser
+Lehrveranstaltung berührt.
+\end{description}
+\subsection{Verwandschaft zu anderen Sprachen}
+\label{sec-1-2}
+C++ ist ursprünglich als eine Erweiterung zu C entwickelt worden um
+die objektorientierte Programmierung zu erleichtern. Es ist daher
+immer noch fast jeder C Code auch gültiger C++ Code. Über die Jahre
+hat sich die Sprache C++ aber stark weiterenwickelt während die
+Sprache C relativ unverändert geblieben ist. Heute ist es so, dass C
+Code zwar prinzipiell auch gültiger C++ Code ist (mit kleinen
+Ausnahmen), aber schön geschriebener C++ Code hat nicht mehr viel mit
+C gemeinsam. Wenn C++ Code also aussieht wie C Code, dann ist er in
+der Regel schlecht geschrieben.
+\subsection{Warum C++}
+\label{sec-1-3}
+\begin{description}
+\item[{Sehr schnell, geringer Speicherverbrauch}] C++ basiert auf dem
+Konzept, dass ein Programm keine Dinge tut die man nicht explizit
+angibt. Dadurch sind Programme die in C++ geschrieben sind
+generell relativ schnell und verbrauchen wenig Arbeitsspeicher.
+\item[{Hardwarenahe Programmierung}] C++ eignet sich genauso wie C für
+sehr hardwarenahe Programmierung. Man kann z.B. sehr genau
+bestimmen was bei der Ausführung in der CPU passiert, etc.
+\item[{Verwenden von C-Bibliotheken}] Durch die historische Nähe von C++
+zu C lassen sich C-Bibliotheken genauso einfach verwenden wie in
+C selbst. Das ist von Vorteil, da sehr viele C-Bibliotheken
+existieren. Speziell wenn man mit Hardware interagieren will,
+existiert üblicherweise eine C-Bibliotheken für diesen Zweck vom
+Hersteller.
+\item[{Flexibel}] C++ ist vermutlich die flexibelste Sprache hinsichtlich
+des Einsatzgebietes. Man kann vom Mikroprozessor, über
+PCs/Konsolen, bis hin zu High Performance Computing auf riesigen
+Clustern mit zehntausenden CPUs alles programmieren. Und C++ wird
+in all diesen Bereichen auch tagtäglich eingesetzt.
+\item[{Hohes Maß an Abstraktion}] Im Gegensatz zu C ist ein hohes Maß an
+Abstraktion möglich (OOP, Templates, Meta Template Programming,
+\ldots{}). Wir werden auf diese Dinge noch im Verlauf des Semesters
+genauer eingehen. Dieses höhere Maß an Abstraktion macht zwar die
+Sprache selbst komplexer (da es mehr Konzepte gibt die man lernen
+und verstehen muss), aber das Programmieren selbst wird dadurch
+letztlich einfacher wenn man die Konzepte verstanden hat.
+\item[{Grössere Standardbibliothek}] Im Gegensatz zu C inkludiert C++ eine
+wesentlich größere Standardbibliothek. Wir werden im Laufe des
+Semesters einige nützliche Bereiche der Standardbibliothek kennen
+lernen. Im Vergleich zu den Standardbibliotheken von Sprachen wie
+Java, Python, C\#, \ldots{} ist sie aber immer noch relativ klein.
+\item[{Lange erprobt}] C++ existiert seit 35 Jahren und hat sich im
+industriellen Einsatz bewährt. Die Sprache hat ihre Probleme,
+aber man hat gelernt damit umzugehen. Es ist daher anzunehmen,
+dass die Sprache auch in Zukunft weiterhin ihren Platz haben
+wird. Im \href{https://www.tiobe.com/tiobe-index/}{TIOBE Index} welcher Sprachen nach ihrer popularität
+bewertet ist C++ z.B. seit Jahrzehnten in den Top-5 (C ist seit
+Jahrzehnten abwechselnd auf Platz 1 oder 2)
+\item[{Sehr große Code Base}] Sehr viele Programme sind in C++
+geschrieben. Zum Beispiel sind faktisch alle Anwendungen (Office,
+Webbrowser, \ldots{}) in C++ geschrieben. Spiele auf PC oder Konsolen
+werden heutzutage auch fast durchgehend in C++ entwickelt. Es
+gibt also sehr viel C++ Code der gewartet und weiter entwickelt
+werden muss.
+\end{description}
+
+\section{C vs C++}
+\label{sec-2}
+Ich will Ihnen hier einen kleinen Vorgeschmack geben, wie einem C++
+das Leben gegenüber C leichter machen kann. Dieses Kapitel ist als
+Vorschau gedacht und soll Ihnen C++ schmackhaft machen. Sie müssen
+noch nicht verstehen, was hier im Detail passiert.
+\subsection{Funktionsüberladung}
+\label{sec-2-1}
+Angenommen Sie wollen eine Funktion schreiben mit der man das Quardat
+einer Zahl bestimmen kann und Sie wollen diese Funktion für \verb~int~
+(Ganzzahlen) als auch für \verb~double~ (Fließkommazahlen) implementieren.
+\subsubsection{In C}
+\label{sec-2-1-1}
+In C ist es nicht erlaubt zwei Funktionen mit dem gleichen Namen zu
+definieren, selbst wenn die Datentypen der Parameter unterschiedlich
+sind oder sie unterschiedliche Anzahl an Parametern haben. Wir müssen
+also für unsere Funktion zwei verschiedene Namen wählen und bei der
+Verwendung selbst daran denken die richtige Version zu verwenden.
+\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+int quadriere_int(int a) { return a * a; }
+double quadriere_double(double a) { return a * a; }
+
+int main() {
+  int i = 2;
+  double d = 2.0;
+
+  int qi = quadriere_int(i);
+  double qd = quadriere_double(d);
+}
+\end{minted}
+\subsubsection{In C++}
+\label{sec-2-1-2}
+In C++ können wir mehreren Funktionen den gleichen Namen geben, so
+lange die Datentypen der Parameter unterschiedlich sind. Der C++
+Compiler wählt dann anhand der Datentypen automatisch die richtige
+Version aus. Man bezeichnet das als \textbf{\href{https://msdn.microsoft.com/de-de/library/5dhe1hce.aspx}{Funktionsüberladung}} (function
+overloading) . In unserem Fall können wir also für die Quadrierfunktion
+für \verb~int~ und für \verb~double~ den gleichen Namen wählen und der Compiler
+verwendet automatisch die richtige Version.
+\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+int quadriere(int a) { return a * a; }
+double quadriere(double a) { return a * a; }
+
+int main() {
+  int i = 2;
+  double d = 2.0;
+
+  int qi = quadriere(i);
+  double qd = quadriere(d);
+}
+\end{minted}
+\subsubsection{In C++ mit Templates}
+\label{sec-2-1-3}
+Wir haben aber immer noch das Problem, dass wir für jeden Datentyp
+eine eigene Version unserer Quadrierfunktion implementieren müssen
+obwohl ja unabhängig vom Typ immer das gleiche passiert (es wird
+einfach der übergebene Parameter mit sich selbst multipliziert). C++
+ermöglicht es mittels sogenannter Templates, Funktionen zu schreiben
+welche automatisch für alle Typen funktionieren welche z.B. die
+Multiplikation unterstüzen.
+\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+template <typename T> T quadriere(T a) { return a * a; }
+
+int main() {
+  int i = 2;
+  unsigned int ui = 2;
+  short d = 2;
+  double d = 2.0;
+
+  int qi = quadriere(i);
+  unsigned int qui = quadriere(ui);
+  short qs = quadriere(s);
+  double qd = quadriere(d);
+}
+\end{minted}
+Das \verb~T~ dient hier als ein Platzhalter für beliebige Datentypen.
+\subsection{Verwendung komplexer Zahle}
+\label{sec-2-2}
+Angenommen wir wollen das Ergebnis dieser Formel berechnen und müssen
+daher mit komplexen Zahen rechnen: $$d=\frac{(1.3+5i)+5}{(3.4+1i)^2}$$
+Sowohl C als auch C++ bieten über ihre Standardbibliothek das Rechnen
+mit komplexen Zahlen an. \textbf{Achtung:} Die folgenden Beispiele verwenden
+nicht die Implementierungen wie sie von C und C++ zur Verfügung
+gestellt werden. Die Beispiele verdeutlichen nur, wie eine
+Implementierung aussehen könnte.
+\subsubsection{In C}
+\label{sec-2-2-1}
+Da C nur sehr wenige Möglichkeiten zur Abstraktion bietet müssen alle
+Operationen über Funktionen realisiert werden. Es ist in C z.B. nicht
+möglich eigenes Verhalten für \verb~+~ zu implementieren. Wir müssen daher
+zum Addieren von zwei komplexen Zahlen die Funktion \verb~complex_add~
+verwenden, etc. Das macht den Code sehr unleserlich.
+\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+struct complex d =
+    complex_div(complex_add(create_complex(1.3, 5), create_complex(5, 0)),
+                complex_pow(create_complex(3.4, 1.0), 2));
+\end{minted}
+
+\subsubsection{In C++}
+\label{sec-2-2-2}
+C++ erlaubt die Implementierung von eigenen Versionen von \verb~+~, \verb~*~,
+\ldots{} Man bezeichnet dies als \href{https://de.wikipedia.org/wiki/\%25C3\%259Cberladen#Operator\%C3\%BCberladung}{Operatorüberladung} (operator overloading).
+Dadurch wir Code häufig leichter lesbar.
+\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+complex d = (complex(1.3, 5.0) + 5.0) / complex(3.4, 1.0) ^ 2.0;
+\end{minted}
+
+\subsection{Typinferenz}
+\label{sec-2-3}
+In C müssen wir den Datentyp einer Variable angeben, auch wenn der
+Compiler eigentlich selbst herausfinden könnte welchen Datentyp die
+Variable haben muss. Angenommen wir haben folgende Funktionen gegeben:
+\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+struct some_long_name get_struct();
+void do_something_with_struct(struct some_long_name a);
+\end{minted}
+Wir wollen nun mittels \verb~get_struct~ eine Variable befüllen und diese
+dann mittels \verb~do_something_with_struct~ weiterverarbeiten.
+\subsubsection{Verwendung in C}
+\label{sec-2-3-1}
+In C müssen wir den Datentyp der Variable \verb~mystruct~ explizit angeben,
+obwohl der Compiler ja selbst herausfinden könnte welchen Datentyp
+\verb~get_struct~ zurück gibt und den selben Typ für die Variable verwenden
+könnte.
+\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+struct some_long_name mystruct = get_struct();
+// ...
+do_something_with_struct(mystruct);
+\end{minted}
+\subsubsection{Verwendung in C++(11)}
+\label{sec-2-3-2}
+Seit C++11 unterstützt C++ eine einfache Form der \href{https://de.wikipedia.org/wiki/Typinferenz}{Typinferenz}. Dadurch
+muss der Datentyp einer Variable nicht angegeben werden, falls der
+Compiler den Datentyp selbst bestimmen kann. Um den Compiler zu
+veranlassen den Datentyp selbst zu bestimmen, wird statt des Datentyps
+das Schlüsselwort \verb~auto~ verwendet.
+\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+auto mystruct = get_struct();
+// ...
+do_something_with_struct(mystruct);
+\end{minted}
+\verb~auto~ findet den Typ einer Variable also automatisch.
+\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+auto i = 42;   // i ist vom Typ int
+auto d = 23.4; // d ist vom Typ double
+auto c = 'A';  // c ist vom Typ char
+\end{minted}
+\section{Hello World}
+\label{sec-3}
+Heute ist es üblich, als erstes Beispiel einer Programmiersprache das
+sogenannte "\href{https://de.wikipedia.org/wiki/Hallo-Welt-Programm}{Hello World}" Programm zu implementieren. Es handelt sich
+dabei um ein Programm welches einfach den Text "Hello World" auf dem
+Bildschirm ausgibt. Begonnen hat diese Tradition im Buch \href{https://de.wikipedia.org/wiki/The_C_Programming_Language}{The C
+Programming Language} (DAS Standardwerk zu C) von Kernighan und
+Ritchie. Es folgt ein Vergleich dieses Programms in C (welches Sie
+bereits kennen sollten) und C++.
+\subsection{C}
+\label{sec-3-1}
+\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+#include <stdio.h>
+int main() {
+    printf("Hello World\n");
+}
+\end{minted}
+Die Headerdatei \verb~stdio.h~ wird eingebunden um \verb~printf~ verwenden zu
+können. Die Funktion \verb~main~ ist die Funktion die bei Ausführung eines
+Programms als erstes aufgerufen wird. Die Funktion \verb~printf~ ist der
+Standardweg um Text in C auf dem Bildschirm auszugeben.
+\subsection{C++}
+\label{sec-3-2}
+\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+#include <iostream>
+int main() {
+    std::cout << "Hello World" << std::endl;
+}
+\end{minted}
+Hier wird der Header für \verb~iostream~ eingebunden um \verb~std::cout~
+verwenden zu können. Bei C++ ist es üblich die Dateierweiterung \verb~.h~
+bei Headerdateien wegzulassen. In C++ ist \verb~std::cout~ der Standardweg
+um Text auf dem Bildschirm auszugeben. Der Bezeichner \verb~std::endl~
+bewirkt das gleiche wie \verb~\n~ in C (ein Zeilenumbruch wird eingefügt).
+\section{Datentypen}
+\label{sec-4}
+Alle Datentypen die in C verfügbar sind können und werden auch in C++
+verwendet.
+\subsection{Ganzzahlen}
+\label{sec-4-1}
+Ganzzahlen werden verwendet um ganze Zahlen (ohne Kommastellen) zu
+speichern. Die unterschiedlichen Datentypen für Ganzzahlen
+unterscheiden sich hinsichtlich der Wertebereiche welche in ihnen
+gespeichert werden können und wie viel Speicher eine einzelne Zahl
+belegt.
+
+Leider ist die Größe dieser Datentypen in C nicht standardisiert (es
+ist nur die minimale Größe spezifiziert). Sollte man garantierte
+Größen benötigen kann man (seit C99) den Header \verb~stdint.h~ verwenden
+(\href{http://openbook.rheinwerk-verlag.de/c_von_a_bis_z/030_c_anhang_b_017.htm}{weitere Info}). Auf einem aktuellen PC mit 64 Bit Architektur sind
+folgende Größen üblich. Auf Mikroprozessoren und Embedded Devices
+können die Größen stark von dieser Tabelle abweichen.
+
+\begin{center}
+\begin{tabular}{lll}
+Bezeichner & Übliche Größe auf PC & Üblicher Wertebereich auf PC\\
+\hline
+\verb~char~ & 8 Bit & -128 \ldots{} 127\\
+\verb~unsigned char~ & 8 Bit & 0 \ldots{} 255\\
+\verb~short~ & 16 Bit & -32768 \ldots{} 32767\\
+\verb~unsiged short~ & 16 Bit & 0 \ldots{} 65536\\
+\verb~int~ & 32 Bit & -2147483648 \ldots{} 2147483647\\
+\verb~unsigned int~ & 32 Bit & 0 \ldots{} 4294967296\\
+\verb~long~ & 32/64 Bit & -9223372036854775808 \ldots{} 9223372036854775807\\
+\verb~unsigned long~ & 32/64 Bit & 0 \ldots{} 18446744073709551616\\
+\verb~long long~ & 64 Bit & -9223372036854775808 \ldots{} 9223372036854775807\\
+\verb~unsigned long long~ & 64 Bit & 0 \ldots{} 18446744073709551616\\
+\end{tabular}
+\end{center}
+
+Ganzzahlen mit mehr als 64 Bit werden üblicherweise nicht direkt von C
+unterstützt (einige Compiler unterstützen noch 128 Bit Ganzzahlen).
+Falls man größere Zahlen benötigt muss eine externe Bibliothek, z.B.
+\href{https://gmplib.org/}{GMP} , verwendet werden. Mit dieser Bibliothek sind beliebig große
+Ganzzahlen möglich.
+\subsection{Fließkommazahlen}
+\label{sec-4-2}
+Fließkommazahlen sind eine Möglichkeit Zahlen mit Nachkommastellen in
+einem Computer darzustellen. Die Anzahl der Nachkommastellen ist nicht
+fix vorgegeben. Daher der Name \textbf{Fließ}-kommazahlen. C kennt die
+folgenden Datentypen für Fließkommazahlen.
+
+\begin{center}
+\begin{tabular}{llll}
+Bezeichner & Größe & Wertebereich & Genauigkeit\\
+\hline
+\verb~float~ & 32 Bit & $\pm3.4*10^{38}$ & ca. 7 Stellen\\
+\verb~double~ & 64 Bit & $\pm2.3*10^{308}$ & ca. 16 Stellen\\
+\verb~long double~ & 128 Bit & $\pm3.4*10^{4932}$ & ca. 19 Stellen\\
+\end{tabular}
+\end{center}
+
+\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+auto pi = 3.14159265358979323846;
+auto tau = 2 * pi;
+auto ganz = 3.0; // Auch 3.0 ist eine Kommazahl (mit .0000 als Kommastellen)
+auto ganz2 = 4.; // Ein . ist ausreichend um eine Fließkommazahl zu erzeugen
+auto expo = 3e3; // Exponentialschreibweise. Entspricht 3*10^3
+double kein_integer = 23; // Wird automatisch in 23.0 umgewandelt
+\end{minted}
+\subsection{Welche Datentypen sollte man verwenden?}
+\label{sec-4-3}
+\textbf{Generell faktisch immer \verb~int~ und \verb~double~} 
+
+C und C++ unterstützen sehr viele unterschiedliche Datentypen für
+Zahlen, aber nur wenige sind ohne spezielle Gründe sinnvoll. Falls Sie
+keine SEHR guten Gründe haben, sollten Sie generell \verb~int~ und \verb~double~
+verwenden. Gute Gründe sind fast ausschließlich die Interaktion mit
+Hardware welche bestimmte Datentypen benötigen.
+
+Das Rechnen mit \verb~short~ und \verb~float~ ist auf PCs \textbf{nicht generell
+schneller} als das Rechnen mit \verb~int~ und \verb~double~ und häufig sogar
+langsamer.
+
+Der Datentyp \verb~char~ stellt eine Ausnahme dar da er zum Speichern von
+Zeichen verwendet wird.
+\subsection{Boolsche Werte}
+\label{sec-4-4}
+Wie auch in C werden Wahrheitswerte (true/false) in C++ durch
+Ganzzahlen dargestellt. Die Zahl \verb~0~ repräsentiert \verb~false~ und alle
+anderen Zahlen (positiv wie auch negativ) repräsentieren \verb~true~.
+
+\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+if(0) printf("true"); else printf("false");     // false
+if(-0) printf("true"); else printf("false");    // false
+if(23-23) printf("true"); else printf("false"); // false
+if(42) printf("true"); else printf("false");    // true
+if(-255) printf("true"); else printf("false");  // true
+
+int a = 0;
+int b = 47;
+if(a) printf("true"); else printf("false");  // false
+if(b) printf("true"); else printf("false");  // true
+\end{minted}
+
+In C++ gibt es allerdings einen eigenen Datetyp zur Speicherung von
+Wahrheitswerten namens \verb~bool~. Intern wird immer noch eine Ganzzahl
+gespeichert (die Größe ist nicht spezifiziert, aber häufig 1 Byte),
+aber die Verwendung von \verb~bool~ hat einige Vorteile:
+
+\begin{enumerate}
+\item Die Verwendung von \verb~bool~ macht klar, dass die Variable, der
+Parameter, der Rückgabewert nur Wahrheitswerte berücksichtigt. Bei
+Verwendung von z.B. \verb~int~ ist das häufig nicht offensichtlich.
+\item Es gibt die Bezeichner \verb~true~ und \verb~false~ mit denen verglichen
+werden kann und die als Rückgabewert verwendet werden können, was
+den Code ebenfalls lesbarer macht.
+\item Der Datentyp \verb~bool~ garantiert, dass intern nur \verb~0~ oder \verb~1~
+gespeichert wird, selbst wenn andere Zahlen zugewiesen werden (was
+gültig ist)
+\end{enumerate}
+
+In C ist etwas sehr ähnliches durch das Einbinden der Headerdatei
+\verb~stdbool.h~ verfügbar (\href{http://openbook.rheinwerk-verlag.de/c_von_a_bis_z/005_c_basisdatentypen_015.htm}{Info}). In C++ ist \verb~bool~ allerdings fixer
+Bestandteil der Sprache selbst.
+
+\subsubsection{Beispiel 1}
+\label{sec-4-4-1}
+Wir sehen uns die Verwendung von \verb~bool~ als Rückgabewert einer
+Funktion an die zurück gibt ob ein Integer gerade ist oder nicht.
+\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+#include <iostream>
+using namespace std;
+
+bool ist_gerade(int zahl) {
+  if (zahl % 2 == 0)
+    return true;
+  else
+    return false;
+}
+
+int main() {
+  int a = 23;
+  if (ist_gerade(a)) // bool kann direkt als Bedingung verwendet werden
+    cout << a << " ist gerade" << endl;
+  else
+    cout << a << " ist nicht gerade" << endl;
+  // Ausgabe:
+  // 23 ist nicht gerade
+
+  int b = 42;
+  bool ist_b_gerade =
+      ist_gerade(b); // Wir können bool in einer Variable speichern
+  if (b == true)     // Wir können explizit mit == vergleichen
+    cout << b << " ist gerade" << endl;
+  else
+    cout << b << " ist nicht gerade" << endl;
+  // Ausgabe:
+  // 42 ist nicht gerade
+}
+\end{minted}
+
+\subsubsection{Beispiel 2}
+\label{sec-4-4-2}
+Verwendung von \verb~bool~ als Parameter
+\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+#include <iostream>
+using namespace std;
+
+void print(int zahl, bool mit_text) {
+  if (mit_text)
+    cout << "Zahl ist " << zahl << endl;
+  else
+    cout << zahl << endl;
+}
+
+int main() {
+  int i = 42;
+  print(i, false);
+  print(i, true);
+}
+
+// Ausgabe:
+// 42
+// Zahl ist 42
+\end{minted}
+
+\subsubsection{Beispiel 3}
+\label{sec-4-4-3}
+Wir sehen, dass eine Variable vom Typ \verb~bool~ mit \verb~cout~ als Zahl (\verb~0~
+oder \verb~1~) ausgegeben wird und dass \verb~bool~ nur \verb~0~ oder \verb~1~ speichert,
+selbst wenn eine andere Zahl zugewiesen wird.
+\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+#include <iostream>
+using namespace std;
+
+int main() {
+  bool b1 = true;
+  bool b2 = false;
+
+  cout << "b1 = " << b1 << ", b2 = " << b2 << endl;
+  // Ausgabe:
+  // b1 = 1, b2 = 0
+
+  bool b3 = 500;
+  cout << "b3 = " << b3 << endl;
+  // Ausgabe:
+  // b3 = 1
+
+  cout << "false = " << false << endl;
+  cout << "true = " << true << endl;
+  // Ausgabe:
+  // false = 0
+  // true = 1
+}
+\end{minted}
+\subsection{auto}
+\label{sec-4-5}
+Seit C++11 unterstützt C++ eine einfache Form der sogenannten
+\href{https://de.wikipedia.org/wiki/Typinferenz}{Typinferenz}. Das bedeutet, dass wir den Datentyp einer Variable nicht
+explizit angeben müssen, wenn der Compiler einen eindeutigen Typ
+automatisch bestimmen kann. Der Compiler wird angewiesen den Datentyp
+selbst zu bestimmen indem das Schlüsselwort \verb~auto~ statt des Datentyps
+verwendet wird.
+
+Das Schlüsselwort \verb~auto~ ändert nichts an der Tatsache, dass C++ den
+Datentyp einer Variable bereits beim Compilieren eindeutig wissen muss
+und dass sich dieser Datentyp während der Ausführung auch nicht ändern
+kann!
+\subsubsection{Vorteile}
+\label{sec-4-5-1}
+\begin{itemize}
+\item Man kann sich teilweise das Schreiben langer Datentypen sparen. Dies
+ist insbesondere hilfreich wenn man Templateparameter verwendet, da
+die Typnamen dadurch sehr lange werden können. Templates und
+Templateparameter werden später noch besprochen.
+\item Falls man den Datentyp an einer Stelle im Code ändert, ändern sich
+automatisch alle davon betroffenen Variablen mit \verb~auto~ automatisch.
+Ohne \verb~auto~ muss man möglicherweise an vielen Stellen im Code die
+Datentypen manuell anpassen. Siehe späteres Beispiel.
+\end{itemize}
+\subsubsection{Nachteile}
+\label{sec-4-5-2}
+\begin{itemize}
+\item Der Code kann durch Verwendung vieler Variablen mit \verb~auto~
+unleserlich werden, da man nicht mehr auf einen Blick sieht was in
+einer Variable gespeichert ist.
+\item Falls bei einer Variable klar ist, dass sie für das korrekte
+Funktionieren des Codes einen bestimmten Datentyp haben muss (z.B.
+\verb~int~ für einen Index eines Arrays) kann es ungünstig sein für diese
+Variable \verb~auto~ zu verwenden, da es schwieriger wird Fehler zu
+finden.
+\end{itemize}
+\subsubsection{Beispiel 1}
+\label{sec-4-5-3}
+Ein paar Beispiele von \verb~auto~ bei Zuweisungen
+\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+auto a = 23;       // a ist int
+auto b = 42.0;     // b ist double
+auto c = 'A';      // c ist char
+auto d = 23 / 7;   // d ist int
+auto e = 23 / 3.4; // e ist double
+\end{minted}
+\subsubsection{Beispiel 2}
+\label{sec-4-5-4}
+Hier ein Beispiel wie \verb~auto~ nicht verwendet werden kann:
+\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+auto i;
+i = 20;
+// Gibt einen Compilerfehler
+\end{minted}
+Prinzipiell könnte der Compiler herausfinden, dass an \verb~i~ nach der
+Deklaration ein \verb~int~ zugewiesen wird und deshalb \verb~i~ ein \verb~int~ sein
+muss. Die Typinferenz in C++ ist aber nicht mächtig genug um das
+aufzulösen. \verb~auto~ funktioniert nur, falls in der gleichen Zeile etwas
+zugewiesen wird.
+\subsubsection{Beispiel 3}
+\label{sec-4-5-5}
+Ein großer Vorteil von \verb~auto~ ist, dass sich definierte Typen
+automatisch durch ein ganzes Programm durchziehen, ohne dass der
+Datentyp an jeder Stelle geändert werden muss. Angenommen wir haben
+den folgenden Code mit einem \verb~int~ als Anfangsdatentyp geschrieben:
+\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+#include <iostream>
+using namespace std;
+
+int main() {
+  int start = 23;
+  int division = start / 3;
+  int addition = division + 4;
+  int ergebnis = division * addition;
+  cout << "Ergebnis = " << ergebnis << endl;
+}
+// Ausgabe:
+// Ergebnis = 77
+\end{minted}
+Wollen wir nun alle Berechnungen mit \verb~double~ durchführen, so müssen
+wir alle daran beteiligten Datentypen ändern. Bei diesem einfachen
+Beispiel ist das kein großes Problem, aber wenn sich die ganzen Werte
+über ein größeres Programm verteilen, kann es schwierig werden alle
+Variablen zu finden und korrekt zu ändern.
+\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+#include <iostream>
+using namespace std;
+
+int main() {
+  double start = 23;
+  double division = start / 3;
+  double addition = division + 4;
+  double ergebnis = division * addition;
+  cout << "Ergebnis = " << ergebnis << endl;
+}
+// Ausgabe:
+// Ergebnis = 89.4444
+\end{minted}
+Wenn wir statt eines konkreten Typs \verb~auto~ verwenden, müssen wir nur
+den Typ des Anfangswerts \verb~start~ ändern und alle anderen Typen
+ändern sich automatisch mit.
+\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+#include <iostream>
+using namespace std;
+
+int main() {
+  auto start = 23;      // start ist int
+  // auto start = 23.0; // start ist double
+  auto division = start / 3;
+  auto addition = division + 4;
+  auto ergebnis = division * addition;
+  cout << "Ergebnis = " << ergebnis << endl;
+}
+// Ausgabe bei start = 23:
+// Ergebnis = 77
+// Ausgabe bei start = 23.0:
+// Ergebnis = 89.4444
+\end{minted}
+
+\subsection{Strings}
+\label{sec-4-6}
+\subsubsection{Strings in C}
+\label{sec-4-6-1}
+In C sind Strings nichts anderes als Arrays vom Datentyp \verb~char~. Jeder
+Eintrag im Array entspricht also einem Zeichen. Das Ende des Strings
+ist erreich, sobald ein Element des Arrays die Zahl \verb~0~ enthält.
+(Achtung: Nicht das Zeichen \textasciitilde{}'0'\textasciitilde{}). Dies bedeutet also, dass die Länge
+des Arrays und die Länge des Strings nicht zwingend etwas miteinander
+zu tun haben. Z.B. erzeugt der Befehl \verb~char str[200] = "Hallo";~ einen
+String der Länge 5, welcher 6 Plätze des Arrays einnimmt (5 Zeichen
+des Strings und die \verb~0~ für das Ende des Strings). Das Array selbst
+ist aber 200 Elemente groß. Im Speicher sieht der String
+folgendermaßen aus:
+\begin{center}
+\begin{tabular}{llllllllllll}
+Index & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & \ldots{} & 199\\
+Zeichen & \verb~H~ & \verb~a~ & \verb~l~ & \verb~l~ & \verb~o~ & \verb~\0~ & undef & undef & undef & \ldots{} & undef\\
+Zahl & \verb~72~ & \verb~97~ & \verb~108~ & \verb~108~ & \verb~111~ & \verb~0~ & undef & undef & undef & \ldots{} & undef\\
+\end{tabular}
+\end{center}
+
+Die Art und Weise wie Strings in C implementiert sind hat einige Nachteile:
+\begin{itemize}
+\item Wir müssen uns selbst darum kümmern, dass ein Array groß genug ist
+um Platz für den String zu haben. Eine Ausnahme ist die Zuweisung
+eines fixen Strings direkt bei der Initialisierung eines Strings
+(z.B. \textasciitilde{}char str[] = "Hallo"\textasciitilde{}). In diesem Fall kann der Compiler
+selbst bestimmen wie groß der String sein muss.
+\item Falls wir das Array zu klein wählen, bekommen wir keine
+Fehlermeldung. Das System schreibt einfach über das reservierte
+Array hinaus und überschreibt möglicherweise wichtige
+Speicherbereiche unseres Programms
+\item Falls aus irgend einem Grund die abschließende \verb~0~ des Strings
+fehlt, so lesen alle Stringfunktionen (z.B. \verb~printf("%s",str)~
+einfach über das Stringende hinaus bis irgendwo im Speicher eine \verb~0~
+steht)
+\end{itemize}
+Strings verhalten sich in C (weil es einfach Arrays sind) oft nicht so
+wie man es erwarten würde. Ein Beispiel: Wir wollen z.B. zwei Strings
+\verb~str1~ und \verb~str2~ aneinanderhängen und in einem String \verb~str3~
+speichern. In C sieht das folgendermaßen aus:
+\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+\end{minted}
+Wir müssen uns selbst darum kümmern, dass \verb~str1~, \verb~str2~, und \verb~str3~
+groß genug ist. Aus diesem Grund wählt man die Arrays häufig größer
+als eigentlich notwendig.
+\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+char str1[100], str2[100], str3[200];
+\end{minted}
+Nach der Initialisierung, können wir einem String in C nichts mehr mit
+\verb~=~ zuweisen. str1 = "Hello " funktioniert also nicht! Wir müssen eine
+spezielle Funktion namens \verb~strcpy~ (string copy) verwenden. Diese
+Funktion überprüft nicht, ob das Array auch groß genug für den String
+ist!
+\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+strcpy(str1, "Hello ");
+strcpy(str2, "World");
+\end{minted}
+Man könnte meinen, dass man zwei Strings aneinanderhängt indem man
+z.B. \verb~str1 + str2~ schreibt. Das ist in C aber nicht möglich. Um die
+Strings aneinanderzuhängen müssen wir zuerst \verb~str1~ nach \verb~str3~
+kopieren.
+\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+strcpy(str3, str1);
+\end{minted}
+Anschließend können wir die Funktion \verb~strcat~ (string concatenation)
+verwenden um einen zusätzlichen String an \verb~str3~ anzuhängen. Auch hier
+wird nicht überprüft ob \verb~str3~ groß genug ist um den ganzen String
+aufzunehmen!
+\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+  strcat(str3, str2);
+  // Ausgabe von str3
+  printf("%s", str3);
+}
+\end{minted}
+Man sieht also, dass Strings in C relativ kompliziert sind.
+\subsubsection{Strings in C++}
+\label{sec-4-6-2}
+In C++ gibt es einen eigenen Datentyp für Strings namens
+\verb~std::string~. Dieser verhält sich viel mehr wie ein normaler Datentyp
+(\verb~int~, \verb~double~, \ldots{}). Um C++ Strings verwenden zu können müssen Sie
+diese String Bibliothek mittels \verb~#include <string>~ einbinden. Das
+letzte Beispiel sieht mit Verwendung von C++ Strings folgendermaßen
+aus:
+\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+#include <iostream>
+#include <string>
+
+int main() {
+  std::string str1, str2, str3; // Platz für beliebig viele Zeichen
+  str1 = "Hello ";              // Wir können einfach mit "=" zuweisen
+  str2 = "World";
+  // Hänge str1 und str2 zusammen und speichere in str3
+  str3 = str1 + str2;
+  // Gib str3 auf Bildschirm aus
+  std::cout << str3;
+}
+\end{minted}
+\subsubsection{Vergleich von C++Strings}
+\label{sec-4-6-3}
+In C++ können Strings einfach mittels \verb~==~ verglichen werden. (In C
+funktioniert das nicht, hier muss die Funktion \verb~strcmp~ verwendet
+werden und das Ergebnis auf \verb~0~ überprüft werden. Noch ungünstiger
+ist, dass z.B. \verb~str1 == str2~ in C eine gültige Anweisung ist, aber
+nicht die Strings vergleicht sondern die Adressen an denen \verb~str1~ und
+\verb~str2~ liegen!). In C++ funktionieren auch die Vergleichsoperatoren
+\verb~<~, \verb~>~, \verb~<=~, \ldots{} Sie testen die alphabetische Reihenfolge zweier
+Strings.
+
+In C:
+\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+if (strcmp(str1, str2) == 0) {
+  printf("String 1 und 2 sind gleich");
+}
+\end{minted}
+
+In C++:
+\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+if (str1 == str2) {
+  std::cout << "String 1 und 2 sind gleich";
+}
+\end{minted}
+\subsubsection{Umwandlung von C++String nach C-String}
+\label{sec-4-6-4}
+Falls wir aus irgend welchen Gründen einen klassischen C-String aus
+einem C++ String erzeugen müssen (z.B. weil wir eine C-Bibliothek
+verwenden wollen) erreichen wir das mittels \verb~.c_str()~. Wollen wir
+z.B. einen C-String aus \verb~str3~ erzeugen, schreiben wir \verb~str3.c_str()~.
+\subsubsection{Beispiel 1}
+\label{sec-4-6-5}
+Wir können C++ Strings wie ganz normale Variablen behandeln und Sie
+problemlos als Parameter an eine Funktion schicken, oder sie als
+Rückgabewert einer Funktion verwenden. 
+
+Zum Beispiel: Eine Möglichkeit, \verb~bool~ mit \verb~cout~ als Text \verb~true~ und
+\verb~false~ auszugeben ist es den Wert mit Hilfe einer Funktion von \verb~bool~
+nach \verb~string~ zu konvertieren und diesen String dann mittels \verb~cout~
+auszugeben.
+
+\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+#include <iostream>
+#include <string>
+using namespace std; // Verhindert, dass wir überall std:: schreiben müssen
+
+// Nimmt einen bool Wert entgegen (true, false) und liefert je nach
+// übergebenem Wert des String "true" oder "false" zurück
+string bool_to_string(bool b) {
+  if (b == true)
+    return "true";
+  else
+    return "false";
+}
+
+int main() {
+  bool b1 = false;
+  bool b2 = true;
+
+  cout << "b1 = " << bool_to_string(b1) << endl;
+  cout << "b2 = " << bool_to_string(b2) << endl;
+  cout << "false = " << bool_to_string(false) << endl;
+  cout << "true = " << bool_to_string(true) << endl;
+}
+
+// Ausgabe:
+// b1 = false
+// b2 = true
+// false = false
+// true = true
+\end{minted}
+\subsubsection{Beispiel 2}
+\label{sec-4-6-6}
+Da wir Strings sehr einfach auf Gleichheit überprüfen können und auch
+einfach als Parameter einer Funktion übernehmen können, ist es auch
+sehr einfach die Strings \textasciitilde{}"true"\textasciitilde{} und \textasciitilde{}"false"\textasciitilde{} wieder in einen \verb~bool~
+Wert zu konvertieren.
+\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+#include <iostream>
+#include <string>
+using namespace std; // Verhindert, dass wir überall std:: schreiben müssen
+
+// Nimmt einen String entgegen ("true", "false") und liefert je nach
+// übergebenem String die bool werte true oder false zurück
+bool string_to_bool(string s) {
+  if (s == "true")
+    return true;
+  else
+    return false;
+}
+
+int main() {
+  string s1 = "false";
+  string s2 = "true";
+  // Konvertieren der Strings nach bool
+  bool b1 = string_to_bool(s1);
+  bool b2 = string_to_bool(s2);
+
+  cout << "b1 = " << b1 << endl;
+  cout << "b2 = " << b2 << endl;
+  // Das ganze geht natürlich auch ohne zusätzliche Variable
+  cout << "false = " << string_to_bool("false") << endl;
+  cout << "true = " << string_to_bool("true") << endl;
+}
+
+// Ausgabe:
+// b1 = 0
+// b2 = 1
+// false = 0
+// true = 1
+\end{minted}
+
+\section{Ein-/Ausgabe}
+\label{sec-5}
+Um die folgende Funktionalität für die Ein- und Ausgabe verwenden zu
+können muss die Headerdatei \verb~iostream~ mittels \verb~#include <iostream>~
+eingebunden werden.
+\subsection{Ausgabe}
+\label{sec-5-1}
+Zur Ausgabe von Daten auf dem Bildschirm wird in C++ üblicherweise
+\verb~std::cout~ (für character out) verwendet. Variablen, Konstanten,
+Ausdrücke, etc. werden mittels \verb~<<~ nach \verb~std::cout~ geschickt. Das
+System erkennt automatisch den Typ der Daten die ausgegeben werden
+sollen und verwendet die korrekte Formatierung (man kann sich also die
+Formatplatzhalter von \verb~printf~ wie z.B. \verb~%d~, \verb~%f~, \verb~%s~, etc. sparen)
+
+\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+#include <iostream>
+#include <string>
+
+int main() {
+  // Variablen
+  int i = 23;
+  double d = 42.47;
+  std::string s = "Hello World!";
+  std::cout << i;
+  std::cout << d;
+  std::cout << s;
+  // Konstanten
+  std::cout << 45;
+  std::cout << 34.5;
+  std::cout << "Noch ein Hello!";
+  // Ausdrücke
+  std::cout << 2 * i;
+  std::cout << (i * d) / 3.4;
+  std::cout << s + " World2!";
+}
+// Ausgabe:
+// 2342.47Hello World!4534.5Noch ein Hello!46287.297Hello World! World2!
+\end{minted}
+
+Die gleichzeitige Ausgabe mehrerer Daten kann durch wiederholtes
+aneinanderhängen von \verb~<<~ erzielt werden. Will man z.B. die Variablen
+\verb~a~, \verb~b~ und \verb~c~ ausgeben, dann schreibt man \verb~std::cout << a << b << c;~.
+
+\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+#include <iostream>
+#include <string>
+
+int main() {
+  int i = 23;
+  double d = 42.47;
+  std::string s = "Hello World!";
+  // Variablen
+  std::cout << i << d << s;
+  // Konstanten
+  std::cout << 45 << 34.5 << "Noch ein Hello!";
+  // Ausdrücke
+  std::cout << 2 * i << (i * d) / 3.4 << s + " World2!";
+}
+// Ausgabe:
+// 2342.47Hello World!4534.5Noch ein Hello!46287.297Hello World! World2!
+\end{minted}
+
+Es werden bei Ausgabe mehrerer Daten in einer Zeile keine
+automatischen Leerzeichen eingefügt. Falls man Leerzeichen hab will,
+müssen diese manuell zwischen den Daten ausgegeben werden.
+
+\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+#include <iostream>
+#include <string>
+
+int main() {
+  int i = 23;
+  double d = 42.47;
+  std::string s = "Hello World!";
+  // Variablen
+  std::cout << i << " " << d << " " << s;
+  // Konstanten
+  std::cout << 45 << " " << 34.5 << " " << "Noch ein Hello!";
+  // Ausdrücke
+  std::cout << 2 * i << " " << (i * d) / 3.4 << " " << s + " World2!";
+}
+// Ausgabe:
+// 23 42.47 Hello World!45 34.5 Noch ein Hello!46 287.297 Hello World! World2!
+\end{minted}
+
+An vorherigen Beispielen sieht man, dass \verb~cout~, genauso wie auch
+\verb~printf~, keinen automatischen Zeilenumbruch einfügt. Um einen
+Zeilenumbruch zu erzwingen gibt man entweder \verb~std::endl~ (für endline)
+oder wie in C ein \verb~\n~ aus.
+
+\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+#include <iostream>
+#include <string>
+
+int main() {
+  int i = 23;
+  double d = 42.47;
+  std::string s = "Hello World!";
+  // Variablen
+  std::cout << i << " " << d << " " << s << "\n";
+  // Konstanten
+  std::cout << 45 << " " << 34.5 << " " << "Noch ein Hello!" << std::endl;
+  // Ausdrücke
+  std::cout << 2 * i << " " << (i * d) / 3.4 << " " << s + " World2!\n";
+}
+// Ausgabe:
+// 23 42.47 Hello World!
+// 45 34.5 Noch ein Hello!
+// 46 287.297 Hello World! World2!
+\end{minted}
+\subsection{Eingabe}
+\label{sec-5-2}
+Analog zur Ausgabe von Daten mittels \verb~std::cout~ werden mittels
+\verb~std::cin~ (character in) Daten vom Benutzer eingelesen. Um Daten
+einlesen zu können muss bereits eine Variable deklariert sein in
+welche die Daten geschrieben werden können. Das eigentliche Einlesen
+geschieht mit dem Befehl \verb~std::cin >> variablenname;~. Beachten Sie,
+dass die "Pfeile" von \verb~cin~ in die entgegengesetze Richtung weisen wie
+bei \verb~cout~: \verb~std::cin >> bla;~ vs \verb~std::cout << bla;~.
+
+Wir lesen z.B. einen Integer ein und geben ihn wieder aus:
+\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+#include <iostream>
+
+int main() {
+  // Ausgabe der Eingabeaufforderung
+  std::cout << "Bitte geben Sie einen Integer ein: ";
+  // Deklarieren der Variable in der die Eingabe gespeichert wird
+  int i = 0;
+  // Einlesen vom Benutzer in die Variable
+  std::cin >> i;
+  // Zu diesem Zeitpunkt ist die Variable i mit dem Wert befüllt, den
+  // der Benutzer eingegeben hat und wir können den Inhalt ausgeben
+  std::cout << "Sie haben die Zahl " << i << " eingegeben!\n";
+}
+\end{minted}
+\verb~cin~ liest immer bis zum nächsten Leerzeichen und man kann auch hier
+mehrere Daten gleichzeitig einlesen indem mehrere Variablen mittels
+\verb~>>~ aneinanderhängt werden. 
+
+Wir lesen z.B. drei \verb~double~ Werte ein und geben die Summe dieser aus:
+\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+#include <iostream>
+
+int main() {
+  double a = 0, b = 0, c = 0;
+  std::cout << "Bitte geben Sie drei Zahlen ein: ";
+  std::cin >> a >> b >> c;
+  std::cout << "Die Summe der eingegebenen Zahlen = " << a + b + c << std::endl;
+}
+\end{minted}
+Bei der Aufforderung \verb~Bitte geben Sie drei Zahlen ein:~ kann nun z.B.
+\verb~2.25 13.2 5.25~ eingegeben werden und die Variablen werden der Reihe
+nach befüllt: \verb~a = 2.25~, \verb~b = 13.2~ und \verb~c = 5.25~.
+\subsubsection{getline}
+\label{sec-5-2-1}
+Wie erwähnt, liest \verb~cin~ jeweils bis zum nächsten Leerzeichen.
+Insbesondere für das Einlesen eines Strings kann das unpraktisch sein,
+weil man mit \verb~std::cin~ dadurch nur ein einziges Wort einlesen kann.
+Um längere Texte einlesen zu können gibt es einen speziellen Befehl
+namens \verb~std::getline~ welcher alles bis zum nächsten Zeilenumbruch
+einliest und in einer Stringvariable abspeichert.
+% Emacs 25.3.1 (Org mode 8.2.10)
+\end{document}
