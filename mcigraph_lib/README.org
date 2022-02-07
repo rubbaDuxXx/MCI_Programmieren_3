@@ -6,5 +6,6 @@ An example of how to use it can be seen in ~mandelbrot.cpp~. The folder ~templat
 The library supports Linux, MacOS, and Windows.
 
 Tile that can be used for creating games are found in the ~tiles~ folder and ~tiles.zip~ archive (the content is identical)
+[[file:tiles.png]]
 
 For a more in-depth description of the library see the slides about this topic and the [[https://www.youtube.com/playlist?list=PLklwMV4rlxFnEd5rem6wm4Cp9xVHYySuy][recordings]].
