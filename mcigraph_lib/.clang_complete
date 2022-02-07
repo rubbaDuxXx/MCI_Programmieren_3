@@ -1,0 +1,10 @@
+-std=c++1y
+-Wall
+-Wextra
+-Wpedantic
+-I/usr/local/include/SDL2
+-D_REENTRANT
+-L/usr/local/lib
+-Wl,-rpath,/usr/local/lib
+-lSDL2
+-lpthread
