@@ -1,0 +1,232 @@
+#+TITLE:     Templates
+#+AUTHOR:    Sebastian Stabinger
+#+EMAIL:     sebastian.stabinger@uibk.ac.at
+#+DATE:      SS2018
+
+* Problem
+** Quadrieren von Zahlen in C
+*** Beispiel                                               :B_exampleblock:
+:PROPERTIES: 
+:BEAMER_env: exampleblock
+:END:
+#+BEGIN_SRC C
+  short quad_short(short a) { return a * a; }
+  int quad_int(int a) { return a * a; }
+  float quad_float(float a) { return a * a; }
+  double quad_double(double a) { return a * a; }
+
+  #include <stdio.h>
+
+  int main() {
+    printf("Int: %d\n", quad_int(23));
+    printf("Float: %f\n", quad_float(24.12));
+  }
+#+END_SRC
+*** After                                                 :B_ignoreheading:
+:PROPERTIES: 
+:BEAMER_env: ignoreheading
+:END:
+- Für jeden Datentyp brauchen wir eine eigene Funktion
+- Die Funktionen müssen alle unterschiedlich benannt sein
+- Aber eigentlich machen wir *in jeder Funktion das selbe*!
+** Quadrieren von Zahlen in C++
+- Bis jetzt haben wir *Funktionsüberladung* kennen gelernt. Das macht
+  die Situation zumindest in der Verwendung der Funktionen besser: Wir
+  können *alle Funktionen gleich benennen*
+*** Beispiel                                               :B_exampleblock:
+:PROPERTIES: 
+:BEAMER_env: exampleblock
+:END:
+#+BEGIN_SRC C++
+  #include <iostream>
+  using namespace std;
+
+  short quad(short a) { return a * a; }
+  int quad(int a) { return a * a; }
+  float quad(float a) { return a * a; }
+  double quad(double a) { return a * a; }
+
+  int main() {
+    cout << "Int: " << quad(23) << endl;
+    cout << "Float: " << quad(24.12) << endl;
+  }
+#+END_SRC
+*** After                                                 :B_ignoreheading:
+:PROPERTIES: 
+:BEAMER_env: ignoreheading
+:END:
+- Wir machen *immer noch das selbe* in allen Funktionen!
+* Lösung: Templates
+** Grundlagen
+- Wir können mittels Templates *einen Typ als Parameter* übergeben
+- Möglich bei *Funktionen* oder *Klassen*
+- Geschieht mittels ~template <typename T>~ vor der Funktion oder Klasse
+- T ist dann ein *Platzhalter* für einen beliebigen Typ den wir übergeben können
+- Templateparameter werden in spitzen Klammern statt runder Klammern
+  übergeben. z.B. ~quad<int>(i)~ um einer Templatefunktion ~quad~ als
+  Typ ~int~ und als normalen Parameter ~i~ zu übergeben.
+*** Hinweis
+Aus historischen Gründen kann man statt ~template <typename T>~ auch
+~template <class T>~ schreiben.
+** Funktionstemplates
+Funktionstemplates werden verwendet um bei einer Funktion einen Typ
+als Parameter übergeben zu können
+*** Beispiel für ~quad~                                    :B_exampleblock:
+:PROPERTIES: 
+:BEAMER_env: exampleblock
+:END:
+#+BEGIN_SRC C++
+  #include <iostream>
+  using namespace std;
+
+  template <typename T> T quad(T a) { return a * a; }
+
+  int main() {
+    cout << "Int: " << quad<int>(23) << endl;
+    cout << "Float: " << quad<float>(24.12) << endl;
+  }
+#+END_SRC
+*** After                                                 :B_ignoreheading:
+:PROPERTIES: 
+:BEAMER_env: ignoreheading
+:END:
+- Aufruf: ~f< Templateparameter >( Normale Parameter )~
+** Was passiert hinter den Kulissen?
+- Wir haben ~quad~ folgendermaßen definiert:
+#+BEGIN_SRC C++
+  template <typename T> T quad(T a) { return a * a; }
+#+END_SRC
+- Irgendwo im Code rufen wir ~quad<int>(42);~ auf. Der Compiler
+  *erzeugt automatisch* eine *Funktion mit konkretem Typ* mit Hilfe
+  unseres Funktionstemplates:
+#+BEGIN_SRC C++
+  template <typename T> T quad(T a) { return a * a; }
+  // T wird durch quad<int>(42) der Typ int zugewiesen --->
+  int quad(int a) { return a * a; }
+  // Diese Funktion wird dann ganz normal auf den Wert 42 angewendet
+#+END_SRC
+- Templatefunktionen sind daher bei der Ausführung nicht langsamer als
+  "ganz normale" Funktionen
+- Beim Compilieren wird also tatsächlich *neuer Code erzeugt*
+*** Hinweis                                                  :B_alertblock:
+:PROPERTIES: 
+:BEAMER_env: alertblock
+:END:
+Template kann man als *Schablone* ins Deutsche übersetzten: Wir haben
+eine Schablone für Funktionen und Klassen mit deren Hilfe wir
+spezifische Versionen von Funktionen und Klassen erzeugen können.
+** Typinferenz
+- Wir haben ~quad~ folgendermaßen definiert:
+#+BEGIN_SRC C++
+  template <typename T> T quad(T a) { return a * a; }
+#+END_SRC
+- Es ist offensichtlich etwas unpraktisch den gewünschten Typ bei
+  einer Templatefunktion immer explizit in spitzen Klammern angeben zu
+  müssen
+- Wenn wir ~quad<int>(42)~ aufrufen ist dem Compiler ja bereits durch
+  den Parameter ~42~ bekannt, dass ~T~ ein Integer sein muss
+- Tatsächlich müssen wir den Typ nicht explizit angeben, falls dem
+  Compiler der Typ bekannt sein kann (was bei Funktionstemplates oft
+  der Fall ist)
+- Wir können also einfach ~quad(42)~ schreiben
+** Beispiel ~max~
+#+INCLUDE: max.cpp src C++
+** Beispiel ~max~ --- Gemischte Typen
+Was passiert beim Aufruf von Folgendem?
+#+BEGIN_SRC C++
+  cout << "max int/double = " << t_max(a, c) << endl;
+#+END_SRC 
+*** Ausgabe Compiler
+#+BEGIN_SRC text
+  max.cpp: In function ‘int main()’:
+  max.cpp:20:44: error: no matching function for call to 
+                 ‘t_max(int&, double&)’
+     cout << "max int/double = " << t_max(a, c) << endl;
+                                              ^
+  max.cpp:20:44: note: candidate is:
+  max.cpp:4:25: note: template<class T> T t_max(T, T)
+   template <typename T> T t_max(T a, T b) {
+                           ^
+  max.cpp:4:25: note:   template argument deduction/substitution failed:
+  max.cpp:20:44: note:   deduced conflicting types for parameter ‘T’ 
+                         (‘int’ and ‘double’)
+     cout << "max int/double = " << t_max(a, c) << endl;
+                                              ^
+#+END_SRC
+** Klassentemplates --- Beispiel
+- Funktionieren genauso wie Funktionstemplates. Man kann Typen als
+  Parameter für *eine Instanz einer Klasse* übergeben
+#+INCLUDE: template_average.cpp :src C++
+** Abschluss
+- Wie bereits gesagt kann man sich Templates als *Schablonen*
+  vorstellen. In diesen Schablonen werden Platzhalter für Typen durch
+  einen übergebenen Typer ersetzt
+- Beim Compilieren wird tatsächlich *neuer Code generiert*. Das führt
+  dazu, dass die Compilezeiten länger werden.
+- Wir haben Templates z.B. schon bei ~vector~ gesehen. Der zu
+  speichernde Typ wird in spitzen Klammern angegeben: 
+#+BEGIN_SRC C++
+  vector<int> v; v.push_back(23);
+#+END_SRC
+*** Hinweis
+Templates sind bei weitem komplexer und mächtiger als es hier den
+Anschein hat. Es handelt sich im Prinzip um eine eigene
+Programmiersprache (das war eigentlich nicht so beabsichtigt).
+
+Wer sich den Wahnsinn des "*Template Metaprogrammings*" anschauen will
+kann z.B. auf der _[[https://en.wikipedia.org/wiki/Template_metaprogramming][\color{blue}{Wikipedia}]]_ Seite anfangen.
+* COMMENT Zusätzliche Themen für nächstes mal
+- Mehr Übungen einbauen. Aber ich glaub das Thema war ganz gut
+  verständlich.
+
+* Export settings etc.                                             :noexport:
+#+LANGUAGE:  ger
+#+OPTIONS:   texht:t H:2 toc:nil
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+STARTUP: beamer
+
+#+LATEX_CLASS: beamer
+
+#+LATEX_HEADER: \usepackage[utf8]{inputenc}
+#+LATEX_HEADER: \usepackage{color}
+#+LATEX_HEADER: \usetheme[height=7mm]{Rochester}
+
+#+LATEX_HEADER: \setbeamertemplate{footline}[frame number]
+#+LATEX_HEADER: \usecolortheme[accent=red, light]{solarized}
+#+LATEX_HEADER: \setbeamercolor{frametitle}{bg=solarizedRebase02,fg=solarizedAccent}
+#+LATEX_HEADER: \setbeamercolor{author in head/foot}{bg=solarizedRebase02,fg=solarizedRebase01}
+#+LATEX_HEADER: \setbeamercolor{title in head/foot}{bg=solarizedRebase02,fg=solarizedRebase01}
+#+LATEX_HEADER: \setbeamercolor{block title}{bg=solarizedRebase0,fg=solarizedRebase02}
+#+LATEX_HEADER: \setbeamercolor{block body}{bg=solarizedRebase02,fg=solarizedRebase0}
+#+LATEX_HEADER: \setbeamercolor{item}{bg=solarizedRebase02,fg=solarizedAccent}
+
+#+LATEX_HEADER: \beamertemplatenavigationsymbolsempty
+
+#+LATEX_HEADER: \usemintedstyle{manni}
+
+#+LATEX_HEADER: \AtBeginSection[]{
+#+LATEX_HEADER:   \begin{frame}
+#+LATEX_HEADER:   \vfill
+#+LATEX_HEADER:   \centering
+#+LATEX_HEADER:   \begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
+#+LATEX_HEADER:     \Huge\insertsectionhead\par%
+#+LATEX_HEADER:   \end{beamercolorbox}
+#+LATEX_HEADER:   \vfill
+#+LATEX_HEADER:   \end{frame}
+#+LATEX_HEADER: }
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;; Allow binding of emacs variables on export. You might have to evaluate that so that #+BIND: works
+  (setq org-export-allow-bind-keywords t)
+  ;; Set F12 to compile
+  (global-set-key (kbd "<f12>") 'org-beamer-export-to-pdf)
+
+  ;; Export all verbatim text in certain color
+  (defun latex-export-colored-verbatim (contents backend info)
+    (when (eq backend 'beamer)
+      (concat "{\\color{solarizedYellow}" contents "}")))
+  ;; Register
+  (add-to-list 'org-export-filter-code-functions
+               'latex-export-colored-verbatim)
+#+END_SRC

@@ -1,0 +1,335 @@
+#+TITLE:     Zeiger, Referenzen, das Slicing Problem und Polymorphismus
+#+AUTHOR:    Sebastian Stabinger
+#+EMAIL:     sebastian.stabinger@mci.edu
+#+DATE:      SS2019
+* Zeiger
+** Zeiger in C
+- Zeiger sind Variablen welche Adressen speichern können (also
+  normalerweise 64bit Integer)
+- Zeiger haben einen Typ
+  - Der Typ eines Zeigers gibt an, was an der Adresse auf die gezeigt
+    wird gespeichert ist.
+  - Im Zeiger selbst wird unabhängig vom Typ immer das gleiche
+    gespeichert (eine Adresse)
+#+ATTR_LATEX: :width 0.3\textwidth
+file:img/pointer.png
+** Beispiel und Probleme
+*** Beispiel
+#+BEGIN_SRC C++
+  int intVar = 10;
+  int *intPtr = &intVar;
+  cout << intVar << endl;
+  cout << *intPtr << endl;
+  intVar = 20;
+  cout << *intPtr << endl;
+#+END_SRC
+*** Probleme
+#+BEGIN_SRC C++
+  int *intPtr2;
+  // zufaelliger speicherzugriff (pointer wird nicht initialisiert)
+  cout << *intPtr2 << endl;
+  int *intPtr3 = NULL;
+  // zugriff auf speicheradresse 0 (ueblicherweise segmentation fault)
+  cout << *intPtr3 << endl;
+#+END_SRC
+** Probleme mit Zeigern
+*** Probleme
+1) Ein Zeiger muss nicht auf ein gültiges Objekt im Speicher zeigen
+2) Ein Zeiger kann auch auf nichts zeigen (wenn ~NULL~ als Adresse
+   gespeichert ist)
+3) Die Syntax von Zeigern ist am Anfang verwirrend (~*~, ~&~, ...)
+*** Vorteile
+Nachdem Zeiger ein sehr einfaches Konzept sind (eine Variable welche
+eine Adresse speichert) ist es auch ein extrem mächtiges Werkzeug
+* Referenzen
+** Eigenschaften
+Referenzen verweisen wie Zeiger auf Objekte im Speicher
+*** Vorteile von Referenzen
+- Referenzen lösen einige der Probleme mit Pointern
+- Typprüfung des Compilers kann nicht mehr so leicht übergangen werden
+- Referenzen können wie normale Variablen verwendet werden
+*** Nachteile von Referenzen
+- Referenzen sind weniger flexibel als Zeiger
+  - Keine Zeigerarithmetik
+  - Keine Möglichkeit direkt auf die Adresse zuzugreifen
+** Referenzen --- Syntax
+- Um eine Referenz zu erzeugen stellt man ein ~&~ an den Anfang eines
+  Variablen- oder Parameternamens (Äquivalent zu dem ~*~ bei einem
+  Zeiger)
+- *Bei Variablen muss zudem in der gleichen Zeile eine Referenz auf
+  eine andere Variable zugewiesen werden!*
+- Um eine Referenz auf eine Variable zeigen zu lassen muss nicht wie
+  bei Zeigern zuerst die Variable mittels ~&~ referenziert werden
+#+BEGIN_SRC C++
+  int x = 23;
+  int &foo = x;
+  // foo ist jetzt eine Referenz auf x 
+  // (foo und x enthalten immer den gleichen Wert)
+#+END_SRC
+- Auf eine Referenz wird genauso zugegriffen wie auf eine gewöhnliche
+  Variable (es ist kein Dereferenzieren mit einem ~*~ notwendig wie
+  bei einem Zeiger)
+#+BEGIN_SRC C++
+  foo = 42;
+  std::cout << foo << " " << x << std::endl;
+#+END_SRC
+** Referenzen --- Graphische Visualisierung
+file:img/references.png
+** Vergleich zwischen Zeiger und Referenz
+#+BEGIN_SRC C++
+  // Erzeugen von Variable, Zeiger und Referenz
+  int intVar = 10;
+  int *intPtr = &intVar;
+  int &intRef = intVar;
+  // Auslesen von Variable, Zeiger und Referenz
+  cout << intVar << endl;
+  cout << *intPtr << endl;
+  cout << intRef << endl;
+  // Zuweisen an Variable, Zeiger und Referenz
+  intVar = 20;
+  ,*intPtr = 30;
+  intRef = 40;
+
+  cout << intVar << endl; // Ausgabe = 40
+#+END_SRC
+
+Man sieht also, dass sich Referenzen genauso verwenden lassen wie
+Variablen, aber zu großen Teilen die Funktionalität eines Zeigers
+haben
+** Referenzen als Parameter
+- Referenzen als Variablen in "normalem" Code sind eher unüblich
+- Referenzen werden am häufigsten bei Parametern von Funktionen
+  verwendet:
+  - Die übergebenen Parameter müssen dadurch nicht kopiert werden was
+    gerade bei großen Klassen schneller ist
+  - Innerhalb der Funktion können Änderungen an den Parametern
+    vorgenommen werden welche auch ausserhalb der Funktion sichtbar
+    sind. Normalerweise funktioniert das nicht, weil die Änderungen
+    nur an einer Kopie vorgenommen werden.
+** Swap mit normalen Parametern, Zeigern, Referenzen
+*** Normale Parameter
+#+BEGIN_SRC C++
+  void swap(int p1, int p2) {
+    int temp = p1; p1 = p2; p2 = temp;
+  }
+  int a = 2, b = 3; swap(a, b);   // Verwendung
+#+END_SRC
+\footnotesize
+Sieht einfach aus, funktioniert aber auch einfach nicht ...
+*** Zeiger
+#+BEGIN_SRC C++
+  void swap(int *p1, int *p2) {
+      int temp = *p1; *p1 = *p2; *p2 = temp;
+  }
+  int a = 2, b = 3; swap(&a, &b); // Verwendung
+#+END_SRC
+*** Referenzen
+#+BEGIN_SRC C++
+  void swap(int &p1, int &p2) {
+    int temp = p1; p1 = p2; p2 = temp;
+  }
+  int a = 2, b = 3; swap(a, b);  // Verwendung
+#+END_SRC
+** Swap -- Graphische Visualisierung
+#+ATTR_LATEX: :width 0.6\textwidth
+file:img/swap_copy.png
+** Swap -- Graphische Visualisierung
+#+ATTR_LATEX: :width 0.6\textwidth
+file:img/swap_point.png
+** Swap -- Graphische Visualisierung
+#+ATTR_LATEX: :width 0.6\textwidth
+file:img/swap_ref.png
+* Casten
+** Casten "normaler" Datentypen
+Casten einer "normalen" Variable konvertiert (so gut wie möglich) den
+Inhalt einer Variable in einen anderen Datentyp
+#+BEGIN_SRC C++
+  int i1 = 23;
+  double d1 = (double)i; // Konvertiert i explizit nach double
+  double d2 = 23.42;
+  int i2 = d2; // Hier wird implizit von double nach int konvertiert
+#+END_SRC
+** COMMENT Casten von Zeigern
+- Wie bereits erwähnt gibt der Typ eines Zeigers nur an, was an der
+  Speicherstelle auf die der Zeiger verweist gespeichert ist
+- Wenn wir einen Zeiger in einen anderen Typ casten teilen wir dem
+  Compiler nur mit, dass an der Speicherstelle jetzt ein anderer
+  Datentyp liegt. Es wird aber keine Konvertierung der Werte an der
+  Speicherstelle vorgenommen.
+- Das Casten von Zeigern kann also sehr riskant sein! Siehe folgendes
+  Beispiel
+** COMMENT Casten von Zeigern --- Beispiel
+#+BEGIN_SRC C++
+  #include <iostream>
+  using namespace std;
+
+  int main() {
+    double d = 12.32;
+    cout << "Adresse von d = " << &d << endl;
+    double *dp = &d; // Verweist auf Speicheradresse von d
+    cout << "Wert von dp = " << dp << endl;
+    int *ip = (int *)dp; // Verweist auch auf Speicheradresse von d
+    cout << "Wert von ip = " << ip << endl;
+    cout << "Wert auf den dp verweist (double an Adresse " << dp << " ) = "
+         << *dp << endl;
+    cout << "Wert auf den ip verweist (int an Adresse " << ip << " ) = "
+         << *ip << endl;
+  }
+#+END_SRC
+*** Ausgabe
+#+BEGIN_SRC text
+  Adresse von d = 0x7ffc03b27970
+  Wert von dp = 0x7ffc03b27970
+  Wert von ip = 0x7ffc03b27970
+  Wert auf den dp verweist (double an Adresse 0x7ffc03b27970 ) = 12.32
+  Wert auf den ip verweist (int an Adresse 0x7ffc03b27970 ) = 171798692
+#+END_SRC
+* Der Upcast
+** Upcast
+- Wenn sich Klassen in einer Vererbungshierarchie befinden, kann ohne
+  weiteres von einer abgeleiteten Klasse zu einer Basisklasse gecastet
+  werden
+- Das ist kein Problem, weil bei der abgeleiteten Klasse ja nur Sachen
+  zur Basisklasse hinzugekommen sind
+- Man bezeichnet so eine Konvertierung von einer abgeleiteten Klasse
+  zu einer Basisklasse als *upcast* (weil man in der Klassenhierarchie
+  nach Oben wandert)
+- Wir werden uns solche Upcasts an Hand von impliziten casts anschauen
+  (also Konvertierungen die automatisch passieren)
+** Der Upcast --- Beispiel
+#+INCLUDE: upcast.cpp SRC c++
+** Der Upcast --- Graphische Visualisierung
+file:img/slizing_full.png
+** Das Slicing Problem
+- Aus Sicht der Referenz ~b~ haben wir es nun mit einer Instanz der
+  Klasse ~Basis~ zu tun.
+  
+  file:img/slizing_small.png
+- ~b~ hat also "vergessen", dass es auf einen Teil einer
+  ~Abgeleitet~-Klasse verweist
+- Beim kopieren für die Variable ~bc~ wurde nur der Basis-Teil kopiert
+- Man bezeichnet das als Slicing-Problem, weil Teile einer Klasse
+  tatsächlich, oder scheinbar abgeschnitten werden
+** Der Upcast --- Was passiert
+#+ATTR_LATEX: :width 0.65\textwidth
+file:img/upcast.png
+** Der Upcast --- Parameter Beispiel
+#+INCLUDE: upcast_param.cpp SRC c++
+** Effekt eines Upcasts
+- Wird eine abgeleitete Klasse in den Typ einer Basisklasse
+  konvertiert, vergisst die Instanz was sie vorher einmal war und
+  verhält sich dann als wäre es schon immer eine Basisklasse gewesen
+- Dieses Verhalten bezeichnet mal als *slicing* und ist oft nicht was
+  man will
+- Auf den nächsten Slides werden wir uns das Problem näher ansehen und
+  mit sogenanntem *Polymorphismus* eine Lösung finden
+* Polymorphismus
+** Ein kleines Beispiel
+#+INCLUDE: polymorph_example.cpp SRC c++
+** Was ist das Problem?
+- Wir hätten gerne, dass sich die Klassen mit ihren tatsächlichen
+  ~print~ Funktionen melden und nicht mit der Standardimplementierung
+  der Basisklasse
+- Das funktioniert aber auf Grund des Slicing-Problems nicht
+*** Lösung
+Die Lösung ist das Schlüsselwort ~virtual~. Wenn in einer Basisklasse
+vor einer Funktion ~virtual~ steht, so merkt sich die Klasse welche
+Funktion einer abgeleiteten Klasse tatsächlich aufgerufen werden muss.
+*** Warum ist virtual nicht Standard?
+Der Aufruf einer ~virtual~-Funktion ist langsamer, weil das System
+zuerst nachsehen muss welche Funktion tatsächlich aufgerufen werden
+muss. Zudem verbraucht eine ~virtual~-Funktion Speicher in jeder
+Instanz einer Klasse, weil irgendwo gespeichert werden muss welche
+Funktion wirklich aufzurufen ist.
+** Virtual --- Beispiel
+#+INCLUDE: virtual_example.cpp SRC c++
+** Wann verwendet man Polymorphismus
+- Man hat eine Basisklasse die ein bestimmtes Verhalten implementiert
+- Davon leitet man mehrere Klassen ab die dieses Verhalten erweitern
+- Man kann jetzt eine Funktion für die Basisklasse schreiben, und als
+  Parameter alle abgeleiteten Klassen verwenden, oder ...
+- wir können in einem Vektor oder in einem Array vom Typ der
+  Basisklasse auch alle abgeleiteten Klassen speichern (als Zeiger
+  oder Referenz)
+** Beispiel --- Vektor mit Zeigern
+#+INCLUDE: vector_pointer.cpp SRC c++
+** Beispiel --- Vektor mit Referenzen
+#+INCLUDE: vector_ref.cpp SRC c++
+** Übung --- Employee und Manager
+\footnotesize
+- Implementieren Sie die beiden Klassen ~Employee~ und ~Manager~
+- ~Employee~ ist die Basisklasse, ~Manager~ ist die abgeleitete
+  Klasse. Ein Manager ist also auch ein Angestellter
+- ~Employee~ hat eine Variable ~salary~ die speichert wie viel der
+  jeweilige Mitarbeiten verdient
+- ~Employee~ hat eine Funktion ~raise~ mit der man einem Mitarbeiter
+  eine Gehaltserhöhung geben kann. Damit der unsere Mitarbeiter nicht
+  zu viel verdienen, wird der maximale Gehalt auf ~3500~ beschränkt
+- ~Employee~ hat auch eine Funktion ~print~ die ausgibt: ~Der
+  Mitarbeiter hat einen Gehalt von ...~
+- Im ~Manager~ wird die Funktion ~raise~ überladen und das Gehalt ist
+  nicht beschränkt
+*** Verwendung
+- Erzeugen Sie einen Vektor und füllen Sie ihn mit einigen ~Employee~
+  sowie ~Manager~ Instanzen (entweder mit Zeigern oder Referenzen)
+- Iterieren Sie über den Vektor und rufen ~raise~ sowie ~print~ auf
+  und beobachten Sie das Verhalten
+** Hinweis
+- *Polymorphismus* ist ein weiterführendes Thema der
+  Objektorientierten Programmierung und uns fehlen einige Grundlagen
+  um das Konzept wirklich gut nützen zu können (z.B. dynamische
+  Speicherverwaltung)
+- Es geht in erster Linie darum, *dass sie das Konzept gehört haben*
+  und sich zumindest ungefähr vorstellen können um was es geht
+- Sie müssen Polymorphismus im Abschlussprojekt nicht verwenden.
+* Export settings etc.                                             :noexport:
+#+LANGUAGE:  ger
+#+OPTIONS:   texht:t H:2 toc:nil
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+STARTUP: beamer
+
+#+LATEX_CLASS: beamer
+
+#+LATEX_HEADER: \usepackage[utf8]{inputenc}
+#+LATEX_HEADER: \usepackage{color}
+#+LATEX_HEADER: \usetheme[height=7mm]{Rochester}
+
+#+LATEX_HEADER: \setbeamertemplate{footline}[frame number]
+#+LATEX_HEADER: \usecolortheme[accent=red, light]{solarized}
+#+LATEX_HEADER: \setbeamercolor{frametitle}{bg=solarizedRebase02,fg=solarizedAccent}
+#+LATEX_HEADER: \setbeamercolor{author in head/foot}{bg=solarizedRebase02,fg=solarizedRebase01}
+#+LATEX_HEADER: \setbeamercolor{title in head/foot}{bg=solarizedRebase02,fg=solarizedRebase01}
+#+LATEX_HEADER: \setbeamercolor{block title}{bg=solarizedRebase0,fg=solarizedRebase02}
+#+LATEX_HEADER: \setbeamercolor{block body}{bg=solarizedRebase02,fg=solarizedRebase0}
+#+LATEX_HEADER: \setbeamercolor{item}{bg=solarizedRebase02,fg=solarizedAccent}
+
+#+LATEX_HEADER: \beamertemplatenavigationsymbolsempty
+
+#+LATEX_HEADER: \usemintedstyle{manni}
+
+#+LATEX_HEADER: \AtBeginSection[]{
+#+LATEX_HEADER:   \begin{frame}
+#+LATEX_HEADER:   \vfill
+#+LATEX_HEADER:   \centering
+#+LATEX_HEADER:   \begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
+#+LATEX_HEADER:     \Huge\insertsectionhead\par%
+#+LATEX_HEADER:   \end{beamercolorbox}
+#+LATEX_HEADER:   \vfill
+#+LATEX_HEADER:   \end{frame}
+#+LATEX_HEADER: }
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;; Allow binding of emacs variables on export. You might have to evaluate that so that #+BIND: works
+  (setq org-export-allow-bind-keywords t)
+  ;; Set F12 to compile
+  (global-set-key (kbd "<f12>") 'org-beamer-export-to-pdf)
+
+  ;; Export all verbatim text in certain color
+  (defun latex-export-colored-verbatim (contents backend info)
+    (when (eq backend 'beamer)
+      (concat "{\\color{solarizedYellow}" contents "}")))
+  ;; Register
+  (add-to-list 'org-export-filter-code-functions
+               'latex-export-colored-verbatim)
+#+END_SRC
