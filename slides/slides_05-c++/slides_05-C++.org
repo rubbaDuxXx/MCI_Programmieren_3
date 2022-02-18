@@ -1,7 +1,6 @@
 #+TITLE:     Einführung in C++, Namespaces und Ein-/Ausgabe
-#+AUTHOR:    Sebastian Stabinger
-#+EMAIL:     sebastian@stabinger.name
-#+DATE:      SS2020
+#+AUTHOR:    Thomas Hausberger, Matthias Panny @@latex:\\@@ Ursprünglich erstellt von Sebastian Stabinger
+#+DATE:      SS2022
 
 * Hintergründe von C++
 ** Zeitleiste

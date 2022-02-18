@@ -1,0 +1,230 @@
+% Created 2022-02-18 Fr 09:18
+% Intended LaTeX compiler: pdflatex
+\documentclass[presentation]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\usepackage{minted}
+\usetheme{default}
+\author{Sebastian Stabinger}
+\date{\today}
+\title{Klasse zum Konvertieren von Temperaturen}
+\hypersetup{
+ pdfauthor={Sebastian Stabinger},
+ pdftitle={Klasse zum Konvertieren von Temperaturen},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 27.2 (Org mode 9.4.4)}, 
+ pdflang={English}}
+\begin{document}
+
+\maketitle
+
+\begin{frame}[label={sec:org706ae3b}]{Angabe}
+Implementieren Sie eine Klasse welche zwischen \alert{Fahrenheit}, \alert{Celsius}
+und \alert{Kelvin} konvertieren kann und umgekehrt.
+\begin{block}{Funktionalität}
+Sie sollen die Temperatur der Klasse in Fahrenheit, Celsius und Kelvin
+setzten können. Sie sollen die Temperatur in Fahrenheit, Celsius und
+Kelvin auslesen können.
+\end{block}
+\begin{block}{Frage}
+Welchen Vorteil hat diese Vorgehensweise gegenüber der Definition von
+Funktionen zum Konvertieren?
+\end{block}
+\begin{block}{Konvertierungsfunktionen}
+\(Kelvin = (Fahrenheit + 459.67)\cdot\frac{5}{9}\)
+
+\(Fahrenheit = Kelvin \cdot\frac{9}{5} - 459.67\)
+
+\(Kelvin = Celsius + 273.15\)
+
+\(Celsius = Kelvin - 273.15\)
+\end{block}
+\end{frame}
+\begin{frame}[label={sec:org40f99e4},fragile]{Lösung}
+ Generell werden wir das Problem folgendermaßen lösen: Beim setzen der
+Temperatur in einer bestimmten Einheit rechnen wir diese sofort in
+Kelvin um und speichern gleich die Temperatur in Kelvin. Beim Abfragen
+der Temperatur müssen wir diese nur noch von Kelvin in die gewünschte
+Einheit umrechnen. Dadurch benötigen wir nur eine Variable in der
+Klasse und jeweils eine Funktion zum setzen und auslesen der
+Temperatur pro Einheit.
+
+Wir starten mit der Definition der Klasse.
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
+class Tempconv {
+\end{minted}
+
+\begin{block}{Variablen}
+Wir wollen die aktuelle Temperatur der Klasse in Kelvin speichern und
+sinnvollerweise wählen wir {\color{solarizedYellow}\verb!double!} als Typ. Von Außerhalb der Klasse
+soll kein direkter Zugriff auf diese Variable möglich sein, daher
+definieren wir sie im {\color{solarizedYellow}\verb!private!} Bereich der Klasse. Variablen im
+{\color{solarizedYellow}\verb!private!} Bereich beginnen üblicherweise mit einem Unterstrich um sie
+als private zu kennzeichnen.
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
+private:
+  double _kelvin;
+\end{minted}
+
+Alle folgenden Dinge der Klasse sollen von Außerhalb zugänglich sein.
+Wir starten daher den {\color{solarizedYellow}\verb!public!} Bereich der Klasse.
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
+public:
+\end{minted}
+\end{block}
+
+\begin{block}{Konstruktoren}
+Wenn wir eine neue Instanz der Klasse erzeugen (z.B. eine Variable
+dieser Klasse definieren) wollen wir, dass die Temperatur der Klasse
+Null Grad Kelvin beträgt. Wir schreiben daher einen
+Standardkonstruktor welcher {\color{solarizedYellow}\verb!_kelvin!} auf {\color{solarizedYellow}\verb!0!} setzt. Zur Erinnerung:
+Ein Konstruktor ist eine Memberfunktion welche den \alert{gleichen Namen}
+wie die Klasse und \alert{keinen Rückgabetyp} hat. Der Standardkonstruktor
+hat zusätzlich eine \alert{leere Parameterliste}.
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
+Tempconv() { _kelvin = 0; }
+\end{minted}
+\end{block}
+
+\begin{block}{Memberfunktionen}
+Im nächsten Schritt definieren wir die ganzen Funktionen der Klasse
+(sogenannte Memberfunktionen).
+
+\begin{block}{Setzen der Temperatur}
+In den Funktionen zum setzen der Temperatur rechnen wir die übergebene
+Temperatur nach Kelvin um und speichern diesen Wert in der privaten
+Variable {\color{solarizedYellow}\verb!_kelvin!}.
+\begin{block}{Setzen der Temperatur in Kelvin}
+Da die Temperatur bereits in der korrekten Einheit übergeben wurde
+müssen wir nichts umrechnen.
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
+void set_kelvin(double kelvin) { _kelvin = kelvin; }
+\end{minted}
+\end{block}
+\begin{block}{Setzen der Temperatur in Celsius}
+Wir verwenden die Umrechnungsfunktion von Oben: \(Kelvin = Celsius + 273.15\)
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
+void set_celsius(double celsius) { _kelvin = celsius + 273.15; }
+\end{minted}
+\end{block}
+\begin{block}{Setzen der Temperaturen in Fahrenheit}
+Wir verwenden die Umrechnungsfunktion von Oben: \(Kelvin = (Fahrenheit + 459.67)\cdot\frac{5}{9}\)
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
+void set_fahrenheit(double fahrenheit) {
+  _kelvin = (fahrenheit + 459.67) * (5.0 / 9.0);
+}
+\end{minted}
+\end{block}
+\end{block}
+\begin{block}{Auslesen der Temperatur}
+In den Funktionen zum Auslesen der Temperatur konvertieren wir die in
+Kelvin gespeicherte Temperatur in die jeweils geforderte Einheit und
+liefern das Ergebnis der Konvertierung als Ergebnis der Funktion
+zurück.
+\begin{block}{Ausgeben der Temperatur in Kelvin}
+Da die Temperatur bereits in Kelvin gespeichert ist brauchen wir
+nichts weiter zu machen als den Inhalt von {\color{solarizedYellow}\verb!_kelvin!} zurückzuliefern.
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
+double get_kelvin() { return _kelvin; }
+\end{minted}
+\end{block}
+\begin{block}{Ausgeben der Temperatur in Celsius}
+Wir verwenden die Umrechnungsfunktion von Oben: \(Celsius = Kelvin - 273.15\)
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
+double get_celsius() { return _kelvin - 273.15; }
+\end{minted}
+\end{block}
+\begin{block}{Ausgeben der Temperatur in Celsius}
+Wir verwenden die Umrechnungsfunktion von Oben: \(Fahrenheit = Kelvin \cdot\frac{9}{5} - 459.67\)
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
+double get_fahrenheit() {
+  return _kelvin * (9.0 / 5.0) - 459.67;
+}
+\end{minted}
+\end{block}
+\end{block}
+\end{block}
+\begin{block}{Main}
+Damit haben wir die Klasse zum Konvertieren fertig geschrieben und
+müssen nur noch eine {\color{solarizedYellow}\verb!main!} Funktion schreiben um die Funktionalität
+der neuen Klasse testen.
+
+Wir erzeugen eine neue Instanz unserer Klasse und testen ob die
+anfängliche Temperatur tatsächlich Null Grad Kelvin beträgt.
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
+Tempconv a;
+cout << "Anfang:" << endl;
+cout << "Temp: " << a.get_kelvin() << "K" << endl;
+cout << "Temp: " << a.get_celsius() << "C" << endl;
+cout << "Temp: " << a.get_fahrenheit() << "F" << endl << endl;
+\end{minted}
+-40 Fahrenheit und -40 Grad Celsius sollte etwa die gleiche Temperatur
+ sein. Überprüfen wir das!
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
+a.set_celsius(-40);
+cout << "-40C = " << a.get_fahrenheit() << "F" << endl;
+\end{minted}
+Als Ausgaben bekommen wir folgendes. Die Klasse scheint also korrekt
+zu funktionieren.
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{text}
+Anfang:
+Temp: 0K
+Temp: -273.15C
+Temp: -459.67F
+
+-40C = -40F
+\end{minted}
+\end{block}
+\end{frame}
+\begin{frame}[label={sec:orgcc425ed},fragile]{Kompletter Sourcecode}
+ \begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
+#include <iostream>
+using namespace std;
+
+class Tempconv {
+private:
+  double _kelvin;
+
+public:
+  Tempconv() { _kelvin = 0; }  // Standardkonstruktor
+
+  // Memberfunktionen zum Setzen der Temperatur
+  void set_kelvin(double kelvin) { _kelvin = kelvin; }
+  void set_celsius(double celsius) { _kelvin = celsius + 273.15; }
+  void set_fahrenheit(double fahrenheit) {
+    _kelvin = (fahrenheit + 459.67) * (5.0 / 9.0);
+  }
+
+  // Memberfunktionen zum Auslesen der Temperatur
+  double get_kelvin() { return _kelvin; }
+  double get_celsius() { return _kelvin - 273.15; }
+  double get_fahrenheit() {
+    return _kelvin * (9.0 / 5.0) - 459.67;
+  }
+}; // Ende der Tempconv-Klasse
+
+int main() {
+  Tempconv a;
+  cout << "Anfang:" << endl;
+  cout << "Temp: " << a.get_kelvin() << "K" << endl;
+  cout << "Temp: " << a.get_celsius() << "C" << endl;
+  cout << "Temp: " << a.get_fahrenheit() << "F" << endl << endl;
+
+  a.set_celsius(-40);
+  cout << "-40C = " << a.get_fahrenheit() << "F" << endl;
+}
+\end{minted}
+\end{frame}
+\end{document}

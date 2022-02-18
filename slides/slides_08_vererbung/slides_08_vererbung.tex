@@ -1,4 +1,4 @@
-% Created 2020-06-29 Mon 11:46
+% Created 2022-02-18 Fr 10:14
 % Intended LaTeX compiler: pdflatex
 \documentclass[presentation]{beamer}
 \usepackage[utf8]{inputenc}
@@ -39,22 +39,23 @@
 \end{frame}
 }
 \usetheme{default}
-\author{Sebastian Stabinger}
-\date{SS2020}
+\author{Thomas Hausberger, Matthias Panny \\ Ursprünglich erstellt von Sebastian Stabinger}
+\date{SS2022}
 \title{Vererbung}
 \hypersetup{
- pdfauthor={Sebastian Stabinger},
+ pdfauthor={Thomas Hausberger, Matthias Panny \\ Ursprünglich erstellt von Sebastian Stabinger},
  pdftitle={Vererbung},
  pdfkeywords={},
  pdfsubject={},
- pdfcreator={Emacs 26.3 (Org mode 9.1.9)}, 
+ pdfcreator={Emacs 27.2 (Org mode 9.4.4)}, 
  pdflang={Ger}}
 \begin{document}
 
 \maketitle
+
 \section{Das Problem}
-\label{sec:org2b7195e}
-\begin{frame}[label={sec:org4088d6e}]{Beispiel}
+\label{sec:orgf4ffd4a}
+\begin{frame}[label={sec:org2c7cd86}]{Beispiel}
 \begin{itemize}
 \item Wir wollen Klassen für verschiedene Elemente eines Spiels
 deklarieren (z.B. Spieler, Ladenbesitzer, Objekt, \ldots{})
@@ -70,8 +71,8 @@ Eigenschaften in der Spieler-, Ladenbesitzer- und Objekt-Klasse
 manuell wiederholen.
 \end{itemize}
 \end{frame}
-\begin{frame}[fragile,label={sec:org224795d}]{Beispiel Code --- Spieler}
- \begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{frame}[label={sec:org0486e86},fragile]{Beispiel Code --- Spieler}
+ \begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 class Player {
 private:
   string _image;
@@ -95,8 +96,8 @@ public:
 };
 \end{minted}
 \end{frame}
-\begin{frame}[fragile,label={sec:org69592f9}]{Beispiel Code --- Ladenbesitzer}
- \begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{frame}[label={sec:org48f000f},fragile]{Beispiel Code --- Ladenbesitzer}
+ \begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 class Shopkeep {
 private:
   string _image;
@@ -117,8 +118,8 @@ public:
 };
 \end{minted}
 \end{frame}
-\begin{frame}[fragile,label={sec:org720f8b8}]{Beispiel Code --- Objekt}
- \begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{frame}[label={sec:org124a108},fragile]{Beispiel Code --- Objekt}
+ \begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 class Object {
 private:
   int _xpos, _ypos;
@@ -139,8 +140,8 @@ public:
 \end{minted}
 \end{frame}
 \section{Die Lösung --- Vererbung}
-\label{sec:orgc9676a6}
-\begin{frame}[fragile,label={sec:orgb6dae2b}]{Vererbung}
+\label{sec:orgc247db7}
+\begin{frame}[label={sec:org4fb10a2},fragile]{Vererbung}
  \begin{itemize}
 \item Mittels Vererbung kann eine Klasse (die \alert{abgeleitete Klasse})
 Variablen und Memberfunktionen einer anderen Klasse (der
@@ -151,7 +152,7 @@ Klasse (die \alert{abgeleitete Klasse}) einen neuen Namen.
 \item Wir sagen \alert{die abgeleitete Klasse erweitert die Basisklasse}
 \end{itemize}
 \begin{block}{Syntax}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 class AbgeleiteteKlasse : public Basisklasse {
   // ... Definition der abgeleiteten Klasse
 }
@@ -159,11 +160,11 @@ class AbgeleiteteKlasse : public Basisklasse {
 \end{block}
 \begin{itemize}
 \item \alert{Achtung}: Die abgeleitete Klasse hat nur Zugriff auf Variablen und
-Memberfunktionen der Basisklasse welche {\color{solarizedYellow}\texttt{public} }sind!
+Memberfunktionen der Basisklasse welche {\color{solarizedYellow}\verb!public!} sind!
 \end{itemize}
 \end{frame}
-\begin{frame}[fragile,label={sec:org8eb3b19}]{Vererbung --- Kurzes Beispiel}
- \begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{frame}[label={sec:org7be13cf},fragile]{Vererbung --- Kurzes Beispiel}
+ \begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 #include <iostream>
 using namespace std;
 
@@ -191,19 +192,19 @@ int main() {
 }
 \end{minted}
 \end{frame}
-\begin{frame}[label={sec:orgae86f3e}]{Vererbung --- Kurzes Beispiel}
+\begin{frame}[label={sec:orgaf8de17}]{Vererbung --- Kurzes Beispiel}
 Grafisch kann man sich die Vererbung folgendermaßen vorstellen (Die
 Basisklasse ist in die abgeleitete Klasse eingebettet):
-\begin{center}\begin{center}
+\begin{center}
 \includegraphics[width=.9\linewidth]{imgs/helloworldbasisabgeleitet.png}
-\end{center}\end{center}
+\end{center}
 \end{frame}
 \section{Überladen von Funktionen}
-\label{sec:org3bb0f33}
-\begin{frame}[fragile,label={sec:org3cf9603}]{Funktionsweise}
+\label{sec:orgfe89787}
+\begin{frame}[label={sec:org7134508},fragile]{Funktionsweise}
  Wir können eine Funktion der Basisklasse in der abgeleiteten Klasse
 überschreiben indem wir sie gleich benennen.
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 #include <iostream>
 using namespace std;
 
@@ -229,22 +230,22 @@ int main() {
 }
 \end{minted}
 \end{frame}
-\begin{frame}[label={sec:orgc3ea7d7}]{Überladen von Funktionen}
-\begin{center}\begin{center}
+\begin{frame}[label={sec:orgbe186ac}]{Überladen von Funktionen}
+\begin{center}
 \includegraphics[width=.9\linewidth]{imgs/overload.png}
-\end{center}\end{center}
+\end{center}
 \begin{itemize}
 \item Das System sucht sozusagen von \alert{Außen nach Innen} und führt die
 erste Funktion aus welche hinsichtlich Namen und Parametern passt
 \end{itemize}
 \end{frame}
-\begin{frame}[fragile,label={sec:org4d20921}]{Verwendung überschriebener Funktionen}
+\begin{frame}[label={sec:org5b05820},fragile]{Verwendung überschriebener Funktionen}
  \begin{block}{Problem}
 \begin{itemize}
-\item Wir haben in {\color{solarizedYellow}\texttt{HelloWorldAbgeleitet} }das vererbte {\color{solarizedYellow}\texttt{print} }von
-{\color{solarizedYellow}\texttt{HelloWorldBasis} }überschrieben
-\item Wir wollen irgendwo in {\color{solarizedYellow}\texttt{HelloWorldAbgeleitet} }trotzdem das {\color{solarizedYellow}\texttt{print}}
-von {\color{solarizedYellow}\texttt{HelloWorldBasis} }aufrufen
+\item Wir haben in {\color{solarizedYellow}\verb!HelloWorldAbgeleitet!} das vererbte {\color{solarizedYellow}\verb!print!} von
+{\color{solarizedYellow}\verb!HelloWorldBasis!} überschrieben
+\item Wir wollen irgendwo in {\color{solarizedYellow}\verb!HelloWorldAbgeleitet!} trotzdem das {\color{solarizedYellow}\verb!print!}
+von {\color{solarizedYellow}\verb!HelloWorldBasis!} aufrufen
 \item Was z.B. häufig vorkommt: Wir erweitern eine Funktion der
 Basisklasse indem wir sie überschreiben. In der neuen Funktion rufen
 wir die überschiebene Funktion der Basisklasse auf.
@@ -253,12 +254,12 @@ wir die überschiebene Funktion der Basisklasse auf.
 \begin{block}{Lösung}
 \begin{itemize}
 \item \alert{Wir können auf die Basisklasse wie auf einen Namespace zugreifen.}
-\item Bsp. {\color{solarizedYellow}\texttt{HelloWorldBasis::print()}}
+\item Bsp. {\color{solarizedYellow}\verb!HelloWorldBasis::print()!}
 \end{itemize}
 \end{block}
 \end{frame}
-\begin{frame}[fragile,label={sec:orgd4d7f39}]{Verwendung überschriebener Funktionen}
- \begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{frame}[label={sec:orga7b0a4c},fragile]{Verwendung überschriebener Funktionen}
+ \begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 #include <iostream>
 using namespace std;
 
@@ -287,11 +288,11 @@ int main() {
 \end{minted}
 \end{frame}
 \section{Konstruktoren und Vererbung}
-\label{sec:org3127b60}
-\begin{frame}[fragile,label={sec:org699fb72}]{Standardkonstruktoren}
+\label{sec:org07fbc45}
+\begin{frame}[label={sec:orge359edb},fragile]{Standardkonstruktoren}
  Der Standardkonstruktor einer Basisklasse wird automatisch aufgerufen
 wenn die abgeleiteten Klasse erzeugt wird.
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 #include <iostream>
 
 class C1 {
@@ -312,12 +313,12 @@ int main() {
 }
 \end{minted}
 \end{frame}
-\begin{frame}[fragile,label={sec:org16c2e6b}]{Konstruktoren mit Parametern}
+\begin{frame}[label={sec:org311ddcc},fragile]{Konstruktoren mit Parametern}
  Ein Konstruktor der Basisklasse welcher Parameter erwartet \alert{muss
-explizit aufgerufen werden}. Dies geschieht durch Anhängen mittels {\color{solarizedYellow}\texttt{:}}
+explizit aufgerufen werden}. Dies geschieht durch Anhängen mittels {\color{solarizedYellow}\verb!:!}
 an den Konstruktor.
 \begin{exampleblock}{Syntax --- Beispiel}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 class C1 {
 public:
   int a;
@@ -337,9 +338,9 @@ int main() {
 \end{exampleblock}
 \end{frame}
 \section{Ein größeres Beispiel}
-\label{sec:orgbd756be}
-\begin{frame}[fragile,label={sec:org12396fe}]{Code Beispiel --- Ein Ding}
- \begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\label{sec:orgcc06bc2}
+\begin{frame}[label={sec:orgb1d9adb},fragile]{Code Beispiel --- Ein Ding}
+ \begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 class Thing {
 private:
   int _xpos, _ypos;
@@ -361,8 +362,8 @@ public:
 };
 \end{minted}
 \end{frame}
-\begin{frame}[fragile,label={sec:orgeccb450}]{Code Beispiel --- Spieler}
- \begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{frame}[label={sec:orgf0b74c9},fragile]{Code Beispiel --- Spieler}
+ \begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 class Player : public Thing {
 private:
   int _health;
@@ -385,13 +386,13 @@ public:
 };
 \end{minted}
 \end{frame}
-\begin{frame}[label={sec:orgf8bd58e}]{Graphische Visualisierung --- Thing - Player}
-\begin{center}\begin{center}
+\begin{frame}[label={sec:orgbec796e}]{Graphische Visualisierung --- Thing - Player}
+\begin{center}
 \includegraphics[width=.9\linewidth]{imgs/thingplayer.png}
-\end{center}\end{center}
+\end{center}
 \end{frame}
-\begin{frame}[fragile,label={sec:orgdf1d39a}]{Code Beispiel --- Ladenbesitzer}
- \begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{frame}[label={sec:org562ab7f},fragile]{Code Beispiel --- Ladenbesitzer}
+ \begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 class Shopkeep : public Thing {
 private:
   vector<string> _inventory;
@@ -406,8 +407,8 @@ public:
 };
 \end{minted}
 \end{frame}
-\begin{frame}[fragile,label={sec:org915f723}]{Code Beispiel --- Objekt}
- \begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{frame}[label={sec:org2843c20},fragile]{Code Beispiel --- Objekt}
+ \begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 class Object : public Thing {
 private:
   bool _solid;
@@ -423,18 +424,18 @@ public:
 \end{minted}
 \end{frame}
 \section{Kontrolle der Sichtbarkeit}
-\label{sec:orgdd3ead4}
-\begin{frame}[fragile,label={sec:orge3d7d30}]{Das Problem}
+\label{sec:orgc9f5441}
+\begin{frame}[label={sec:orgf44c455},fragile]{Das Problem}
  \begin{itemize}
 \item Wir haben bereits gelernt: Die abgeleitete Klasse hat Zugriff auf
-alle Elemente der Basisklasse welche {\color{solarizedYellow}\texttt{public} }sind. Auf die
-{\color{solarizedYellow}\texttt{private} }Elemente hat sie \alert{keinen} Zugriff.
+alle Elemente der Basisklasse welche {\color{solarizedYellow}\verb!public!} sind. Auf die
+{\color{solarizedYellow}\verb!private!} Elemente hat sie \alert{keinen} Zugriff.
 \item Wir wollen aber häufig in der abgeleiteten Klasse direkt auf
 Elemente der Basisklasse zugreifen welche von außerhalb nicht
 sichtbar sind.
 \end{itemize}
 \begin{exampleblock}{Beispiel}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 class C1 {
 private:
   int secret;
@@ -446,19 +447,19 @@ public:
   // Error!! Kein Zugriff auf secret
 };
 \end{minted}
-Wir könnten {\color{solarizedYellow}\texttt{secret} }in den {\color{solarizedYellow}\texttt{public} }Bereich schieben, aber dann kann
+Wir könnten {\color{solarizedYellow}\verb!secret!} in den {\color{solarizedYellow}\verb!public!} Bereich schieben, aber dann kann
 jeder darauf zugreifen \ldots{}
 \end{exampleblock}
 \end{frame}
-\begin{frame}[fragile,label={sec:org83f4000}]{Die Lösung: protected}
+\begin{frame}[label={sec:org3aff9a3},fragile]{Die Lösung: protected}
  \begin{itemize}
 \item Um dieses Problem zu lösen gibt es einen dritten
-Sichtbarkeitsbereich innerhalb einer Klasse namens {\color{solarizedYellow}\texttt{protected}}
-\item Er verhält sich von Außerhalb so wie {\color{solarizedYellow}\texttt{private}}, aber eine
+Sichtbarkeitsbereich innerhalb einer Klasse namens {\color{solarizedYellow}\verb!protected!}
+\item Er verhält sich von Außerhalb so wie {\color{solarizedYellow}\verb!private!}, aber eine
 abgeleitete Klasse kann direkt darauf zugreifen.
 \end{itemize}
 \begin{exampleblock}{Beispiel}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 class C1 {
 protected:
   int secret;
@@ -479,8 +480,8 @@ int main() {
 \end{exampleblock}
 \end{frame}
 \section{Übungen}
-\label{sec:org4057eb3}
-\begin{frame}[label={sec:orgba4973f}]{Gemeinsame Übung}
+\label{sec:org0d01232}
+\begin{frame}[label={sec:org0d02512}]{Gemeinsame Übung}
 Wir schreiben die beim letzten Termin entwickelte Version des Spiels
 so um, dass es eine \alert{Spieler- und eine Monsterklasse} gibt.
 \begin{itemize}

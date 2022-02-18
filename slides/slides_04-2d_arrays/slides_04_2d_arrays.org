@@ -1,6 +1,7 @@
 #+TITLE:     2D Arrays
-#+AUTHOR:    Sebastian Stabinger, Thomas Hausberger
-#+DATE:      SS2021
+#+AUTHOR:    Thomas Hausberger, Matthias Panny @@latex:\\@@ Ursprünglich erstellt von Sebastian Stabinger
+#+DATE:      SS2022
+
 * 2D Arrays im Speicher
 ** Das Problem mit 2D Arrays
 - Wir würden gerne 2D Arrays (z.B. Matrizen) in C verwenden.

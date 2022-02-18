@@ -1,7 +1,6 @@
 #+TITLE:     Programmaufteilung
-#+AUTHOR:    Sebastian Stabinger, Thomas Hausberger
-#+EMAIL:     sebastian@stabinger.name
-#+DATE:      SS2021
+#+AUTHOR:    Thomas Hausberger, Matthias Panny @@latex:\\@@ Ursprünglich erstellt von Sebastian Stabinger
+#+DATE:      SS2022
 
 * Wozu sollte man ein Programm aufteilen?
 ** Hintergrund

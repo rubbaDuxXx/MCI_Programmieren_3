@@ -1,4 +1,4 @@
-% Created 2021-03-03 Wed 21:05
+% Created 2022-02-18 Fr 09:19
 % Intended LaTeX compiler: pdflatex
 \documentclass[presentation]{beamer}
 \usepackage[utf8]{inputenc}
@@ -39,25 +39,26 @@
 \end{frame}
 }
 \usetheme{default}
-\author{Sebastian Stabinger, Thomas Hausberger}
-\date{SS2021}
+\author{Thomas Hausberger, Matthias Panny \\ Ursprünglich erstellt von Sebastian Stabinger}
+\date{SS2022}
 \title{Strukturen}
 \hypersetup{
- pdfauthor={Sebastian Stabinger, Thomas Hausberger},
+ pdfauthor={Thomas Hausberger, Matthias Panny \\ Ursprünglich erstellt von Sebastian Stabinger},
  pdftitle={Strukturen},
  pdfkeywords={},
  pdfsubject={},
- pdfcreator={Emacs 27.1 (Org mode 9.4.4)},
+ pdfcreator={Emacs 27.2 (Org mode 9.4.4)}, 
  pdflang={Ger}}
 \begin{document}
 
 \maketitle
-\begin{frame}[label={sec:org4a19e47},fragile]{Datentypen}
+
+\begin{frame}[label={sec:org11643fd},fragile]{Datentypen}
  \begin{block}{Standarddatentypen}
 \begin{itemize}
 \item C bietet eine Reihe von Standarddatentypen an
-\item {\color{solarizedYellow}\texttt{int}}
-\item {\color{solarizedYellow}\texttt{double}}
+\item {\color{solarizedYellow}\verb!int!}
+\item {\color{solarizedYellow}\verb!double!}
 \item \ldots{}
 \end{itemize}
 \end{block}
@@ -68,12 +69,12 @@
 \end{itemize}
 \end{block}
 \end{frame}
-\begin{frame}[label={sec:org9b59a7a},fragile]{Wie werden solche Datentypen normalerweise verwendet?}
+\begin{frame}[label={sec:org6cb0e41},fragile]{Wie werden solche Datentypen normalerweise verwendet?}
  \begin{itemize}
 \item Es wird ein \alert{neuer Datentyp} definiert (z.B. Komplexe Zahl)
 \begin{itemize}
 \item Hier wird entschieden welche Daten gespeichert werden müssen
-\item Für komplexe Zahl z.B. \alert{Real- und Imaginärteil} als {\color{solarizedYellow}\texttt{double}}
+\item Für komplexe Zahl z.B. \alert{Real- und Imaginärteil} als {\color{solarizedYellow}\verb!double!}
 \end{itemize}
 \item Man entscheided wie diese \alert{Daten verarbeitet} werden
 \begin{itemize}
@@ -90,10 +91,10 @@ welche Strukturen entgegennehmen und zurück geben
 \end{block}
 \end{frame}
 \section{Neuer Datentyp}
-\label{sec:org780cbd2}
-\begin{frame}[label={sec:org811b5e7},fragile]{Strukturen}
+\label{sec:orga777947}
+\begin{frame}[label={sec:org481fcad},fragile]{Strukturen}
  \begin{block}{Syntax}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c}
 struct Name {
   // Enthaltene Daten im Format:
   // datentyp name;
@@ -101,22 +102,22 @@ struct Name {
 \end{minted}
 \end{block}
 \begin{exampleblock}{Beispiel}
-Wir definieren einen  neuen Typ namens {\color{solarizedYellow}\texttt{Complex}}:
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+Wir definieren einen  neuen Typ namens {\color{solarizedYellow}\verb!Complex!}:
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c}
 struct Complex {
   double real;
   double imag;
 };
 \end{minted}
-{\color{solarizedYellow}\texttt{real} }und {\color{solarizedYellow}\texttt{imag} }sind Teil des neuen Datentyps
+{\color{solarizedYellow}\verb!real!} und {\color{solarizedYellow}\verb!imag!} sind Teil des neuen Datentyps
 \end{exampleblock}
 \begin{alertblock}{Hinweis}
-Strukturen werden vor der {\color{solarizedYellow}\texttt{main}}-Funktion deklariert!
+Strukturen werden vor der {\color{solarizedYellow}\verb!main!}-Funktion deklariert!
 \end{alertblock}
 \end{frame}
-\begin{frame}[label={sec:org2ff3c5e},fragile]{Strukturen --- Erzeugen von Variablen}
+\begin{frame}[label={sec:org1901790},fragile]{Strukturen --- Erzeugen von Variablen}
  \begin{exampleblock}{Erzeugen einer uninitialisierten Variable}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c}
 #include <stdio.h>
 
 struct Complex {
@@ -132,20 +133,20 @@ int main() {
 \end{exampleblock}
 \end{frame}
 
-\begin{frame}[label={sec:org759cf5a},fragile]{Typealias}
+\begin{frame}[label={sec:org1cc46f0},fragile]{Typealias}
  Es ist etwas unpraktisch, dass man bei einem Strukturdatentyp immer
-explizit {\color{solarizedYellow}\texttt{struct} }davor schreiben muss (Hinweis: In C++ ist dies nicht
+explizit {\color{solarizedYellow}\verb!struct!} davor schreiben muss (Hinweis: In C++ ist dies nicht
 mehr der Fall)
 \begin{block}{Lösung mit {\color{solarizedYellow}\texttt{typedef}}}
 \begin{itemize}
-\item Mit Hilfe des Befehls {\color{solarizedYellow}\texttt{typedef} }können alternative Namen (ein
+\item Mit Hilfe des Befehls {\color{solarizedYellow}\verb!typedef!} können alternative Namen (ein
 sogenannter Typealias) für Datentypen vergeben werden
 \end{itemize}
-Format: {\color{solarizedYellow}\texttt{typedef datentyp neuer\_name;}}
+Format: {\color{solarizedYellow}\verb!typedef datentyp neuer_name;!}
 \end{block}
 \end{frame}
-\begin{frame}[label={sec:orgf31a291},fragile]{Typealias --- Beispiel}
- \begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+\begin{frame}[label={sec:org7e885a6},fragile]{Typealias --- Beispiel}
+ \begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c}
 #include <stdio.h>
 
 struct Complex {
@@ -160,11 +161,11 @@ int main() {
 }
 \end{minted}
 \end{frame}
-\begin{frame}[label={sec:orge4b647e},fragile]{Struktur und Typealias in einem Rutsch}
+\begin{frame}[label={sec:org66a5ed9},fragile]{Struktur und Typealias in einem Rutsch}
  Die Deklaration einer Struktur und die Vergabe eines Typealias können
 auch \alert{in einem Rutsch} erledigt werden
 \begin{exampleblock}{Beispiel}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c}
 #include <stdio.h>
 
 // Typealias und Deklaration der Struktur in einem Schritt
@@ -179,11 +180,11 @@ int main() {
 \end{minted}
 \end{exampleblock}
 \end{frame}
-\begin{frame}[label={sec:orgc05ede9},fragile]{Zugriff auf Komponenten einer Struktur}
- Geschieht mittels Punkt ({\color{solarizedYellow}\texttt{.}}) zwischen Variablenname und
+\begin{frame}[label={sec:org47788c3},fragile]{Zugriff auf Komponenten einer Struktur}
+ Geschieht mittels Punkt ({\color{solarizedYellow}\verb!.!}) zwischen Variablenname und
 Komponentenname der Struktur:
 \begin{exampleblock}{Beispiel}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c}
 #include <stdio.h>
 
 typedef struct Complex {
@@ -207,7 +208,7 @@ int main() {
 \end{exampleblock}
 \end{frame}
 
-\begin{frame}[label={sec:org74833db},fragile]{Initialisierung}
+\begin{frame}[label={sec:orgd1c0a19},fragile]{Initialisierung}
  \begin{itemize}
 \item Wie die meisten anderen Datentypen auch sind Variablen mit einem
 Strukturdatentyp nicht automatisch initialisiert
@@ -215,7 +216,7 @@ Strukturdatentyp nicht automatisch initialisiert
 sich nicht drauf verlassen}!
 \end{itemize}
 \begin{exampleblock}{Beispiel}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c}
 #include <stdio.h>
 
 typedef struct Complex {
@@ -231,7 +232,7 @@ int main() {
 \end{minted}
 \end{exampleblock}
 \end{frame}
-\begin{frame}[label={sec:org168afee},fragile]{Initialisierung}
+\begin{frame}[label={sec:org1407139},fragile]{Initialisierung}
  \begin{itemize}
 \item Beim Deklarieren einer Variable (\alert{und nur dort}) mit einem
 Strukturdatentyp können Startwerte in Form einer
@@ -240,7 +241,7 @@ Strukturdatentyp können Startwerte in Form einer
 Struktur
 \end{itemize}
 \begin{exampleblock}{Beispiel}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c}
 #include <stdio.h>
 
 typedef struct Complex {
@@ -259,16 +260,16 @@ int main() {
 \end{verbatim}
 \end{exampleblock}
 \end{frame}
-\begin{frame}[label={sec:org6ef4b3b}]{Übung}
+\begin{frame}[label={sec:org5909de1}]{Übung}
 Wir schreiben unseren Spieleprototyp so um, dass die Informationen
 einer Spielfigur in einer Struktur gespeichert sind
-\begin{center}\begin{center}
+\begin{center}
 \includegraphics[width=0.5\textwidth]{data/06/33dede-9a84-458e-8ea0-5ae29bb9bc9c/screenshot-20200306-160024.png}
-\end{center}\end{center}
+\end{center}
 \end{frame}
 \section{Mit den Datentypen arbeiten}
-\label{sec:org516dccc}
-\begin{frame}[label={sec:org8332606}]{Strukturen als Datenpaket}
+\label{sec:orga08b4df}
+\begin{frame}[label={sec:org8fe9f79}]{Strukturen als Datenpaket}
 \begin{itemize}
 \item Die Verwendung von Strukturen als \alert{eine Sammlung von
 zusammengehörenden Variablen} ist an sich schon nützlich
@@ -277,12 +278,12 @@ Abstraktion, wenn die Verarbeitung von den darin enthalteten Daten
 in Funktionen passiert.
 \end{itemize}
 \end{frame}
-\begin{frame}[label={sec:org1faff1f},fragile]{Strukturen als Parameter von Funktionen}
- So wie sie einen {\color{solarizedYellow}\texttt{int} }als Parameter in eine Funktion schicken können,
+\begin{frame}[label={sec:orgc4c90a8},fragile]{Strukturen als Parameter von Funktionen}
+ So wie sie einen {\color{solarizedYellow}\verb!int!} als Parameter in eine Funktion schicken können,
 können Sie auch eine Struktur als Parameter an eine Funktion
 übergeben.
 \begin{exampleblock}{Beispiel}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c}
 #include <stdio.h>
 
 typedef struct Complex {
@@ -299,21 +300,21 @@ int main() {
 \end{minted}
 \end{exampleblock}
 \end{frame}
-\begin{frame}[label={sec:org540bcb5},fragile]{Rückgabe von Strukturen von Funktionen}
- Genauso wie Sie einen {\color{solarizedYellow}\texttt{int} }von einer Funktion mittels {\color{solarizedYellow}\texttt{return}}
-zurückgeben können, können Sie auch eine Struktur mit {\color{solarizedYellow}\texttt{return} }zurück
+\begin{frame}[label={sec:orgcb0f6ab},fragile]{Rückgabe von Strukturen von Funktionen}
+ Genauso wie Sie einen {\color{solarizedYellow}\verb!int!} von einer Funktion mittels {\color{solarizedYellow}\verb!return!}
+zurückgeben können, können Sie auch eine Struktur mit {\color{solarizedYellow}\verb!return!} zurück
 geben
 \begin{exampleblock}{Beispiel}
 \center
 Nächstes Slide
-\begin{center}\begin{center}
+\begin{center}
 \includegraphics[width=0.3\textwidth]{data/b1/ec1282-fa9f-4a02-abc6-b8b219020ccc/screenshot-20200306-173506.png}
-\end{center}\end{center}
+\end{center}
 \end{exampleblock}
 \end{frame}
 
-\begin{frame}[label={sec:orgeffb613},fragile]{Rückgabe von Strukturen von Funktionen --- Beispiel}
- \begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+\begin{frame}[label={sec:orge287bfd},fragile]{Rückgabe von Strukturen von Funktionen --- Beispiel}
+ \begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c}
 #include <stdio.h>
 
 typedef struct Complex {
@@ -340,8 +341,8 @@ int main() {
 }
 \end{minted}
 \end{frame}
-\begin{frame}[label={sec:org962b235},fragile]{Rückgabe --- Beispiel ohne temporäre Variable}
- \begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+\begin{frame}[label={sec:orgecad1cb},fragile]{Rückgabe --- Beispiel ohne temporäre Variable}
+ \begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c}
 #include <stdio.h>
 
 typedef struct Complex {
@@ -365,8 +366,8 @@ int main() {
 }
 \end{minted}
 \end{frame}
-\begin{frame}[label={sec:orgf519c29},fragile]{Rückgabe --- Beispiel komplett ohne Variablen}
- \begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+\begin{frame}[label={sec:org841f0e1},fragile]{Rückgabe --- Beispiel komplett ohne Variablen}
+ \begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c}
 #include <stdio.h>
 
 typedef struct Complex {
@@ -385,12 +386,12 @@ int main() {
 }
 \end{minted}
 \end{frame}
-\begin{frame}[label={sec:org989b13d},fragile]{Ändern der Werte einer Struktur innerhalb einer Funktion}
+\begin{frame}[label={sec:org7c28c2f},fragile]{Ändern der Werte einer Struktur innerhalb einer Funktion}
  Wenn Sie Strukturen als Parameter an eine Funktion übergeben, können
 Sie die Werte darin zwar ändern, aber \alert{diese Änderungen haben keine
 Auswirkungen außerhalb der Funktion}
 \begin{exampleblock}{Beispiel}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c}
 #include <stdio.h>
 
 typedef struct Complex {
@@ -408,17 +409,12 @@ int main() {
   print(c);
 }
 \end{minted}
-
-\begin{verbatim}
-23.000000 + 42.270000i
-\end{verbatim}
 \end{exampleblock}
 \end{frame}
-
-\begin{frame}[label={sec:orgc7c7733},fragile]{Übergabe von Strukturen als Zeiger}
+\begin{frame}[label={sec:org506cbfa},fragile]{Übergabe von Strukturen als Zeiger}
  Um Werte in einer Struktur nach aussen hin sichtbar zu ändern, muss
 die Struktur als Zeiger an die Funktion übergeben werden
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c}
 #include <stdio.h>
 
 typedef struct Complex {
@@ -436,23 +432,18 @@ int main() {
   print(c);
 }
 \end{minted}
-
-\begin{verbatim}
-0.000000 + 0.000000i
-\end{verbatim}
 \end{frame}
-
-\begin{frame}[label={sec:orgcc97762},fragile]{Zugriff auf Komponenten eines Strukturzeigers}
+\begin{frame}[label={sec:org3fe06e1},fragile]{Zugriff auf Komponenten eines Strukturzeigers}
  \begin{itemize}
 \item Der Zugriff mit einem Punkt nach dem Dereferenzieren (z.B.
-{\color{solarizedYellow}\texttt{(*num).real}}) ist etwas umständlich.
+{\color{solarizedYellow}\verb!(*num).real!}) ist etwas umständlich.
 \item Syntactic Sugar um das ganze leserlicher zu machen:
 \begin{itemize}
-\item Statt {\color{solarizedYellow}\texttt{(*num).real} }kann auch {\color{solarizedYellow}\texttt{num->real} }geschrieben werden
+\item Statt {\color{solarizedYellow}\verb!(*num).real!} kann auch {\color{solarizedYellow}\verb!num->real!} geschrieben werden
 \end{itemize}
 \end{itemize}
 \begin{exampleblock}{Beispiel}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c}
 #include <stdio.h>
 
 typedef struct Complex {
@@ -471,18 +462,18 @@ int main() {
 \end{minted}
 \end{exampleblock}
 \end{frame}
-\begin{frame}[label={sec:org6dc2091},fragile]{Übung}
+\begin{frame}[label={sec:org5e59f58},fragile]{Übung}
  Schreiben Sie folgende Funktionen für unser auf Strukturen umgeschriebenes Spielebeispiel:
 \begin{description}
-\item[{{\color{solarizedYellow}\texttt{draw\_figure}}}] Zeichnet die Figur mit der richtigen Grafik an der richtigen Stelle
-\item[{{\color{solarizedYellow}\texttt{are\_colliding}}}] Übernimmt zwei Figur-Strukturen und überprüft ob diese gerade kollidieren
-\item[{{\color{solarizedYellow}\texttt{move\_up}}, {\color{solarizedYellow}\texttt{move\_down}}, {\color{solarizedYellow}\texttt{move\_left}}, {\color{solarizedYellow}\texttt{move\_right}}}] Bewegt eine
+\item[{\color{solarizedYellow}\texttt{draw\_figure}}] Zeichnet die Figur mit der richtigen Grafik an der richtigen Stelle
+\item[{\color{solarizedYellow}\texttt{are\_colliding}}] Übernimmt zwei Figur-Strukturen und überprüft ob diese gerade kollidieren
+\item[{\color{solarizedYellow}\texttt{move\_up}}, {\color{solarizedYellow}\texttt{move\_down}}, {\color{solarizedYellow}\texttt{move\_left}}, {\color{solarizedYellow}\texttt{move\_right}}] Bewegt eine
 Figur nach Oben, Unten, Links, Rechts und stellt sicher, dass
 sich diese nicht vom Spielfeld bewegt
 \end{description}
-\begin{center}\begin{center}
+\begin{center}
 \includegraphics[width=0.3\textwidth]{data/06/33dede-9a84-458e-8ea0-5ae29bb9bc9c/screenshot-20200306-160024.png}
-\end{center}\end{center}
+\end{center}
 Verwenden Sie die geschriebenen Funktionen an geeigneter Stelle in
 unserem Spiel
 \end{frame}

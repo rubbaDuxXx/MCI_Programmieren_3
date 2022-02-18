@@ -1,7 +1,7 @@
 #+TITLE:     Zeiger, Referenzen, das Slicing Problem und Polymorphismus
-#+AUTHOR:    Sebastian Stabinger
-#+EMAIL:     sebastian.stabinger@mci.edu
-#+DATE:      SS2019
+#+AUTHOR:    Thomas Hausberger, Matthias Panny @@latex:\\@@ Ursprünglich erstellt von Sebastian Stabinger
+#+DATE:      SS2022
+
 * Zeiger
 ** Zeiger in C
 - Zeiger sind Variablen welche Adressen speichern können (also

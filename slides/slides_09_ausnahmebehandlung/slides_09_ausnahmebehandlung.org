@@ -1,7 +1,6 @@
 #+TITLE:     Ausnahmebehandlung
-#+AUTHOR:    Sebastian Stabinger, Thomas Hausberger
-#+EMAIL:     sebastian@stabinger.name
-#+DATE:      SS2021
+#+AUTHOR:    Thomas Hausberger, Matthias Panny @@latex:\\@@ Ursprünglich erstellt von Sebastian Stabinger
+#+DATE:      SS2022
 
 ** Was versteht man unter Ausnahmebehandlung?
 - Ausnahmebehandlung (engl. Exception Handeling) beschreibt die

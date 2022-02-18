@@ -1,4 +1,4 @@
-% Created 2021-05-14 Fri 16:46
+% Created 2022-02-18 Fr 10:25
 % Intended LaTeX compiler: pdflatex
 \documentclass[presentation]{beamer}
 \usepackage[utf8]{inputenc}
@@ -39,23 +39,23 @@
 \end{frame}
 }
 \usetheme{default}
-\author{Sebastian Stabinger, Thomas Hausberger}
-\date{SS2021}
+\author{Thomas Hausberger, Matthias Panny \\ Ursprünglich erstellt von Sebastian Stabinger}
+\date{SS2022}
 \title{Programmaufteilung}
 \hypersetup{
- pdfauthor={Sebastian Stabinger, Thomas Hausberger},
+ pdfauthor={Thomas Hausberger, Matthias Panny \\ Ursprünglich erstellt von Sebastian Stabinger},
  pdftitle={Programmaufteilung},
  pdfkeywords={},
  pdfsubject={},
- pdfcreator={Emacs 27.2 (Org mode 9.4.5)}, 
+ pdfcreator={Emacs 27.2 (Org mode 9.4.4)}, 
  pdflang={Ger}}
 \begin{document}
 
 \maketitle
 
 \section{Wozu sollte man ein Programm aufteilen?}
-\label{sec:orgcd7bc51}
-\begin{frame}[label={sec:orgd8802d1}]{Hintergrund}
+\label{sec:orge157b3e}
+\begin{frame}[label={sec:orgafbbfc8}]{Hintergrund}
 \begin{itemize}
 \item In C und C++ kann man prinzipiell beliebig große Programme in einer
 Datei schreiben (das geht nicht in allen Sprachen)
@@ -74,7 +74,7 @@ sehr viele) Dateien aufgeteilt
 \end{itemize}
 \end{block}
 \end{frame}
-\begin{frame}[label={sec:orgc25f9f5},fragile]{Zusammenarbeiten}
+\begin{frame}[label={sec:orgb241b0a},fragile]{Zusammenarbeiten}
  \begin{itemize}
 \item Es ist relativ schwierig eine Datei mit mehreren Leuten gleichzeitig
 zu bearbeiten
@@ -85,16 +85,16 @@ relativ unpraktisch.
 \item Üblicherweise verwendet man ein \alert{Version Control System} um die
 Änderungen in einem Projekt nachvollziehen zu können und mehreren
 Programmierern Änderungen zu erlauben. Das populärste VCS ist
-aktuell {\color{solarizedYellow}\texttt{git} }\url{https://en.wikipedia.org/wiki/Git}
+aktuell {\color{solarizedYellow}\verb!git!} \url{https://en.wikipedia.org/wiki/Git}
 \end{itemize}
 \end{frame}
-\begin{frame}[label={sec:orgfc16cf5}]{Beispiel git}
+\begin{frame}[label={sec:orgf7cdbdc}]{Beispiel git}
 Änderungsverlauf des git-Repositories dieser Lehrveranstaltung
-\begin{center}\begin{center}
+\begin{center}
 \includegraphics[width=1.0\textwidth]{img/screenshot-20180608-171423.png}
-\end{center}\end{center}
+\end{center}
 \end{frame}
-\begin{frame}[label={sec:org2c17d14}]{Übersichtlicher}
+\begin{frame}[label={sec:org3058372}]{Übersichtlicher}
 \begin{itemize}
 \item Es ist wesentlich einfacher bestimmte Teile eines Programms zu
 finden wenn mehrere Dateien verwendet werden
@@ -110,25 +110,25 @@ Dateien übersichtlicher werden
 \end{itemize}
 \end{itemize}
 \end{frame}
-\begin{frame}[label={sec:org2421e86}]{Compilezeiten}
+\begin{frame}[label={sec:org8316992}]{Compilezeiten}
 \begin{itemize}
 \item Große Projekte können \alert{Stunden} für einen kompletten Compilevorgang
 benötigen. Daduch kann das Programmieren extrem ineffizient werden
 \item Wenn ein Programm auf mehrere Dateien aufgeteilt ist müssen nur die
 Dateien neu compiliert werden die sich \alert{geändert} haben
 \end{itemize}
-\begin{center}\begin{center}
+\begin{center}
 \includegraphics[width=0.5\textwidth]{img/compiling.png}
-\end{center}\end{center}
+\end{center}
 \tiny \center
 \url{https://xkcd.com/303/}
 \end{frame}
 \section{Wie teilt man Programme auf mehrere Dateien auf?}
-\label{sec:org06e1dcc}
-\begin{frame}[label={sec:org64a79e6},fragile]{Das generelle Prinzip}
+\label{sec:org7700d3e}
+\begin{frame}[label={sec:org364e715},fragile]{Das generelle Prinzip}
  \begin{itemize}
 \item Wir wollen also Teile unseres Programms aus der Hauptdatei (in der
-die {\color{solarizedYellow}\texttt{main}}--Funktion liegt) auslagern
+die {\color{solarizedYellow}\verb!main!}--Funktion liegt) auslagern
 \item In C/C++ müssen für ausgelagerte Teile immer zwei Dateien
 geschrieben werden. Die \alert{Headerdatei} und die eigentliche
 \alert{Quellcodedatei}
@@ -141,16 +141,16 @@ Funktionen und Klassen
 \alert{Implementiert} die in der Headerdatei definierte Funktionalität
 \end{block}
 \end{frame}
-\begin{frame}[label={sec:org493deab},fragile]{Die Headerdatei}
+\begin{frame}[label={sec:org40307c9},fragile]{Die Headerdatei}
  \begin{itemize}
 \item Enthält einen sogenannten \alert{Include Guard} der verhindert, dass die
 selbe Headerdatei öfter als ein mal inkludiert werden kann
 \item Enthält \alert{Signaturen} aller Funktionen und Klassen
 \item Enthält Namen von \alert{Konstanten} und \alert{globalen Variablen}
-\item Enthält {\color{solarizedYellow}\texttt{\#include} }für anderen Headerdateien
+\item Enthält {\color{solarizedYellow}\verb!#include!} für anderen Headerdateien
 \end{itemize}
 \begin{block}{Include Guard}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 #ifndef EINDEUTIGER_NAME
 #define EINDEUTIGER_NAME
 
@@ -164,28 +164,28 @@ Signaturen teilen dem Compiler mit welche Funktionen und Klassen es
 gibt, ohne die Funktionalität bereits zu implementieren
 \end{block}
 \end{frame}
-\begin{frame}[label={sec:orgd2a97c8},fragile]{Was macht {\color{solarizedYellow}\texttt{\#include} }eigentlich?}
+\begin{frame}[label={sec:org1620458},fragile]{Was macht {\color{solarizedYellow}\texttt{\#include}} eigentlich?}
  \begin{itemize}
-\item {\color{solarizedYellow}\texttt{\#include} }ersetzt die Zeile in der {\color{solarizedYellow}\texttt{\#include} }steht mit dem Inhalt
+\item {\color{solarizedYellow}\verb!#include!} ersetzt die Zeile in der {\color{solarizedYellow}\verb!#include!} steht mit dem Inhalt
 der angegebenen Datei
 \item Der \alert{Include Guard} verhindert, dass der Inhalt einer Datei nicht
 öfters verwendet wird.
 \end{itemize}
 \begin{block}{Beispiel}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 #include <iostream>
 #include <iostream>
 #include <iostream>
 \end{minted}
-Die wiederholten Einfügungen von {\color{solarizedYellow}\texttt{iostream} }werden vor dem compilieren
+Die wiederholten Einfügungen von {\color{solarizedYellow}\verb!iostream!} werden vor dem compilieren
 wieder gelöscht.
 \end{block}
 \end{frame}
 
-\begin{frame}[label={sec:orga76bc22},fragile]{Signaturen von Funktionen}
+\begin{frame}[label={sec:orga6d932a},fragile]{Signaturen von Funktionen}
  Bestehen einfach aus dem \alert{Teil einer Funktion vor den {\color{solarizedYellow}\texttt{\{ \}}}}
 \begin{block}{Beispiele}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 int add(int a, int b);
 bool is_even(int number);
 void print_my_stuff(MyClass &c);
@@ -196,7 +196,7 @@ void print_my_stuff(MyClass &c);
 Die Signatur einer Funktion muss prinzipiell \alert{keine Parameternamen}
 enthalten. Es ist für den Compiler nur wichtig, dass die Typen alle
 korrekt sind:
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 int add(int, int);
 bool is_even(int);
 void print_my_stuff(MyClass &);
@@ -205,12 +205,12 @@ void print_my_stuff(MyClass &);
 Der Übersichtlichkeit halber \alert{verwendet man sie generell aber trotzdem}!
 \end{block}
 \end{frame}
-\begin{frame}[label={sec:org4a15753},fragile]{Signaturen von Klassen}
+\begin{frame}[label={sec:org118493e},fragile]{Signaturen von Klassen}
  Die Signatur einer Klasse ist aufgebaut wie eine Klasse die wir bis
 jetzt gesehen haben, \alert{enthält aber statt der Funktionen nur die
 Funktionssignaturen}.
 \begin{block}{Beispiel für die ursprüngliche Player Klasse}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 class Player {
 private:
     int _posx, _posy;      
@@ -220,7 +220,7 @@ private:
 
 public:
     Player(int posx, int posy, string img, int fieldsx,
-           int fieldsy, int sizex, int sizey);
+	   int fieldsy, int sizex, int sizey);
 
     void move_left();
     void move_right();
@@ -231,20 +231,20 @@ public:
 \end{minted}
 \end{block}
 \end{frame}
-\begin{frame}[label={sec:org60aae87},fragile]{Die Quellcodedatei}
+\begin{frame}[label={sec:org51f9859},fragile]{Die Quellcodedatei}
  \begin{itemize}
-\item Inkludiert die zuvor beschriebene Headerdatei mit {\color{solarizedYellow}\texttt{\#include
-  "dateiname.h"} }(\alert{Achtung:} Die Anführungszeichen sind wichtig!)
+\item Inkludiert die zuvor beschriebene Headerdatei mit {\color{solarizedYellow}\verb!#include!
+  \verb!"dateiname.h"!} (\alert{Achtung:} Die Anführungszeichen sind wichtig!)
 \item Implementiert die Funktionen und die Memberfunktionen von Klassen
 die wir in der Headerdatei beschrieben haben (siehe die folgenden
 beiden Beispiele)
 \end{itemize}
 \end{frame}
-\begin{frame}[label={sec:org34f4890},fragile]{Auslagern von Funktionen --- Beispiel}
- Wir wollen {\color{solarizedYellow}\texttt{is\_prime} }des folgenden Programms auslagern:
+\begin{frame}[label={sec:orga9e3f7e},fragile]{Auslagern von Funktionen --- Beispiel}
+ Wir wollen {\color{solarizedYellow}\verb!is_prime!} des folgenden Programms auslagern:
 
 \noindent\rule{\textwidth}{0.5pt}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 #include <iostream>
 using namespace std;
 
@@ -265,9 +265,9 @@ int main() {
 }
 \end{minted}
 \end{frame}
-\begin{frame}[label={sec:org645b907},fragile]{Auslagern von Funktionen --- Beispiel}
+\begin{frame}[label={sec:org74de123},fragile]{Auslagern von Funktionen --- Beispiel}
  \begin{block}{prime.hpp}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 #ifndef PRIME_H
 #define PRIME_H
 
@@ -277,22 +277,22 @@ bool is_prime(int number);
 \end{minted}
 \end{block}
 \begin{block}{prime.cpp}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 #include "prime.hpp"
 
 bool is_prime(int number) {
     for (int i = 2; i < number / 2 + 1; i++) {
-        if (number % i == 0)
-            return false;
+	if (number % i == 0)
+	    return false;
     }
     return true;
 }
 \end{minted}
 \end{block}
 \end{frame}
-\begin{frame}[label={sec:org69033c4},fragile]{Auslagern von Funktionen --- Beispiel}
+\begin{frame}[label={sec:org43ff812},fragile]{Auslagern von Funktionen --- Beispiel}
  \begin{block}{main.cpp}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 #include <iostream>
 #include "prime.hpp"
 using namespace std;
@@ -308,9 +308,9 @@ int main() {
 \end{block}
 \end{frame}
 
-\begin{frame}[label={sec:org179425b},fragile]{Auslagern von Klassen --- Beispiel}
- Wir wollen {\color{solarizedYellow}\texttt{Average} }des folgenden Programms auslagern:
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{frame}[label={sec:org3e89397},fragile]{Auslagern von Klassen --- Beispiel}
+ Wir wollen {\color{solarizedYellow}\verb!Average!} des folgenden Programms auslagern:
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 #include <iostream>
 using namespace std;
 
@@ -321,8 +321,8 @@ private:
 
 public:
     void add(double val) {
-        sum += val;
-        count++;
+	sum += val;
+	count++;
     }
 
     double get_avg() { return sum / count; }
@@ -337,9 +337,9 @@ int main() {
 }
 \end{minted}
 \end{frame}
-\begin{frame}[label={sec:org6fa125c},fragile]{Auslagern von Klassen --- Beispiel}
+\begin{frame}[label={sec:org2336224},fragile]{Auslagern von Klassen --- Beispiel}
  \begin{block}{average.hpp}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 #ifndef AVERAGE_H
 #define AVERAGE_H
 
@@ -357,9 +357,9 @@ public:
 \end{minted}
 \end{block}
 \end{frame}
-\begin{frame}[label={sec:org256b9ce},fragile]{Auslagern von Klassen --- Beispiel}
+\begin{frame}[label={sec:org1e2d54d},fragile]{Auslagern von Klassen --- Beispiel}
  \begin{block}{average.cpp}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 #include "average.hpp"
 
 void Average::add(double val) {
@@ -371,7 +371,7 @@ double Average::get_avg() { return sum / count; }
 \end{minted}
 \end{block}
 \begin{block}{main.cpp}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 #include "average.hpp"
 #include <iostream>
 using namespace std;
@@ -386,24 +386,24 @@ int main() {
 \end{minted}
 \end{block}
 \end{frame}
-\begin{frame}[label={sec:org5684781},fragile]{Globale Variablen}
- Globale Variablen müssen in der Headerdatei mit {\color{solarizedYellow}\texttt{extern} }markiert und
+\begin{frame}[label={sec:orgefe31bd},fragile]{Globale Variablen}
+ Globale Variablen müssen in der Headerdatei mit {\color{solarizedYellow}\verb!extern!} markiert und
 in der Quellcodedatei erzeugt werden
 \begin{block}{Header}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 // ...
 extern int meine_globale_variable;
 // ...
 \end{minted}
 \end{block}
 \begin{block}{Quellcodedatei}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 #include "header.hpp"
 int meine_globale_variable = 42;
 \end{minted}
 \end{block}
 \begin{block}{Main}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 #include "header.cpp"
 #include <iostream>
 
@@ -413,10 +413,10 @@ int main() {
 \end{minted}
 \end{block}
 \end{frame}
-\begin{frame}[label={sec:org7330903},fragile]{Übung}
+\begin{frame}[label={sec:orgd109363},fragile]{Übung}
  \begin{itemize}
-\item Laden Sie sich die Datei {\color{solarizedYellow}\texttt{split\_off.cpp} }aus Sakai
-\item Lagern Sie alles bis auf die {\color{solarizedYellow}\texttt{main}}-Funktion in eine Header- und
+\item Laden Sie sich die Datei {\color{solarizedYellow}\verb!split_off.cpp!} aus Sakai
+\item Lagern Sie alles bis auf die {\color{solarizedYellow}\verb!main!}-Funktion in eine Header- und
 Quellcodedatei aus
 \end{itemize}
 \end{frame}

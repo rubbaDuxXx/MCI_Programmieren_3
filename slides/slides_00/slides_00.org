@@ -1,8 +1,7 @@
 #+TITLE:     Programmieren 3
 #+SUBTITLE:  Erweiterte Konzepte in C, Einführung in objektorientierte Programmierung
-#+AUTHOR:    Sebastian Stabinger, Thomas Hausberger
-#+EMAIL:     sebastian.stabinger@mci.edu
-#+DATE:      SS 2021
+#+AUTHOR:    Thomas Hausberger, Matthias Panny @@latex:\\@@ Ursprünglich erstellt von Sebastian Stabinger
+#+DATE:      SS 2022
 
 * Allgemeine Info
 ** COMMENT Zu meiner Person

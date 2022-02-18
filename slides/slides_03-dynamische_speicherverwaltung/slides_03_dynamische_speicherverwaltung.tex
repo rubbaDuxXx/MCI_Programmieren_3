@@ -1,4 +1,4 @@
-% Created 2021-03-03 Wed 21:13
+% Created 2022-02-18 Fr 09:32
 % Intended LaTeX compiler: pdflatex
 \documentclass[presentation]{beamer}
 \usepackage[utf8]{inputenc}
@@ -39,22 +39,23 @@
 \end{frame}
 }
 \usetheme{default}
-\author{Sebastian Stabinger, Thomas Hausberger}
-\date{SS2021}
+\author{Thomas Hausberger, Matthias Panny \\ Ursprünglich erstellt von Sebastian Stabinger}
+\date{SS2022}
 \title{Dynamische Speicherverwaltung}
 \hypersetup{
- pdfauthor={Sebastian Stabinger, Thomas Hausberger},
+ pdfauthor={Thomas Hausberger, Matthias Panny \\ Ursprünglich erstellt von Sebastian Stabinger},
  pdftitle={Dynamische Speicherverwaltung},
  pdfkeywords={},
  pdfsubject={},
- pdfcreator={Emacs 27.1 (Org mode 9.4.4)},
+ pdfcreator={Emacs 27.2 (Org mode 9.4.4)}, 
  pdflang={Ger}}
 \begin{document}
 
 \maketitle
+
 \section{Stack vs. Heap}
-\label{sec:orgd72c2d1}
-\begin{frame}[label={sec:org84ec29e}]{Stack vs. Heap}
+\label{sec:org4ebd915}
+\begin{frame}[label={sec:org24c6a08}]{Stack vs. Heap}
 \begin{block}{Stack}
 \begin{itemize}
 \item Enthält lokale Variablen, übergebene Parameter, intern benötigte
@@ -71,7 +72,7 @@ Informationen (z.B. Rücksprungadresse beim Aufruf von Funktionen, \ldots{})
 \end{itemize}
 \end{block}
 \end{frame}
-\begin{frame}[label={sec:org01f9449}]{Stack (Stapel) --- Datenstruktur}
+\begin{frame}[label={sec:orgcc50d90}]{Stack (Stapel) --- Datenstruktur}
 \begin{columns}
 \begin{column}{0.4\columnwidth}
 \begin{itemize}
@@ -81,13 +82,13 @@ Informationen (z.B. Rücksprungadresse beim Aufruf von Funktionen, \ldots{})
 \end{itemize}
 \end{column}
 \begin{column}{0.6\columnwidth}
-\begin{center}\begin{center}
+\begin{center}
 \includegraphics[width=.9\linewidth]{images/Lifo_stack.png}
-\end{center}\end{center}
+\end{center}
 \end{column}
 \end{columns}
 \end{frame}
-\begin{frame}[label={sec:org8231ffb},fragile]{Stack (Stapel) --- Verwaltung von Speicher von Funktionen}
+\begin{frame}[label={sec:org1291765},fragile]{Stack (Stapel) --- Verwaltung von Speicher von Funktionen}
  \begin{columns}
 \begin{column}{0.5\columnwidth}
 \begin{itemize}
@@ -96,18 +97,18 @@ man als \alert{Stackframe}
 \item Diese Stackframes werden auf einem Stack verwaltet
 \item Wird eine \alert{Funktion aufgerufen}, kommt ein \alert{neuer Stackframe auf den
 Stapel}
-\item Wenn eine \alert{Funktion fertig} ist ({\color{solarizedYellow}\texttt{return}}), wird der oberste
+\item Wenn eine \alert{Funktion fertig} ist ({\color{solarizedYellow}\verb!return!}), wird der oberste
 Stackframe vom Stapel \alert{entfernt}
 \end{itemize}
 \end{column}
 \begin{column}{0.5\columnwidth}
-\begin{center}\begin{center}
+\begin{center}
 \includegraphics[width=.9\linewidth]{images/ProgramCallStack2_en.png}
-\end{center}\end{center}
+\end{center}
 \end{column}
 \end{columns}
 \end{frame}
-\begin{frame}[label={sec:org2a2695a},fragile]{Der Stack verwaltet sich selbst}
+\begin{frame}[label={sec:orgfd61222},fragile]{Der Stack verwaltet sich selbst}
  \begin{itemize}
 \item Nachdem der Stackframe der aktuell laufenden Funktion vom Stapel
 fliegt wenn die Funktion beendet ist, wird nicht mehr benötigter
@@ -116,7 +117,7 @@ Speicher auf dem Stack automatisch freigegeben
 \begin{exampleblock}{Beispiel}
 \begin{columns}
 \begin{column}{0.15\columnwidth}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c}
 #include <stdio.h>
 
 int square(int n) {
@@ -133,23 +134,23 @@ int main() {
 \end{column}
 \begin{column}{0.7\columnwidth}
 \begin{itemize}
-\item Stackframe für {\color{solarizedYellow}\texttt{square}}
+\item Stackframe für {\color{solarizedYellow}\verb!square!}
 \begin{itemize}
-\item Speicher für {\color{solarizedYellow}\texttt{n}}
-\item Speicher für {\color{solarizedYellow}\texttt{tmp}}
+\item Speicher für {\color{solarizedYellow}\verb!n!}
+\item Speicher für {\color{solarizedYellow}\verb!tmp!}
 \end{itemize}
-\item Stackframe für {\color{solarizedYellow}\texttt{main}}
+\item Stackframe für {\color{solarizedYellow}\verb!main!}
 \begin{itemize}
-\item Speicher für {\color{solarizedYellow}\texttt{a}}
-\item Speicher für {\color{solarizedYellow}\texttt{b}}
-\item Speicher für Antwort von {\color{solarizedYellow}\texttt{square}}
+\item Speicher für {\color{solarizedYellow}\verb!a!}
+\item Speicher für {\color{solarizedYellow}\verb!b!}
+\item Speicher für Antwort von {\color{solarizedYellow}\verb!square!}
 \end{itemize}
 \end{itemize}
 \end{column}
 \end{columns}
 \end{exampleblock}
 \end{frame}
-\begin{frame}[label={sec:orge0116cb}]{Einschränkungen des Stack}
+\begin{frame}[label={sec:org0c75b2f}]{Einschränkungen des Stack}
 \begin{itemize}
 \item Die \alert{Größe} des Stacks ist \alert{beschränkt}
 \item \alert{Wie viel Speicher} für einen Stackframe reserviert ist, muss \alert{fix} sein
@@ -165,16 +166,16 @@ einen Namen} gebunden.
 \end{itemize}
 \end{itemize}
 \end{frame}
-\begin{frame}[label={sec:org2a2231b},fragile]{Einschränkungen des Stack --- Beispiel}
+\begin{frame}[label={sec:org7565d54},fragile]{Einschränkungen des Stack --- Beispiel}
  \begin{itemize}
-\item Wir haben eine Struktur ({\color{solarizedYellow}\texttt{Model}}) definiert in der wir 3D-Modelle
+\item Wir haben eine Struktur ({\color{solarizedYellow}\verb!Model!}) definiert in der wir 3D-Modelle
 für ein Spiel speichern wollen und jede dieser Strukturen benötigt
 8 MiB Speicher
 \item Unser Spiel soll gleichzeitig maximal 1024 Modelle unterstützen
 \end{itemize}
 \begin{exampleblock}{Naive Lösung}
 \begin{itemize}
-\item Wir reservieren Speicher für 1024 Modelle: {\color{solarizedYellow}\texttt{Model modelstore[1024];}}
+\item Wir reservieren Speicher für 1024 Modelle: {\color{solarizedYellow}\verb!Model modelstore[1024];!}
 \end{itemize}
 \alert{Problem:}
 \begin{itemize}
@@ -183,9 +184,9 @@ nur eine Hand voll Modelle laden
 \end{itemize}
 \end{exampleblock}
 \end{frame}
-\begin{frame}[label={sec:orgec34040},fragile]{Einschränkungen des Stack --- Beispiel}
+\begin{frame}[label={sec:orgd256c66},fragile]{Einschränkungen des Stack --- Beispiel}
  \begin{itemize}
-\item Wir haben eine Struktur ({\color{solarizedYellow}\texttt{Model}}) definiert in der wir 3D-Modelle
+\item Wir haben eine Struktur ({\color{solarizedYellow}\verb!Model!}) definiert in der wir 3D-Modelle
 für ein Spiel speichern wollen und jede dieser Strukturen benötigt
 8 MiB Speicher
 \item Unser Spiel soll gleichzeitig maximal 1024 Modelle unterstützen
@@ -193,13 +194,13 @@ für ein Spiel speichern wollen und jede dieser Strukturen benötigt
 \begin{exampleblock}{Lösungsansatz}
 \begin{itemize}
 \item Wir reservieren Speicher für 1024 \alert{Zeiger auf Modelle}: {\color{solarizedYellow}\texttt{Model*
-  modelstore[1024];}}
+  modelstore[1024];}
 \end{itemize}
 \alert{Vorteil:}
 \begin{itemize}
 \item Ein Zeiger ist immer gleich groß und recht klein (z.B. 64 Bit
 \(\rightarrow\) 8 Byte). Das Array braucht also z.B. nur 8 KiB.
-\item Wir können die Zeiger mit {\color{solarizedYellow}\texttt{NULL} }initialisieren und wissen immer
+\item Wir können die Zeiger mit {\color{solarizedYellow}\verb!NULL!} initialisieren und wissen immer
 welcher Platz im Array wirklich ein echtes Modell enthält
 \end{itemize}
 \alert{Neues Problem:}
@@ -209,8 +210,8 @@ darauf in unserem Array speichern?
 \end{itemize}
 \end{exampleblock}
 \end{frame}
-\begin{frame}[label={sec:org9b8280c},fragile]{Einschränkungen des Stack --- Falsche Lösung 1}
- \begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+\begin{frame}[label={sec:orgf3cc5fb},fragile]{Einschränkungen des Stack --- Falsche Lösung 1}
+ \begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c}
 typedef struct Model {
   double data[1024 * 1024];
 } Model;
@@ -233,12 +234,12 @@ int main() {
 \end{minted}
 \begin{itemize}
 \item Diese Lösung funktioniert nicht, weil \alert{der Speicher} für
-{\color{solarizedYellow}\texttt{loadedmodel} }nach Beenden von {\color{solarizedYellow}\texttt{load\_model} }automatisch \alert{frei
+{\color{solarizedYellow}\verb!loadedmodel!} nach Beenden von {\color{solarizedYellow}\verb!load_model!} automatisch \alert{frei
 gegeben wird}. D.h. \alert{der Zeiger ist nicht mehr gültig}!
 \end{itemize}
 \end{frame}
-\begin{frame}[label={sec:org087bb6e},fragile]{Einschränkungen des Stack --- Falsche Lösung 2}
- \begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+\begin{frame}[label={sec:org3a3e1b1},fragile]{Einschränkungen des Stack --- Falsche Lösung 2}
+ \begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c}
 typedef struct Model {
   double data[1024 * 1024];
 } Model;
@@ -263,12 +264,12 @@ int main() {
 }
 \end{minted}
 \begin{itemize}
-\item Funktioniert nicht, weil der Inhalt von {\color{solarizedYellow}\texttt{m} }jedes mal überschrieben
+\item Funktioniert nicht, weil der Inhalt von {\color{solarizedYellow}\verb!m!} jedes mal überschrieben
 wird
 \end{itemize}
 \end{frame}
-\begin{frame}[label={sec:org86e23f9},fragile]{Einschränkungen des Stack --- Problematische Lösung}
- \begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+\begin{frame}[label={sec:org6492c3a},fragile]{Einschränkungen des Stack --- Problematische Lösung}
+ \begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c}
 typedef struct Model {
   double data[1024 * 1024];
 } Model;
@@ -299,7 +300,7 @@ man für jedes Modell eine Variable anlegen muss, muss man beim
 Compilieren schon wissen wie viele Modelle man laden will
 \end{itemize}
 \end{frame}
-\begin{frame}[label={sec:org06c091e}]{Heap (Haufen)}
+\begin{frame}[label={sec:org30728c1}]{Heap (Haufen)}
 \begin{itemize}
 \item Als Lösung für solche Probleme verwendet man statt dem Stack den
 sogenannten \alert{Heap} (auch \alert{Free Store} genannt) um Daten zu speichern
@@ -315,26 +316,26 @@ Name)
 \end{itemize}
 \end{frame}
 \section{Dynamische Speicherverwaltung}
-\label{sec:org6de04c1}
-\begin{frame}[label={sec:orgc31dd2b},fragile]{Allgemeines}
+\label{sec:org2413e0d}
+\begin{frame}[label={sec:org404f39e},fragile]{Allgemeines}
  \begin{itemize}
 \item Um die gleich erwähnten Funktionen verwenden zu können muss
-{\color{solarizedYellow}\texttt{stdlib.h} }mit {\color{solarizedYellow}\texttt{\#include} }eingebunden werden
+{\color{solarizedYellow}\verb!stdlib.h!} mit {\color{solarizedYellow}\verb!#include!} eingebunden werden
 \end{itemize}
 \end{frame}
-\begin{frame}[label={sec:org79a0df7},fragile]{Reservieren von Speicher}
+\begin{frame}[label={sec:org7b37426},fragile]{Reservieren von Speicher}
  \begin{itemize}
-\item Speicher wird mit der Funktion {\color{solarizedYellow}\texttt{malloc} }reserviert
+\item Speicher wird mit der Funktion {\color{solarizedYellow}\verb!malloc!} reserviert
 \item Als einzigen Parameter nimmt die Funktion die Größe des zu
 reservierenden Speichers in Byte entgegen
 \item Die Funktion gibt die Adresse des ersten Bytes des reservierten
 Speichers zurück
-\item Falls etwas schief gelaufen ist, wird {\color{solarizedYellow}\texttt{NULL} }zurück gegeben
+\item Falls etwas schief gelaufen ist, wird {\color{solarizedYellow}\verb!NULL!} zurück gegeben
 \end{itemize}
 \end{frame}
-\begin{frame}[label={sec:org399b842},fragile]{Reservieren von Speicher --- Beispiele}
+\begin{frame}[label={sec:org9255081},fragile]{Reservieren von Speicher --- Beispiele}
  \begin{block}{Reservieren von Speicher für einen Integer}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c}
 int *ip = malloc(sizeof(int));
 
 if (ip != NULL) {
@@ -345,7 +346,7 @@ if (ip != NULL) {
 \end{minted}
 \end{block}
 \begin{block}{Reservieren von Speicher für 10 Double}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c}
 double *double_arr = malloc(sizeof(double) * 10);
 
 if (double_arr) {
@@ -356,19 +357,19 @@ if (double_arr) {
 \end{minted}
 \end{block}
 \end{frame}
-\begin{frame}[label={sec:org68c6d61},fragile]{Freigeben von Speicher}
+\begin{frame}[label={sec:org1f43d07},fragile]{Freigeben von Speicher}
  \begin{itemize}
-\item Speicher wird mit der Funktion {\color{solarizedYellow}\texttt{free} }freigegeben
+\item Speicher wird mit der Funktion {\color{solarizedYellow}\verb!free!} freigegeben
 \item Als einzigen Parameter nimmt die Funktion die Adresse des ersten
 Bytes eines vorher reservierten Speicherbereichs entgegen
-\item Falls die übergebene Adresse {\color{solarizedYellow}\texttt{NULL} }ist, macht die Funktion nichts
-\item Ein Speicherbereich darf nur ein mal mit {\color{solarizedYellow}\texttt{free} }freigegeben werden!
+\item Falls die übergebene Adresse {\color{solarizedYellow}\verb!NULL!} ist, macht die Funktion nichts
+\item Ein Speicherbereich darf nur ein mal mit {\color{solarizedYellow}\verb!free!} freigegeben werden!
 \end{itemize}
 \end{frame}
 
-\begin{frame}[label={sec:orgb2b2004},fragile]{Freigeben von Speicher --- Beispiele}
+\begin{frame}[label={sec:orgd6f634a},fragile]{Freigeben von Speicher --- Beispiele}
  \begin{block}{Reservieren von Speicher für einen Integer mit Freigabe}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c}
 int *ip = malloc(sizeof(int));
 
 if (ip != NULL) {
@@ -381,7 +382,7 @@ free(ip);
 \end{minted}
 \end{block}
 \begin{block}{Reservieren von Speicher für 10 Double mit Freigabe}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c}
 double *double_arr = malloc(sizeof(double) * 10);
 
 if (double_arr) {
@@ -394,9 +395,9 @@ free(double_arr);
 \end{minted}
 \end{block}
 \end{frame}
-\begin{frame}[label={sec:org126e245},fragile]{Vergrößern/Verkleinern von reserviertem Speicher}
+\begin{frame}[label={sec:org7f66b8c},fragile]{Vergrößern/Verkleinern von reserviertem Speicher}
  \begin{itemize}
-\item Bereits reservierter Speicher kann mit der Funktion {\color{solarizedYellow}\texttt{realloc}}
+\item Bereits reservierter Speicher kann mit der Funktion {\color{solarizedYellow}\verb!realloc!}
 vergrößert/verkleinert werden
 \item Werte die schon im Array stehen bleiben erhalten (bis auf Werte die
 beim Verkleinern verloren gehen)
@@ -406,12 +407,12 @@ entgegen
 \item Die Funktion liefert entweder die ursprüngliche Adresse des ersten
 Bytes zurück, oder eine neue falls der Speicher aus Platzgründen
 umkopiert werden musste
-\item Falls etwas schief gelaufen ist, wird {\color{solarizedYellow}\texttt{NULL} }zurück gegeben
+\item Falls etwas schief gelaufen ist, wird {\color{solarizedYellow}\verb!NULL!} zurück gegeben
 \end{itemize}
 \end{frame}
-\begin{frame}[label={sec:orgb124b3b},fragile]{Vergrößern/Verkleinern  --- Beispiele}
+\begin{frame}[label={sec:org6ca7db1},fragile]{Vergrößern/Verkleinern  --- Beispiele}
  \begin{block}{Beispiel 1}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c}
 int *arr = malloc(sizeof(int) * 10);
 // arr hat jetzt Platz für 10 Integerwerte
 arr = realloc(arr, sizeof(int) * 20);
@@ -419,7 +420,7 @@ arr = realloc(arr, sizeof(int) * 20);
 \end{minted}
 \end{block}
 \begin{block}{Mit kompletter Fehlerbehandlung}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c}
 int *arr = malloc(sizeof(int) * 10);
 if (arr) {
   // arr hat jetzt Platz für 10 Integerwerte
@@ -437,21 +438,21 @@ if (arr) {
 \end{block}
 \end{frame}
 
-\begin{frame}[label={sec:orgd6093cc},fragile]{Memory Leak / Speicherleck}
+\begin{frame}[label={sec:org5f43cd3},fragile]{Memory Leak / Speicherleck}
  \begin{itemize}
 \item Das Problem von dynamischer Speicherverwaltung ist, dass hier leicht
 Fehler passieren können
 \item Wenn man die Adresse zu einem dynamisch reservierten Speicherbereich
 verliert, kann man \alert{nicht mehr darauf zugreifen} und den Speicher
-auch \alert{nicht mehr mittels {\color{solarizedYellow}\texttt{free} }frei geben}
+auch \alert{nicht mehr mittels {\color{solarizedYellow}\texttt{free}} frei geben}
 \item Der Speicherplatz ist damit \alert{bis zum Programmende verloren}!
 \item Man bezeichnet so etwas als Speicherleck (auf Englisch Memory leak)
 \item Sehr \alert{häufiger Fehler} in C/C++ Programmen die nach einiger Zeit zum
 \alert{Programmabsturz} führen weil der \alert{Speicher ausgeht}
 \end{itemize}
 \end{frame}
-\begin{frame}[label={sec:org43b57b3},fragile]{Memory Leak --- Beispiel}
- \begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+\begin{frame}[label={sec:org39b9bed},fragile]{Memory Leak --- Beispiel}
+ \begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c}
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -482,9 +483,9 @@ int main() {
 \end{frame}
 
 \section{Praktische Anwendungen}
-\label{sec:org0cc0b68}
-\begin{frame}[label={sec:orgd6460e4},fragile]{Dynamisches Erzeugen von einem Array}
- \begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+\label{sec:org149d836}
+\begin{frame}[label={sec:orgd68839b},fragile]{Dynamisches Erzeugen von einem Array}
+ \begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c}
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -507,8 +508,8 @@ int main() {
 \end{minted}
 \end{frame}
 
-\begin{frame}[label={sec:org9b0bd05},fragile]{Rückgabe eines neuen Arrays von einer Funktion}
- \begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+\begin{frame}[label={sec:orgfb5cda6},fragile]{Rückgabe eines neuen Arrays von einer Funktion}
+ \begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c}
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -535,8 +536,8 @@ int main() {
 \end{minted}
 \end{frame}
 
-\begin{frame}[label={sec:orgcb4e76a},fragile]{Größenänderung eines Arrays}
- \begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+\begin{frame}[label={sec:orga4131c1},fragile]{Größenänderung eines Arrays}
+ \begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c}
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -565,7 +566,7 @@ int main() {
 }
 \end{minted}
 \end{frame}
-\begin{frame}[label={sec:org3685ae6}]{Dynamischer Speicher für Strukturen}
+\begin{frame}[label={sec:org37c76ae}]{Dynamischer Speicher für Strukturen}
 \begin{itemize}
 \item Wir wollen eine Menge an zufällig erzeugten komplexen Zahlen in
 einem Array speichern, wobei der Speicherplatz im Array nur dann
@@ -577,15 +578,15 @@ laden wollen
 \end{itemize}
 \end{frame}
 \section{Übung}
-\label{sec:org4065126}
-\begin{frame}[label={sec:org3d8ca73},fragile]{Verwendung von dynamischem Speicher für Monster}
+\label{sec:org89f2792}
+\begin{frame}[label={sec:org7b8be16},fragile]{Verwendung von dynamischem Speicher für Monster}
  \footnotesize
 Erweitern Sie unser Spieleprojekt folgendermaßen:
 \begin{itemize}
 \item \alert{Entfernen Sie die zweite Spielfigur} da sie aktuell nicht mehr
 benötigt wird
-\item Verwenden Sie ein \alert{Array} von 10 Zeigern auf {\color{solarizedYellow}\texttt{Figure} }Strukturen
-welches zu Anfang mit {\color{solarizedYellow}\texttt{NULL} }\alert{initialisiert} ist. Wir werden dieses
+\item Verwenden Sie ein \alert{Array} von 10 Zeigern auf {\color{solarizedYellow}\verb!Figure!} Strukturen
+welches zu Anfang mit {\color{solarizedYellow}\verb!NULL!} \alert{initialisiert} ist. Wir werden dieses
 Array verwenden um \alert{Monster} in unser Spiel zu bringen.
 \item Bei \alert{jedem Schleifendurchlauf} soll das folgende passieren:
 \begin{itemize}
@@ -597,8 +598,8 @@ zufälliger Position erzeugt wird
 \item Alle Monster die sich im Array befinden \alert{werden gezeichnet}
 \end{itemize}
 \end{itemize}
-\begin{center}\begin{center}
+\begin{center}
 \includegraphics[width=0.5\textwidth]{data/ef/50772b-6721-4bd5-a274-efaba137299f/screenshot-20200406-225138.png}
-\end{center}\end{center}
+\end{center}
 \end{frame}
 \end{document}

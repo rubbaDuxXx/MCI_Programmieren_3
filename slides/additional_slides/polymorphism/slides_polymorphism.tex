@@ -1,4 +1,4 @@
-% Created 2019-05-22 Wed 10:30
+% Created 2022-02-18 Fr 10:31
 % Intended LaTeX compiler: pdflatex
 \documentclass[presentation]{beamer}
 \usepackage[utf8]{inputenc}
@@ -39,22 +39,23 @@
 \end{frame}
 }
 \usetheme{default}
-\author{Sebastian Stabinger}
-\date{SS2019}
+\author{Thomas Hausberger, Matthias Panny \\ Ursprünglich erstellt von Sebastian Stabinger}
+\date{SS2022}
 \title{Zeiger, Referenzen, das Slicing Problem und Polymorphismus}
 \hypersetup{
- pdfauthor={Sebastian Stabinger},
+ pdfauthor={Thomas Hausberger, Matthias Panny \\ Ursprünglich erstellt von Sebastian Stabinger},
  pdftitle={Zeiger, Referenzen, das Slicing Problem und Polymorphismus},
  pdfkeywords={},
  pdfsubject={},
- pdfcreator={Emacs 26.2 (Org mode 9.1.9)}, 
+ pdfcreator={Emacs 27.2 (Org mode 9.4.4)}, 
  pdflang={Ger}}
 \begin{document}
 
 \maketitle
+
 \section{Zeiger}
-\label{sec:org67219f1}
-\begin{frame}[label={sec:org506cd43}]{Zeiger in C}
+\label{sec:orgd1fe54c}
+\begin{frame}[label={sec:orgfdfe725}]{Zeiger in C}
 \begin{itemize}
 \item Zeiger sind Variablen welche Adressen speichern können (also
 normalerweise 64bit Integer)
@@ -66,13 +67,13 @@ wird gespeichert ist.
 gespeichert (eine Adresse)
 \end{itemize}
 \end{itemize}
-\begin{center}\begin{center}
+\begin{center}
 \includegraphics[width=0.3\textwidth]{img/pointer.png}
-\end{center}\end{center}
+\end{center}
 \end{frame}
-\begin{frame}[fragile,label={sec:org4065a98}]{Beispiel und Probleme}
+\begin{frame}[label={sec:orgf82d720},fragile]{Beispiel und Probleme}
  \begin{block}{Beispiel}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 int intVar = 10;
 int *intPtr = &intVar;
 cout << intVar << endl;
@@ -82,7 +83,7 @@ cout << *intPtr << endl;
 \end{minted}
 \end{block}
 \begin{block}{Probleme}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 int *intPtr2;
 // zufaelliger speicherzugriff (pointer wird nicht initialisiert)
 cout << *intPtr2 << endl;
@@ -92,13 +93,13 @@ cout << *intPtr3 << endl;
 \end{minted}
 \end{block}
 \end{frame}
-\begin{frame}[fragile,label={sec:org23db211}]{Probleme mit Zeigern}
+\begin{frame}[label={sec:org9bd9d8e},fragile]{Probleme mit Zeigern}
  \begin{block}{Probleme}
 \begin{enumerate}
 \item Ein Zeiger muss nicht auf ein gültiges Objekt im Speicher zeigen
-\item Ein Zeiger kann auch auf nichts zeigen (wenn {\color{solarizedYellow}\texttt{NULL} }als Adresse
+\item Ein Zeiger kann auch auf nichts zeigen (wenn {\color{solarizedYellow}\verb!NULL!} als Adresse
 gespeichert ist)
-\item Die Syntax von Zeigern ist am Anfang verwirrend ({\color{solarizedYellow}\texttt{*}}, {\color{solarizedYellow}\texttt{\&}}, \ldots{})
+\item Die Syntax von Zeigern ist am Anfang verwirrend ({\color{solarizedYellow}\verb!*!}, {\color{solarizedYellow}\verb!&!}, \ldots{})
 \end{enumerate}
 \end{block}
 \begin{block}{Vorteile}
@@ -107,8 +108,8 @@ eine Adresse speichert) ist es auch ein extrem mächtiges Werkzeug
 \end{block}
 \end{frame}
 \section{Referenzen}
-\label{sec:org7493371}
-\begin{frame}[label={sec:org381fe3d}]{Eigenschaften}
+\label{sec:orgb08a8a5}
+\begin{frame}[label={sec:org05eda9c}]{Eigenschaften}
 Referenzen verweisen wie Zeiger auf Objekte im Speicher
 \begin{block}{Vorteile von Referenzen}
 \begin{itemize}
@@ -127,17 +128,17 @@ Referenzen verweisen wie Zeiger auf Objekte im Speicher
 \end{itemize}
 \end{block}
 \end{frame}
-\begin{frame}[fragile,label={sec:orgbe73db8}]{Referenzen --- Syntax}
+\begin{frame}[label={sec:org058c988},fragile]{Referenzen --- Syntax}
  \begin{itemize}
-\item Um eine Referenz zu erzeugen stellt man ein {\color{solarizedYellow}\texttt{\&} }an den Anfang eines
-Variablen- oder Parameternamens (Äquivalent zu dem {\color{solarizedYellow}\texttt{*} }bei einem
+\item Um eine Referenz zu erzeugen stellt man ein {\color{solarizedYellow}\verb!&!} an den Anfang eines
+Variablen- oder Parameternamens (Äquivalent zu dem {\color{solarizedYellow}\verb!*!} bei einem
 Zeiger)
 \item \alert{Bei Variablen muss zudem in der gleichen Zeile eine Referenz auf
 eine andere Variable zugewiesen werden!}
 \item Um eine Referenz auf eine Variable zeigen zu lassen muss nicht wie
-bei Zeigern zuerst die Variable mittels {\color{solarizedYellow}\texttt{\&} }referenziert werden
+bei Zeigern zuerst die Variable mittels {\color{solarizedYellow}\verb!&!} referenziert werden
 \end{itemize}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 int x = 23;
 int &foo = x;
 // foo ist jetzt eine Referenz auf x 
@@ -145,21 +146,21 @@ int &foo = x;
 \end{minted}
 \begin{itemize}
 \item Auf eine Referenz wird genauso zugegriffen wie auf eine gewöhnliche
-Variable (es ist kein Dereferenzieren mit einem {\color{solarizedYellow}\texttt{*} }notwendig wie
+Variable (es ist kein Dereferenzieren mit einem {\color{solarizedYellow}\verb!*!} notwendig wie
 bei einem Zeiger)
 \end{itemize}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 foo = 42;
 std::cout << foo << " " << x << std::endl;
 \end{minted}
 \end{frame}
-\begin{frame}[label={sec:orgc02fed9}]{Referenzen --- Graphische Visualisierung}
-\begin{center}\begin{center}
+\begin{frame}[label={sec:org9038e77}]{Referenzen --- Graphische Visualisierung}
+\begin{center}
 \includegraphics[width=.9\linewidth]{img/references.png}
-\end{center}\end{center}
+\end{center}
 \end{frame}
-\begin{frame}[fragile,label={sec:orgd178f42}]{Vergleich zwischen Zeiger und Referenz}
- \begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{frame}[label={sec:org5fe8625},fragile]{Vergleich zwischen Zeiger und Referenz}
+ \begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 // Erzeugen von Variable, Zeiger und Referenz
 int intVar = 10;
 int *intPtr = &intVar;
@@ -180,7 +181,7 @@ Man sieht also, dass sich Referenzen genauso verwenden lassen wie
 Variablen, aber zu großen Teilen die Funktionalität eines Zeigers
 haben
 \end{frame}
-\begin{frame}[label={sec:org7f33c2f}]{Referenzen als Parameter}
+\begin{frame}[label={sec:org4d579f2}]{Referenzen als Parameter}
 \begin{itemize}
 \item Referenzen als Variablen in "normalem" Code sind eher unüblich
 \item Referenzen werden am häufigsten bei Parametern von Funktionen
@@ -195,9 +196,9 @@ nur an einer Kopie vorgenommen werden.
 \end{itemize}
 \end{itemize}
 \end{frame}
-\begin{frame}[fragile,label={sec:orga7944fa}]{Swap mit normalen Parametern, Zeigern, Referenzen}
+\begin{frame}[label={sec:org7676784},fragile]{Swap mit normalen Parametern, Zeigern, Referenzen}
  \begin{block}{Normale Parameter}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 void swap(int p1, int p2) {
   int temp = p1; p1 = p2; p2 = temp;
 }
@@ -207,7 +208,7 @@ int a = 2, b = 3; swap(a, b);   // Verwendung
 Sieht einfach aus, funktioniert aber auch einfach nicht \ldots{}
 \end{block}
 \begin{block}{Zeiger}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 void swap(int *p1, int *p2) {
     int temp = *p1; *p1 = *p2; *p2 = temp;
 }
@@ -215,7 +216,7 @@ int a = 2, b = 3; swap(&a, &b); // Verwendung
 \end{minted}
 \end{block}
 \begin{block}{Referenzen}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 void swap(int &p1, int &p2) {
   int temp = p1; p1 = p2; p2 = temp;
 }
@@ -223,27 +224,27 @@ int a = 2, b = 3; swap(a, b);  // Verwendung
 \end{minted}
 \end{block}
 \end{frame}
-\begin{frame}[label={sec:orgfda703d}]{Swap -- Graphische Visualisierung}
-\begin{center}\begin{center}
+\begin{frame}[label={sec:org6c3d990}]{Swap -- Graphische Visualisierung}
+\begin{center}
 \includegraphics[width=0.6\textwidth]{img/swap_copy.png}
-\end{center}\end{center}
+\end{center}
 \end{frame}
-\begin{frame}[label={sec:orgb13e4b4}]{Swap -- Graphische Visualisierung}
-\begin{center}\begin{center}
+\begin{frame}[label={sec:org03f5846}]{Swap -- Graphische Visualisierung}
+\begin{center}
 \includegraphics[width=0.6\textwidth]{img/swap_point.png}
-\end{center}\end{center}
+\end{center}
 \end{frame}
-\begin{frame}[label={sec:orgb22f3c5}]{Swap -- Graphische Visualisierung}
-\begin{center}\begin{center}
+\begin{frame}[label={sec:orge1390b5}]{Swap -- Graphische Visualisierung}
+\begin{center}
 \includegraphics[width=0.6\textwidth]{img/swap_ref.png}
-\end{center}\end{center}
+\end{center}
 \end{frame}
 \section{Casten}
-\label{sec:org47b2173}
-\begin{frame}[fragile,label={sec:org2c69bd6}]{Casten "normaler" Datentypen}
+\label{sec:orgff6fa73}
+\begin{frame}[label={sec:orgbeb0e11},fragile]{Casten "normaler" Datentypen}
  Casten einer "normalen" Variable konvertiert (so gut wie möglich) den
 Inhalt einer Variable in einen anderen Datentyp
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 int i1 = 23;
 double d1 = (double)i; // Konvertiert i explizit nach double
 double d2 = 23.42;
@@ -251,8 +252,8 @@ int i2 = d2; // Hier wird implizit von double nach int konvertiert
 \end{minted}
 \end{frame}
 \section{Der Upcast}
-\label{sec:orgddf9222}
-\begin{frame}[label={sec:org67d4d80}]{Upcast}
+\label{sec:org441429a}
+\begin{frame}[label={sec:org52ca310}]{Upcast}
 \begin{itemize}
 \item Wenn sich Klassen in einer Vererbungshierarchie befinden, kann ohne
 weiteres von einer abgeleiteten Klasse zu einer Basisklasse gecastet
@@ -266,8 +267,8 @@ nach Oben wandert)
 (also Konvertierungen die automatisch passieren)
 \end{itemize}
 \end{frame}
-\begin{frame}[fragile,label={sec:orgf3867af}]{Der Upcast --- Beispiel}
- \begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{frame}[label={sec:org77db962},fragile]{Der Upcast --- Beispiel}
+ \begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 #include <iostream>
 using namespace std;
 
@@ -281,7 +282,7 @@ class Abgeleitet : public Basis {
 public:
   int b;
     void print() { cout << "Abgeleitete Klasse mit Nummern " << a
-                        << " und " << b << endl; }
+			<< " und " << b << endl; }
 };
 
 int main() {
@@ -295,33 +296,33 @@ int main() {
 }
 \end{minted}
 \end{frame}
-\begin{frame}[label={sec:org9e810f8}]{Der Upcast --- Graphische Visualisierung}
-\begin{center}\begin{center}
+\begin{frame}[label={sec:org8f7b0ea}]{Der Upcast --- Graphische Visualisierung}
+\begin{center}
 \includegraphics[width=.9\linewidth]{img/slizing_full.png}
-\end{center}\end{center}
+\end{center}
 \end{frame}
-\begin{frame}[fragile,label={sec:org934fcd5}]{Das Slicing Problem}
+\begin{frame}[label={sec:org15afb5d},fragile]{Das Slicing Problem}
  \begin{itemize}
-\item Aus Sicht der Referenz {\color{solarizedYellow}\texttt{b} }haben wir es nun mit einer Instanz der
-Klasse {\color{solarizedYellow}\texttt{Basis} }zu tun.
+\item Aus Sicht der Referenz {\color{solarizedYellow}\verb!b!} haben wir es nun mit einer Instanz der
+Klasse {\color{solarizedYellow}\verb!Basis!} zu tun.
 
-\begin{center}\begin{center}
+\begin{center}
 \includegraphics[width=.9\linewidth]{img/slizing_small.png}
-\end{center}\end{center}
-\item {\color{solarizedYellow}\texttt{b} }hat also "vergessen", dass es auf einen Teil einer
-{\color{solarizedYellow}\texttt{Abgeleitet}}-Klasse verweist
-\item Beim kopieren für die Variable {\color{solarizedYellow}\texttt{bc} }wurde nur der Basis-Teil kopiert
+\end{center}
+\item {\color{solarizedYellow}\verb!b!} hat also "vergessen", dass es auf einen Teil einer
+{\color{solarizedYellow}\verb!Abgeleitet!}-Klasse verweist
+\item Beim kopieren für die Variable {\color{solarizedYellow}\verb!bc!} wurde nur der Basis-Teil kopiert
 \item Man bezeichnet das als Slicing-Problem, weil Teile einer Klasse
 tatsächlich, oder scheinbar abgeschnitten werden
 \end{itemize}
 \end{frame}
-\begin{frame}[label={sec:org5815da8}]{Der Upcast --- Was passiert}
-\begin{center}\begin{center}
+\begin{frame}[label={sec:org8b603eb}]{Der Upcast --- Was passiert}
+\begin{center}
 \includegraphics[width=0.65\textwidth]{img/upcast.png}
-\end{center}\end{center}
+\end{center}
 \end{frame}
-\begin{frame}[fragile,label={sec:org99e85b3}]{Der Upcast --- Parameter Beispiel}
- \begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{frame}[label={sec:org0d2e6e5},fragile]{Der Upcast --- Parameter Beispiel}
+ \begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 #include <iostream>
 using namespace std;
 
@@ -335,7 +336,7 @@ class Abgeleitet : public Basis {
 public:
   int b;
     void print() { cout << "Abgeleitete Klasse mit Nummern " << a
-                        << " und " << b << endl; }
+			<< " und " << b << endl; }
 };
 
 void callmyprint(Basis &b) { b.print(); }
@@ -349,7 +350,7 @@ int main() {
 }
 \end{minted}
 \end{frame}
-\begin{frame}[label={sec:orgac2309d}]{Effekt eines Upcasts}
+\begin{frame}[label={sec:orgef210a4}]{Effekt eines Upcasts}
 \begin{itemize}
 \item Wird eine abgeleitete Klasse in den Typ einer Basisklasse
 konvertiert, vergisst die Instanz was sie vorher einmal war und
@@ -361,9 +362,9 @@ mit sogenanntem \alert{Polymorphismus} eine Lösung finden
 \end{itemize}
 \end{frame}
 \section{Polymorphismus}
-\label{sec:org173090b}
-\begin{frame}[fragile,label={sec:org9487e85}]{Ein kleines Beispiel}
- \begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\label{sec:org0b48c44}
+\begin{frame}[label={sec:orga4e1776},fragile]{Ein kleines Beispiel}
+ \begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 #include <iostream>
 using namespace std;
 
@@ -378,7 +379,7 @@ public: void print() { cout << "Hallo von der abgeleiteten Klasse 2" << endl; }
 };
 
 void print_with_introduction(Basis &a) {
-  cout << "Unsere Klasse möchte folgendes sagen: " << endl;
+  cout << "Unsere Klasse mÃ¶chte folgendes sagen: " << endl;
   a.print();
 }
 
@@ -391,28 +392,28 @@ int main() {
 }
 \end{minted}
 \end{frame}
-\begin{frame}[fragile,label={sec:org7a31f20}]{Was ist das Problem?}
+\begin{frame}[label={sec:orgc6baf5d},fragile]{Was ist das Problem?}
  \begin{itemize}
 \item Wir hätten gerne, dass sich die Klassen mit ihren tatsächlichen
-{\color{solarizedYellow}\texttt{print} }Funktionen melden und nicht mit der Standardimplementierung
+{\color{solarizedYellow}\verb!print!} Funktionen melden und nicht mit der Standardimplementierung
 der Basisklasse
 \item Das funktioniert aber auf Grund des Slicing-Problems nicht
 \end{itemize}
 \begin{block}{Lösung}
-Die Lösung ist das Schlüsselwort {\color{solarizedYellow}\texttt{virtual}}. Wenn in einer Basisklasse
-vor einer Funktion {\color{solarizedYellow}\texttt{virtual} }steht, so merkt sich die Klasse welche
+Die Lösung ist das Schlüsselwort {\color{solarizedYellow}\verb!virtual!}. Wenn in einer Basisklasse
+vor einer Funktion {\color{solarizedYellow}\verb!virtual!} steht, so merkt sich die Klasse welche
 Funktion einer abgeleiteten Klasse tatsächlich aufgerufen werden muss.
 \end{block}
 \begin{block}{Warum ist virtual nicht Standard?}
-Der Aufruf einer {\color{solarizedYellow}\texttt{virtual}}-Funktion ist langsamer, weil das System
+Der Aufruf einer {\color{solarizedYellow}\verb!virtual!}-Funktion ist langsamer, weil das System
 zuerst nachsehen muss welche Funktion tatsächlich aufgerufen werden
-muss. Zudem verbraucht eine {\color{solarizedYellow}\texttt{virtual}}-Funktion Speicher in jeder
+muss. Zudem verbraucht eine {\color{solarizedYellow}\verb!virtual!}-Funktion Speicher in jeder
 Instanz einer Klasse, weil irgendwo gespeichert werden muss welche
 Funktion wirklich aufzurufen ist.
 \end{block}
 \end{frame}
-\begin{frame}[fragile,label={sec:org3872f2b}]{Virtual --- Beispiel}
- \begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{frame}[label={sec:org15c495a},fragile]{Virtual --- Beispiel}
+ \begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 #include <iostream>
 using namespace std;
 
@@ -427,7 +428,7 @@ public: void print() { cout << "Hallo von der abgeleiteten Klasse 2" << endl; }
 };
 
 void print_with_introduction(Basis &a) {
-  cout << "Unsere Klasse möchte folgendes sagen: " << endl;
+  cout << "Unsere Klasse mÃ¶chte folgendes sagen: " << endl;
   a.print();
 }
 
@@ -440,7 +441,7 @@ int main() {
 }
 \end{minted}
 \end{frame}
-\begin{frame}[label={sec:org05ccd6c}]{Wann verwendet man Polymorphismus}
+\begin{frame}[label={sec:org22cb5c1}]{Wann verwendet man Polymorphismus}
 \begin{itemize}
 \item Man hat eine Basisklasse die ein bestimmtes Verhalten implementiert
 \item Davon leitet man mehrere Klassen ab die dieses Verhalten erweitern
@@ -451,8 +452,8 @@ Basisklasse auch alle abgeleiteten Klassen speichern (als Zeiger
 oder Referenz)
 \end{itemize}
 \end{frame}
-\begin{frame}[fragile,label={sec:org967a483}]{Beispiel --- Vektor mit Zeigern}
- \begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{frame}[label={sec:orgfcbdd6b},fragile]{Beispiel --- Vektor mit Zeigern}
+ \begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 #include <iostream>
 #include <vector>
 using namespace std;
@@ -478,8 +479,8 @@ int main() {
 }
 \end{minted}
 \end{frame}
-\begin{frame}[fragile,label={sec:org5850220}]{Beispiel --- Vektor mit Referenzen}
- \begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{frame}[label={sec:orgb704908},fragile]{Beispiel --- Vektor mit Referenzen}
+ \begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 #include <functional>
 #include <iostream>
 #include <vector>
@@ -507,32 +508,32 @@ int main() {
 }
 \end{minted}
 \end{frame}
-\begin{frame}[fragile,label={sec:orge46e233}]{Übung --- Employee und Manager}
+\begin{frame}[label={sec:org4401701},fragile]{Übung --- Employee und Manager}
  \footnotesize
 \begin{itemize}
-\item Implementieren Sie die beiden Klassen {\color{solarizedYellow}\texttt{Employee} }und {\color{solarizedYellow}\texttt{Manager}}
-\item {\color{solarizedYellow}\texttt{Employee} }ist die Basisklasse, {\color{solarizedYellow}\texttt{Manager} }ist die abgeleitete
+\item Implementieren Sie die beiden Klassen {\color{solarizedYellow}\verb!Employee!} und {\color{solarizedYellow}\verb!Manager!}
+\item {\color{solarizedYellow}\verb!Employee!} ist die Basisklasse, {\color{solarizedYellow}\verb!Manager!} ist die abgeleitete
 Klasse. Ein Manager ist also auch ein Angestellter
-\item {\color{solarizedYellow}\texttt{Employee} }hat eine Variable {\color{solarizedYellow}\texttt{salary} }die speichert wie viel der
+\item {\color{solarizedYellow}\verb!Employee!} hat eine Variable {\color{solarizedYellow}\verb!salary!} die speichert wie viel der
 jeweilige Mitarbeiten verdient
-\item {\color{solarizedYellow}\texttt{Employee} }hat eine Funktion {\color{solarizedYellow}\texttt{raise} }mit der man einem Mitarbeiter
+\item {\color{solarizedYellow}\verb!Employee!} hat eine Funktion {\color{solarizedYellow}\verb!raise!} mit der man einem Mitarbeiter
 eine Gehaltserhöhung geben kann. Damit der unsere Mitarbeiter nicht
-zu viel verdienen, wird der maximale Gehalt auf {\color{solarizedYellow}\texttt{3500} }beschränkt
-\item {\color{solarizedYellow}\texttt{Employee} }hat auch eine Funktion {\color{solarizedYellow}\texttt{print} }die ausgibt: {\color{solarizedYellow}\texttt{Der
-  Mitarbeiter hat einen Gehalt von ...}}
-\item Im {\color{solarizedYellow}\texttt{Manager} }wird die Funktion {\color{solarizedYellow}\texttt{raise} }überladen und das Gehalt ist
+zu viel verdienen, wird der maximale Gehalt auf {\color{solarizedYellow}\verb!3500!} beschränkt
+\item {\color{solarizedYellow}\verb!Employee!} hat auch eine Funktion {\color{solarizedYellow}\verb!print!} die ausgibt: {\color{solarizedYellow}\verb!Der!
+  \verb!Mitarbeiter hat einen Gehalt von ...!}
+\item Im {\color{solarizedYellow}\verb!Manager!} wird die Funktion {\color{solarizedYellow}\verb!raise!} überladen und das Gehalt ist
 nicht beschränkt
 \end{itemize}
 \begin{block}{Verwendung}
 \begin{itemize}
-\item Erzeugen Sie einen Vektor und füllen Sie ihn mit einigen {\color{solarizedYellow}\texttt{Employee}}
-sowie {\color{solarizedYellow}\texttt{Manager} }Instanzen (entweder mit Zeigern oder Referenzen)
-\item Iterieren Sie über den Vektor und rufen {\color{solarizedYellow}\texttt{raise} }sowie {\color{solarizedYellow}\texttt{print} }auf
+\item Erzeugen Sie einen Vektor und füllen Sie ihn mit einigen {\color{solarizedYellow}\verb!Employee!}
+sowie {\color{solarizedYellow}\verb!Manager!} Instanzen (entweder mit Zeigern oder Referenzen)
+\item Iterieren Sie über den Vektor und rufen {\color{solarizedYellow}\verb!raise!} sowie {\color{solarizedYellow}\verb!print!} auf
 und beobachten Sie das Verhalten
 \end{itemize}
 \end{block}
 \end{frame}
-\begin{frame}[label={sec:org9f908ee}]{Hinweis}
+\begin{frame}[label={sec:org4b285dd}]{Hinweis}
 \begin{itemize}
 \item \alert{Polymorphismus} ist ein weiterführendes Thema der
 Objektorientierten Programmierung und uns fehlen einige Grundlagen

@@ -1,7 +1,7 @@
 #+TITLE:     MCIGraph Grafikbibliothek
 #+SUBTITLE: Installation und Verwendung
-#+AUTHOR:    Sebastian Stabinger, Thomas Hausberger
-#+DATE:      SS2021
+#+AUTHOR:    Thomas Hausberger, Matthias Panny @@latex:\\@@ Ursprünglich erstellt von Sebastian Stabinger
+#+DATE:      SS2022
 
 * Installation
 ** Installation von MCIGraph --- Visual Studio, Code::Blocks

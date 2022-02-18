@@ -1,4 +1,4 @@
-% Created 2021-05-14 Fri 16:44
+% Created 2022-02-18 Fr 10:20
 % Intended LaTeX compiler: pdflatex
 \documentclass[presentation]{beamer}
 \usepackage[utf8]{inputenc}
@@ -39,21 +39,21 @@
 \end{frame}
 }
 \usetheme{default}
-\author{Sebastian Stabinger, Thomas Hausberger}
-\date{SS2021}
+\author{Thomas Hausberger, Matthias Panny \\ Ursprünglich erstellt von Sebastian Stabinger}
+\date{SS2022}
 \title{Ausnahmebehandlung}
 \hypersetup{
- pdfauthor={Sebastian Stabinger, Thomas Hausberger},
+ pdfauthor={Thomas Hausberger, Matthias Panny \\ Ursprünglich erstellt von Sebastian Stabinger},
  pdftitle={Ausnahmebehandlung},
  pdfkeywords={},
  pdfsubject={},
- pdfcreator={Emacs 27.2 (Org mode 9.4.5)}, 
+ pdfcreator={Emacs 27.2 (Org mode 9.4.4)}, 
  pdflang={Ger}}
 \begin{document}
 
 \maketitle
 
-\begin{frame}[label={sec:orgea49bed}]{Was versteht man unter Ausnahmebehandlung?}
+\begin{frame}[label={sec:org6ff98b5}]{Was versteht man unter Ausnahmebehandlung?}
 \begin{itemize}
 \item Ausnahmebehandlung (engl. Exception Handeling) beschreibt die
 Methoden und Systeme die man verwendet um mit Fehlern \alert{zur Laufzeit}
@@ -74,8 +74,8 @@ Server meldet sich nicht
 \end{block}
 \end{frame}
 \section{Ausnahmebehandlung in C}
-\label{sec:orgdaa5dc8}
-\begin{frame}[label={sec:org12ea58b}]{Ausnahmebehandlung in C}
+\label{sec:orgf5689e8}
+\begin{frame}[label={sec:org70d2ac6}]{Ausnahmebehandlung in C}
 \begin{itemize}
 \item In C gibt es \alert{kein spezielles System} um mit Laufzeitfehlern
 umzugehen
@@ -89,8 +89,8 @@ umzugehen
 \end{itemize}
 \end{block}
 \end{frame}
-\begin{frame}[label={sec:org6d69a5e},fragile]{Beispiel mit Rückgabewert}
- \begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+\begin{frame}[label={sec:org6bbb5c8},fragile]{Beispiel mit Rückgabewert}
+ \begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c}
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -112,8 +112,8 @@ int main() {
 }
 \end{minted}
 \end{frame}
-\begin{frame}[label={sec:orgb3f6ef4},fragile]{Beispiel mit globaler Variable}
- \begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+\begin{frame}[label={sec:org0a6a458},fragile]{Beispiel mit globaler Variable}
+ \begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c}
 #include <stdio.h>
 
 int sumerror = 0;
@@ -139,18 +139,18 @@ int main() {
 }
 \end{minted}
 \end{frame}
-\begin{frame}[label={sec:orgceab1e5},fragile]{Beispiel mit Zeiger}
- \begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+\begin{frame}[label={sec:org8381168},fragile]{Beispiel mit Zeiger}
+ \begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c}
 #include <stdio.h>
 
 int sum(int start, int stop, int *error) {
     if (start > stop) {
-        *error = -1; // Wir haben ein Problem!
-        return 0;
+	*error = -1; // Wir haben ein Problem!
+	return 0;
     }
     int sum = 0;
     for (int i = start; i <= stop; i++)
-        sum += i;
+	sum += i;
     *error = 0; // Alles war ok
     return sum;
 }
@@ -166,7 +166,7 @@ int main() {
 }
 \end{minted}
 \end{frame}
-\begin{frame}[label={sec:orgd3a68f2},fragile]{Vor- und Nachteile der unterschiedlichen Varianten}
+\begin{frame}[label={sec:orgbd6f702},fragile]{Vor- und Nachteile der unterschiedlichen Varianten}
  \begin{itemize}
 \item \alert{Mit Rückgabewert:} Funktioniert gut, wenn wir den Rückgabewert der
 Funktion nicht für etwas anderes benötigen, oder wenn es
@@ -180,15 +180,15 @@ eine Variable erzeugen muss etc.
 \end{itemize}
 \begin{block}{Genereller Nachteil}
 Wir müssen jeden einzelnen Fehler immer manuell mit einer
-{\color{solarizedYellow}\texttt{if}}-Bedingung abfangen
+{\color{solarizedYellow}\verb!if!}-Bedingung abfangen
 \end{block}
 \end{frame}
 \section{Ausnahmebehandlung in C++}
-\label{sec:orgc628c23}
-\begin{frame}[label={sec:org9f90b25},fragile]{Überblick}
+\label{sec:org7ccb0ee}
+\begin{frame}[label={sec:orgf62bddb},fragile]{Überblick}
  \begin{block}{Ausnahme {\color{solarizedYellow}\texttt{exception}}}
 Ein beliebiges Objekt. Üblicherweise aber eine \alert{Instanz einer Klasse}
-die von der Klasse {\color{solarizedYellow}\texttt{exception} }abgeleitet ist.
+die von der Klasse {\color{solarizedYellow}\verb!exception!} abgeleitet ist.
 \end{block}
 \begin{block}{Werfen {\color{solarizedYellow}\texttt{throw}}}
 \begin{itemize}
@@ -207,35 +207,35 @@ unterschiedlichen Fehlern passieren soll
 \end{itemize}
 \end{block}
 \end{frame}
-\begin{frame}[label={sec:org5298115},fragile]{Das Werfen einer Ausnahme}
+\begin{frame}[label={sec:org095e288},fragile]{Das Werfen einer Ausnahme}
  \begin{itemize}
-\item Das Werfen einer Ausnahme geschieht mit dem Schlüsselwort {\color{solarizedYellow}\texttt{throw}}
-\item {\color{solarizedYellow}\texttt{throw} }funktioniert ähnlich wie {\color{solarizedYellow}\texttt{return}}, wir müssen uns aber nicht
+\item Das Werfen einer Ausnahme geschieht mit dem Schlüsselwort {\color{solarizedYellow}\verb!throw!}
+\item {\color{solarizedYellow}\verb!throw!} funktioniert ähnlich wie {\color{solarizedYellow}\verb!return!}, wir müssen uns aber nicht
 auf einen Rückgabetyp festlegen
-\item Üblicherweise wirft man aber Klassen die von {\color{solarizedYellow}\texttt{std::exception}}
+\item Üblicherweise wirft man aber Klassen die von {\color{solarizedYellow}\verb!std::exception!}
 abgeleitet sind
 \end{itemize}
 \begin{block}{Beispiel}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 void ein_fehler() {
   // Wir haben einfach immer einen Fehler
   throw 23; // Wirft 23 als Ausnahme
 }
 \end{minted}
-Man sieht: Obwohl der Rückgabewert der Funktion {\color{solarizedYellow}\texttt{void} }ist, können wir
-mit {\color{solarizedYellow}\texttt{throw} }einen Integer als Ausnahme zurück geben.
+Man sieht: Obwohl der Rückgabewert der Funktion {\color{solarizedYellow}\verb!void!} ist, können wir
+mit {\color{solarizedYellow}\verb!throw!} einen Integer als Ausnahme zurück geben.
 \end{block}
 \end{frame}
-\begin{frame}[label={sec:org48e7459},fragile]{Vordefinierte Exceptions}
- Verfügbar mit {\color{solarizedYellow}\texttt{\#include <exception>}}
-\begin{center}\begin{center}
+\begin{frame}[label={sec:orgcf5725e},fragile]{Vordefinierte Exceptions}
+ Verfügbar mit {\color{solarizedYellow}\verb!#include <exception>!}
+\begin{center}
 \includegraphics[width=0.5\textwidth]{img/cpp_exceptions.jpg}
-\end{center}\end{center}
+\end{center}
 \tiny
 Von \url{https://www.tutorialspoint.com/cplusplus/cpp\_exceptions\_handling.htm}
 \end{frame}
-\begin{frame}[label={sec:org0f3206c},fragile]{Das Werfen einer Ausnahme}
- \begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{frame}[label={sec:orgdf65a9a},fragile]{Das Werfen einer Ausnahme}
+ \begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 #include <iostream>
 #include <exception>
 using namespace std;
@@ -259,15 +259,15 @@ man erfährt welche Ausnahme dafür verantwortlich war und welchen
 String sie enthalten hat
 \end{itemize}
 \end{frame}
-\begin{frame}[label={sec:org57c8ac0},fragile]{Das Fangen einer allgemeinen Ausnahme}
+\begin{frame}[label={sec:org6d8e106},fragile]{Das Fangen einer allgemeinen Ausnahme}
  \begin{itemize}
 \item Das Stück Code in dem eine Ausnahme gefangen werden soll wird in ein
-{\color{solarizedYellow}\texttt{try \{ \}} }eingeschlossen
-\item Anschließend wird mit {\color{solarizedYellow}\texttt{catch(...) \{ \}} }angegeben \alert{welcher Code} im
+{\color{solarizedYellow}\verb!try { }!} eingeschlossen
+\item Anschließend wird mit {\color{solarizedYellow}\verb!catch(...) { }!} angegeben \alert{welcher Code} im
 Fall einer Ausnahme ausgeführt werden soll
 \end{itemize}
 \begin{block}{Beispiel}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 try {
   cout << "Alles OK" << endl;
   eine_funktion();
@@ -278,17 +278,17 @@ try {
 \end{minted}
 \end{block}
 \end{frame}
-\begin{frame}[label={sec:org3aef413},fragile]{Das Fangen einer speziellen Ausnahme}
+\begin{frame}[label={sec:orgc2cd740},fragile]{Das Fangen einer speziellen Ausnahme}
  \begin{itemize}
-\item {\color{solarizedYellow}\texttt{catch(...)} }bedeutet, dass bei \alert{jeder Ausnahme} reagiert werden
+\item {\color{solarizedYellow}\verb!catch(...)!} bedeutet, dass bei \alert{jeder Ausnahme} reagiert werden
 soll
 \item Falls wir nur auf \alert{spezielle Ausnahmen} reagieren wollen schreiben
 wir in die Klammern \alert{welche Ausnahme} das sein soll und wie das
 Ausnahmeobjekt bezeichnet werden soll
-\item Wir können mehrere {\color{solarizedYellow}\texttt{catch} }Anweisungen hintereinander hängen
+\item Wir können mehrere {\color{solarizedYellow}\verb!catch!} Anweisungen hintereinander hängen
 \end{itemize}
 \begin{block}{Beispiel}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 try {
   cout << "Alles OK" << endl;
   eine_funktion();
@@ -303,8 +303,8 @@ try {
 \end{minted}
 \end{block}
 \end{frame}
-\begin{frame}[label={sec:orgd1a55b6},fragile]{Beispiel}
- \begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{frame}[label={sec:org00c16b2},fragile]{Beispiel}
+ \begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 #include <exception>
 #include <iostream>
 using namespace std;
@@ -327,15 +327,15 @@ int main() {
 }
 \end{minted}
 \end{frame}
-\begin{frame}[label={sec:org45d4965},fragile]{Übung}
+\begin{frame}[label={sec:org3b9cc11},fragile]{Übung}
  \begin{itemize}
-\item Implementieren Sie Ihre \alert{eigene Divisionsfunktion} {\color{solarizedYellow}\texttt{double
-  mydiv(double a, double b)} }welche das Ergebnis von {\color{solarizedYellow}\texttt{a} }geteilt durch
-{\color{solarizedYellow}\texttt{b} }zurück gibt.
+\item Implementieren Sie Ihre \alert{eigene Divisionsfunktion} {\color{solarizedYellow}\verb!double!
+  \verb!mydiv(double a, double b)!} welche das Ergebnis von {\color{solarizedYellow}\verb!a!} geteilt durch
+{\color{solarizedYellow}\verb!b!} zurück gibt.
 \item Falls eine Division durch 0 droht, soll die Funktion eine Ausnahme
-({\color{solarizedYellow}\texttt{domain\_error}}) zurück liefern.
+({\color{solarizedYellow}\verb!domain_error!}) zurück liefern.
 \item Testen Sie ihren Code an ein paar Beispielen und fangen Sie mögliche
-Ausnahmen mit {\color{solarizedYellow}\texttt{try} }und {\color{solarizedYellow}\texttt{catch} }ab
+Ausnahmen mit {\color{solarizedYellow}\verb!try!} und {\color{solarizedYellow}\verb!catch!} ab
 \end{itemize}
 \end{frame}
 \end{document}

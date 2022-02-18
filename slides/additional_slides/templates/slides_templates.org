@@ -1,7 +1,6 @@
 #+TITLE:     Templates
-#+AUTHOR:    Sebastian Stabinger
-#+EMAIL:     sebastian.stabinger@uibk.ac.at
-#+DATE:      SS2018
+#+AUTHOR:    Thomas Hausberger, Matthias Panny @@latex:\\@@ Ursprünglich erstellt von Sebastian Stabinger
+#+DATE:      SS2022
 
 * Problem
 ** Quadrieren von Zahlen in C

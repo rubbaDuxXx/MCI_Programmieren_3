@@ -1,7 +1,7 @@
 #+TITLE:     Objektorientierung
-#+AUTHOR:    Sebastian Stabinger
-#+EMAIL:     sebastian@stabiner.name
-#+DATE:      SS2020
+#+AUTHOR:    Thomas Hausberger, Matthias Panny @@latex:\\@@ Ursprünglich erstellt von Sebastian Stabinger
+#+DATE:      SS2022
+
 * Strukturen
 ** COMMENT Datentypen
 *** Standarddatentypen

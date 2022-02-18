@@ -1,4 +1,4 @@
-% Created 2018-06-06 Wed 08:56
+% Created 2022-02-18 Fr 10:39
 % Intended LaTeX compiler: pdflatex
 \documentclass[presentation]{beamer}
 \usepackage[utf8]{inputenc}
@@ -39,25 +39,25 @@
 \end{frame}
 }
 \usetheme{default}
-\author{Sebastian Stabinger}
-\date{SS2018}
+\author{Thomas Hausberger, Matthias Panny \\ Ursprünglich erstellt von Sebastian Stabinger}
+\date{SS2022}
 \title{Templates}
 \hypersetup{
- pdfauthor={Sebastian Stabinger},
+ pdfauthor={Thomas Hausberger, Matthias Panny \\ Ursprünglich erstellt von Sebastian Stabinger},
  pdftitle={Templates},
  pdfkeywords={},
  pdfsubject={},
- pdfcreator={Emacs 26.1 (Org mode 9.1.9)}, 
+ pdfcreator={Emacs 27.2 (Org mode 9.4.4)}, 
  pdflang={Ger}}
 \begin{document}
 
 \maketitle
 
 \section{Problem}
-\label{sec:org6326c27}
-\begin{frame}[fragile,label={sec:orgba591d7}]{Quadrieren von Zahlen in C}
+\label{sec:orgf3fb823}
+\begin{frame}[label={sec:org0843f1f},fragile]{Quadrieren von Zahlen in C}
  \begin{exampleblock}{Beispiel}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c}
 short quad_short(short a) { return a * a; }
 int quad_int(int a) { return a * a; }
 float quad_float(float a) { return a * a; }
@@ -77,14 +77,14 @@ int main() {
 \item Aber eigentlich machen wir \alert{in jeder Funktion das selbe}!
 \end{itemize}
 \end{frame}
-\begin{frame}[fragile,label={sec:org6bd6171}]{Quadrieren von Zahlen in C++}
+\begin{frame}[label={sec:org1c1d5cc},fragile]{Quadrieren von Zahlen in C++}
  \begin{itemize}
 \item Bis jetzt haben wir \alert{Funktionsüberladung} kennen gelernt. Das macht
 die Situation zumindest in der Verwendung der Funktionen besser: Wir
 können \alert{alle Funktionen gleich benennen}
 \end{itemize}
 \begin{exampleblock}{Beispiel}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 #include <iostream>
 using namespace std;
 
@@ -104,27 +104,27 @@ int main() {
 \end{itemize}
 \end{frame}
 \section{Lösung: Templates}
-\label{sec:org4051185}
-\begin{frame}[fragile,label={sec:org2f75201}]{Grundlagen}
+\label{sec:orgb8048a7}
+\begin{frame}[label={sec:orgeb7bdab},fragile]{Grundlagen}
  \begin{itemize}
 \item Wir können mittels Templates \alert{einen Typ als Parameter} übergeben
 \item Möglich bei \alert{Funktionen} oder \alert{Klassen}
-\item Geschieht mittels {\color{solarizedYellow}\texttt{template <typename T>} }vor der Funktion oder Klasse
+\item Geschieht mittels {\color{solarizedYellow}\verb!template <typename T>!} vor der Funktion oder Klasse
 \item T ist dann ein \alert{Platzhalter} für einen beliebigen Typ den wir übergeben können
 \item Templateparameter werden in spitzen Klammern statt runder Klammern
-übergeben. z.B. {\color{solarizedYellow}\texttt{quad<int>(i)} }um einer Templatefunktion {\color{solarizedYellow}\texttt{quad} }als
-Typ {\color{solarizedYellow}\texttt{int} }und als normalen Parameter {\color{solarizedYellow}\texttt{i} }zu übergeben.
+übergeben. z.B. {\color{solarizedYellow}\verb!quad<int>(i)!} um einer Templatefunktion {\color{solarizedYellow}\verb!quad!} als
+Typ {\color{solarizedYellow}\verb!int!} und als normalen Parameter {\color{solarizedYellow}\verb!i!} zu übergeben.
 \end{itemize}
 \begin{block}{Hinweis}
-Aus historischen Gründen kann man statt {\color{solarizedYellow}\texttt{template <typename T>} }auch
-{\color{solarizedYellow}\texttt{template <class T>} }schreiben.
+Aus historischen Gründen kann man statt {\color{solarizedYellow}\verb!template <typename T>!} auch
+{\color{solarizedYellow}\verb!template <class T>!} schreiben.
 \end{block}
 \end{frame}
-\begin{frame}[fragile,label={sec:org9d7c208}]{Funktionstemplates}
+\begin{frame}[label={sec:orgdd2dfc0},fragile]{Funktionstemplates}
  Funktionstemplates werden verwendet um bei einer Funktion einen Typ
 als Parameter übergeben zu können
-\begin{exampleblock}{Beispiel für {\color{solarizedYellow}\texttt{quad}}}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{exampleblock}{Beispiel für {\color{solarizedYellow}\textt{quad}}}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 #include <iostream>
 using namespace std;
 
@@ -137,22 +137,22 @@ int main() {
 \end{minted}
 \end{exampleblock}
 \begin{itemize}
-\item Aufruf: {\color{solarizedYellow}\texttt{f< Templateparameter >( Normale Parameter )}}
+\item Aufruf: {\color{solarizedYellow}\verb!f< Templateparameter >( Normale Parameter )!}
 \end{itemize}
 \end{frame}
-\begin{frame}[fragile,label={sec:org700d2d4}]{Was passiert hinter den Kulissen?}
+\begin{frame}[label={sec:org6607fd9},fragile]{Was passiert hinter den Kulissen?}
  \begin{itemize}
-\item Wir haben {\color{solarizedYellow}\texttt{quad} }folgendermaßen definiert:
+\item Wir haben {\color{solarizedYellow}\verb!quad!} folgendermaßen definiert:
 \end{itemize}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 template <typename T> T quad(T a) { return a * a; }
 \end{minted}
 \begin{itemize}
-\item Irgendwo im Code rufen wir {\color{solarizedYellow}\texttt{quad<int>(42);} }auf. Der Compiler
+\item Irgendwo im Code rufen wir {\color{solarizedYellow}\verb!quad<int>(42);!} auf. Der Compiler
 \alert{erzeugt automatisch} eine \alert{Funktion mit konkretem Typ} mit Hilfe
 unseres Funktionstemplates:
 \end{itemize}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 template <typename T> T quad(T a) { return a * a; }
 // T wird durch quad<int>(42) der Typ int zugewiesen --->
 int quad(int a) { return a * a; }
@@ -169,27 +169,27 @@ eine Schablone für Funktionen und Klassen mit deren Hilfe wir
 spezifische Versionen von Funktionen und Klassen erzeugen können.
 \end{alertblock}
 \end{frame}
-\begin{frame}[fragile,label={sec:org01320fc}]{Typinferenz}
+\begin{frame}[label={sec:org58caafc},fragile]{Typinferenz}
  \begin{itemize}
-\item Wir haben {\color{solarizedYellow}\texttt{quad} }folgendermaßen definiert:
+\item Wir haben {\color{solarizedYellow}\verb!quad!} folgendermaßen definiert:
 \end{itemize}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 template <typename T> T quad(T a) { return a * a; }
 \end{minted}
 \begin{itemize}
 \item Es ist offensichtlich etwas unpraktisch den gewünschten Typ bei
 einer Templatefunktion immer explizit in spitzen Klammern angeben zu
 müssen
-\item Wenn wir {\color{solarizedYellow}\texttt{quad<int>(42)} }aufrufen ist dem Compiler ja bereits durch
-den Parameter {\color{solarizedYellow}\texttt{42} }bekannt, dass {\color{solarizedYellow}\texttt{T} }ein Integer sein muss
+\item Wenn wir {\color{solarizedYellow}\verb!quad<int>(42)!} aufrufen ist dem Compiler ja bereits durch
+den Parameter {\color{solarizedYellow}\verb!42!} bekannt, dass {\color{solarizedYellow}\verb!T!} ein Integer sein muss
 \item Tatsächlich müssen wir den Typ nicht explizit angeben, falls dem
 Compiler der Typ bekannt sein kann (was bei Funktionstemplates oft
 der Fall ist)
-\item Wir können also einfach {\color{solarizedYellow}\texttt{quad(42)} }schreiben
+\item Wir können also einfach {\color{solarizedYellow}\verb!quad(42)!} schreiben
 \end{itemize}
 \end{frame}
-\begin{frame}[fragile,label={sec:org26c9a4c}]{Beispiel {\color{solarizedYellow}\texttt{max}}}
- \begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{frame}[label={sec:org989d6c4},fragile]{Beispiel {\color{solarizedYellow}\texttt{max}}}
+ \begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 #include <iostream>
 using namespace std;
 
@@ -213,36 +213,36 @@ int main() {
 }
 \end{minted}
 \end{frame}
-\begin{frame}[fragile,label={sec:org69b5e88}]{Beispiel {\color{solarizedYellow}\texttt{max} }--- Gemischte Typen}
+\begin{frame}[label={sec:org077a881},fragile]{Beispiel {\color{solarizedYellow}\texttt{max}} --- Gemischte Typen}
  Was passiert beim Aufruf von Folgendem?
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 cout << "max int/double = " << t_max(a, c) << endl;
 \end{minted}
 \begin{block}{Ausgabe Compiler}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{text}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{text}
 max.cpp: In function ‘int main()’:
 max.cpp:20:44: error: no matching function for call to 
-               ‘t_max(int&, double&)’
+	       ‘t_max(int&, double&)’
    cout << "max int/double = " << t_max(a, c) << endl;
-                                            ^
+					    ^
 max.cpp:20:44: note: candidate is:
 max.cpp:4:25: note: template<class T> T t_max(T, T)
  template <typename T> T t_max(T a, T b) {
-                         ^
+			 ^
 max.cpp:4:25: note:   template argument deduction/substitution failed:
 max.cpp:20:44: note:   deduced conflicting types for parameter ‘T’ 
-                       (‘int’ and ‘double’)
+		       (‘int’ and ‘double’)
    cout << "max int/double = " << t_max(a, c) << endl;
-                                            ^
+					    ^
 \end{minted}
 \end{block}
 \end{frame}
-\begin{frame}[fragile,label={sec:org3438527}]{Klassentemplates --- Beispiel}
+\begin{frame}[label={sec:org06f8e2c},fragile]{Klassentemplates --- Beispiel}
  \begin{itemize}
 \item Funktionieren genauso wie Funktionstemplates. Man kann Typen als
 Parameter für \alert{eine Instanz einer Klasse} übergeben
 \end{itemize}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 #include <iostream>
 using namespace std;
 
@@ -266,17 +266,17 @@ int main() {
 }
 \end{minted}
 \end{frame}
-\begin{frame}[fragile,label={sec:org3a77d6d}]{Abschluss}
+\begin{frame}[label={sec:orgf3070fc},fragile]{Abschluss}
  \begin{itemize}
 \item Wie bereits gesagt kann man sich Templates als \alert{Schablonen}
 vorstellen. In diesen Schablonen werden Platzhalter für Typen durch
 einen übergebenen Typer ersetzt
 \item Beim Compilieren wird tatsächlich \alert{neuer Code generiert}. Das führt
 dazu, dass die Compilezeiten länger werden.
-\item Wir haben Templates z.B. schon bei {\color{solarizedYellow}\texttt{vector} }gesehen. Der zu
+\item Wir haben Templates z.B. schon bei {\color{solarizedYellow}\verb!vector!} gesehen. Der zu
 speichernde Typ wird in spitzen Klammern angegeben:
 \end{itemize}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 vector<int> v; v.push_back(23);
 \end{minted}
 \begin{block}{Hinweis}

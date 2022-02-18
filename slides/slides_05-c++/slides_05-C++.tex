@@ -1,4 +1,4 @@
-% Created 2020-05-24 Sun 16:45
+% Created 2022-02-18 Fr 09:44
 % Intended LaTeX compiler: pdflatex
 \documentclass[presentation]{beamer}
 \usepackage[utf8]{inputenc}
@@ -39,23 +39,23 @@
 \end{frame}
 }
 \usetheme{default}
-\author{Sebastian Stabinger}
-\date{SS2020}
+\author{Thomas Hausberger, Matthias Panny \\ Ursprünglich erstellt von Sebastian Stabinger}
+\date{SS2022}
 \title{Einführung in C++, Namespaces und Ein-/Ausgabe}
 \hypersetup{
- pdfauthor={Sebastian Stabinger},
+ pdfauthor={Thomas Hausberger, Matthias Panny \\ Ursprünglich erstellt von Sebastian Stabinger},
  pdftitle={Einführung in C++, Namespaces und Ein-/Ausgabe},
  pdfkeywords={},
  pdfsubject={},
- pdfcreator={Emacs 26.3 (Org mode 9.1.9)}, 
+ pdfcreator={Emacs 27.2 (Org mode 9.4.4)}, 
  pdflang={Ger}}
 \begin{document}
 
 \maketitle
 
 \section{Hintergründe von C++}
-\label{sec:orga98b9bb}
-\begin{frame}[label={sec:org4cffd0f}]{Zeitleiste}
+\label{sec:orgda574ad}
+\begin{frame}[label={sec:org7ccc78a}]{Zeitleiste}
 \begin{columns}
 \begin{column}{0.5\columnwidth}
 \begin{description}
@@ -69,22 +69,22 @@
 \end{description}
 \end{column}
 \begin{column}{0.5\columnwidth}
-\begin{center}\begin{figure}[htbp]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=0.7\textwidth]{data/ae/50aadc-3e16-4ac9-9f73-cf048cdfa434/screenshot-20160217-143616.png}
 \caption{Bjarne Stroustrup. Erster Entwickler von C++}
-\end{figure}\end{center}
+\end{figure}
 \end{column}
 \end{columns}
 \end{frame}
-\begin{frame}[label={sec:org232c96f}]{Abhängigkeiten}
-\begin{center}\begin{figure}[htbp]
+\begin{frame}[label={sec:org7afd9ff}]{Abhängigkeiten}
+\begin{figure}[htbp]
 \centering
 \includegraphics[height=0.8\textheight]{data/2b/515ad4-e3c4-4834-a7be-e95147807c04/screenshot-20160217-144741.png}
 \caption{Abhängigkeiten von C++}
-\end{figure}\end{center}
+\end{figure}
 \end{frame}
-\begin{frame}[fragile,label={sec:org565996e}]{Warum C++?}
+\begin{frame}[label={sec:org7d290d8},fragile]{Warum C++?}
  \begin{itemize}
 \item Sehr \alert{schnell}
 \item \alert{Hardwarenahe Programmierung} ist möglich
@@ -95,13 +95,13 @@ Cluster.
 (OOP, Templates, Meta Template Programming, \ldots{}). Das macht das
 Programmieren letztlich \alert{einfacher}.
 \item \alert{Grössere Standardbibliothek} (aber immer noch klein im Vergleich zu
-Java, Python, C\#, etc.) (Container, {\color{solarizedYellow}\texttt{all\_of}}, {\color{solarizedYellow}\texttt{find}}, \ldots{})
+Java, Python, C\#, etc.) (Container, {\color{solarizedYellow}\verb!all_of!}, {\color{solarizedYellow}\verb!find!}, \ldots{})
 \item Existiert seit \alert{35 Jahren} und wird auch weiterhin seinen Platz haben
 \item \alert{Große Code Base} (Fast alle Anwendungsprogramme sind z.B. in C++
 geschrieben)
 \end{itemize}
 \end{frame}
-\begin{frame}[label={sec:org99f0a8a}]{Was können wir durchmachen?}
+\begin{frame}[label={sec:org32a2156}]{Was können wir durchmachen?}
 \begin{itemize}
 \item C++ ist wesentlich komplexer als C
 \begin{itemize}
@@ -122,10 +122,10 @@ aus
 \end{itemize}
 \end{itemize}
 \end{frame}
-\begin{frame}[fragile,label={sec:org749e845}]{Hello World}
+\begin{frame}[label={sec:org5a1b067},fragile]{Hello World}
  Zur Erinnerung: Ein Hello World Programm in C:
 \begin{block}{C}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c}
 #include <stdio.h>
 int main() {
   printf("Hello World\n");
@@ -134,7 +134,7 @@ int main() {
 \end{block}
 Hier das äquivalente Programm in C++:
 \begin{block}{C++}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 #include <iostream>
 int main() {
   std::cout << "Hello World" << std::endl;
@@ -143,20 +143,20 @@ int main() {
 \end{block}
 \end{frame}
 \section{Ein und Ausgabe}
-\label{sec:org43d9c99}
-\begin{frame}[fragile,label={sec:org9c64a01}]{\texttt{cout} (\textbf{c}haracter \textbf{out}put)}
+\label{sec:org1da853d}
+\begin{frame}[label={sec:orgd2dbbfe},fragile]{\texttt{cout} (\textbf{c}haracter \textbf{out}put)}
  \begin{itemize}
-\item Verwendbar nach {\color{solarizedYellow}\texttt{\#include <iostream>}}
-\item Dient der \alert{Ausgabe} von Daten auf dem Bildschirm: \newline {\color{solarizedYellow}\texttt{std::cout << <daten>;}}
-\item {\color{solarizedYellow}\texttt{cout} }gibt einen Wert \alert{automatisch korrekt} aus. {\color{solarizedYellow}\texttt{\%d, \%f, ...}}
+\item Verwendbar nach {\color{solarizedYellow}\verb!#include <iostream>!}
+\item Dient der \alert{Ausgabe} von Daten auf dem Bildschirm: \newline {\color{solarizedYellow}\verb!std::cout << <daten>;!}
+\item {\color{solarizedYellow}\verb!cout!} gibt einen Wert \alert{automatisch korrekt} aus. {\color{solarizedYellow}\verb!%d, %f, ...!}
 ist nicht notwendig.
-\item Ausgaben können durch wiederholtes {\color{solarizedYellow}\texttt{<<} }aneinandergereiht werden.\newline
-{\color{solarizedYellow}\texttt{std::cout << "Hello " << "World" << "!\textbackslash{}n";}}
-\item {\color{solarizedYellow}\texttt{std::endl} }fügt einen Zeilenumbruch ein. Als Alternative kann auch
-{\color{solarizedYellow}\texttt{\textbackslash{}n} }wie in C verwendet werden
+\item Ausgaben können durch wiederholtes {\color{solarizedYellow}\verb!<<!} aneinandergereiht werden.\newline
+{\color{solarizedYellow}\verb|std::cout << "Hello " << "World" << "!\n";|}
+\item {\color{solarizedYellow}\verb!std::endl!} fügt einen Zeilenumbruch ein. Als Alternative kann auch
+{\color{solarizedYellow}\verb!\n!} wie in C verwendet werden
 \end{itemize}
 \begin{block}{Beispiel}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 int a = 23; std::string b = "Bla"; double c = 42.47; char d = 'Z';
 std::complex<int> e = {4, 2};
 
@@ -166,14 +166,14 @@ std::cout << a << " " << b << " " << c << " " << d << " " << e;
 \end{block}
 \end{frame}
 
-\begin{frame}[fragile,label={sec:org7846ab7}]{\texttt{cin} (\textbf{c}haracter \textbf{in}put)}
+\begin{frame}[label={sec:org7c9b8ad},fragile]{\texttt{cin} (\textbf{c}haracter \textbf{in}put)}
  \begin{itemize}
-\item Verwendbar nach {\color{solarizedYellow}\texttt{\#include <iostream>}}
-\item Dient der \alert{Eingabe} von Daten durch den Benutzer: \newline {\color{solarizedYellow}\texttt{std::cin >> <daten>;}}
-\item Weiß wie {\color{solarizedYellow}\texttt{cout} }welcher Datentyp eingelesen werden soll
+\item Verwendbar nach {\color{solarizedYellow}\verb!#include <iostream>!}
+\item Dient der \alert{Eingabe} von Daten durch den Benutzer: \newline {\color{solarizedYellow}\verb!std::cin >> <daten>;!}
+\item Weiß wie {\color{solarizedYellow}\verb!cout!} welcher Datentyp eingelesen werden soll
 \end{itemize}
 \begin{block}{Beispiel}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 int a; std::string b; double c; char d; std::complex<double> e;
 std::cin >> a; // Liest Ganzzahl
 std::cin >> b; // Liest String (ohne Leerzeichen)
@@ -183,15 +183,15 @@ std::cin >> e; // Liest Komplexe Zahl im Format (real, imag)
 \end{minted}
 \end{block}
 \end{frame}
-\begin{frame}[fragile,label={sec:org44a55f4}]{Eingabe - Nützliches Tipps}
+\begin{frame}[label={sec:org1561245},fragile]{Eingabe - Nützliches Tipps}
  \begin{block}{Einlesen einer ganzen Zeile in einen String mit Leerzeichen etc.}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 std::string str;
 std::getline(std::cin, str);
 \end{minted}
 \end{block}
 \begin{block}{Eingabebuffer löschen}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 #include <limits>
 // ...
 std::cin.clear();
@@ -199,8 +199,8 @@ std::cin.ignore(std::numeric_limits<std::streamsize>::max())
 \end{minted}
 \end{block}
 \end{frame}
-\begin{frame}[fragile,label={sec:orgfa4c589}]{\texttt{cin/cout} - Beispiel}
- \begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{frame}[label={sec:org42159a7},fragile]{\texttt{cin/cout} - Beispiel}
+ \begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 #include <iostream>
 #include <string>
 
@@ -222,16 +222,16 @@ int main() {
 \end{minted}
 \end{frame}
 \section{Namespaces}
-\label{sec:org05c9fbc}
-\begin{frame}[fragile,label={sec:org0775f26}]{Namespace - Das Problem in C}
+\label{sec:org05619e5}
+\begin{frame}[label={sec:orgaf31c03},fragile]{Namespace - Das Problem in C}
  Namespace auf Deutsch:
 \alert{Namensraum} \footnote{\href{https://de.wikipedia.org/wiki/Namensraum}{https://de.wikipedia.org/wiki/Namensraum}}
 \begin{block}{Beispiel}
 \begin{itemize}
-\item Angenommen wir haben zwei Bibliotheken ({\color{solarizedYellow}\texttt{control.h} }und {\color{solarizedYellow}\texttt{cpu.h}})
-\item Beide implementieren eine Funktion {\color{solarizedYellow}\texttt{int check\_state();}}
+\item Angenommen wir haben zwei Bibliotheken ({\color{solarizedYellow}\verb!control.h!} und {\color{solarizedYellow}\verb!cpu.h!})
+\item Beide implementieren eine Funktion {\color{solarizedYellow}\verb!int check_state();!}
 \end{itemize}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c}
 #include "control.h"
 #include "cpu.h"
 
@@ -241,10 +241,10 @@ if (check_state() == 42) {
 \end{minted}
 \end{block}
 Dieser Code wird \alert{nicht funktionieren}. Woher soll der Compiler
-wissen, welche der beiden Funktionen {\color{solarizedYellow}\texttt{check\_state} }aufgerufen werden
+wissen, welche der beiden Funktionen {\color{solarizedYellow}\verb!check_state!} aufgerufen werden
 soll?
 \end{frame}
-\begin{frame}[fragile,label={sec:orgeb92dcf}]{Namespace - Die Lösung in C++}
+\begin{frame}[label={sec:orgf15748f},fragile]{Namespace - Die Lösung in C++}
  \begin{itemize}
 \item C++ löst dieses Problem durch die Einführung sogenannter \alert{Namespaces}
 (\alert{Namensräume})
@@ -256,7 +256,7 @@ können muss dessen \alert{Name explizit genannt} werden.
 Das vorherige Beispiel könnte gelöst werden indem die beiden
 Funktionen in unterschiedlichen Namespaces deklariert werden
 \begin{exampleblock}{Beispiel: Lösung in C++}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 #include "control.h" // Verwendet z.B. den Namespace ccont 
 #include "cpu.h" // Verwendet z.B. den Namespace cpu_n
 
@@ -265,71 +265,71 @@ if (ccont::check_state() == 47) { std::cout << "Controller ok\n"; }
 \end{minted}
 \end{exampleblock}
 \end{frame}
-\begin{frame}[fragile,label={sec:org6552fd4}]{Namespace - Deklaration}
+\begin{frame}[label={sec:org62a8f4c},fragile]{Namespace - Deklaration}
  Die Deklaration eines Namespaces folgt dem Muster:
 
-{\color{solarizedYellow}\texttt{namespace <name> \{ <code> \}}}
+{\color{solarizedYellow}\verb!namespace <name> { <code> }!}
 \begin{block}{Beispiel}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 namespace ccont {
 int ok = 47;
 int check_state() { return ok; } // Unser Controller is immer OK :-)
 } // namespace ccont
 \end{minted}
-Die Variable {\color{solarizedYellow}\texttt{ok} }und die Funktion {\color{solarizedYellow}\texttt{check\_state} }befinden sich somit
-im Namensraum {\color{solarizedYellow}\texttt{ccont}}
+Die Variable {\color{solarizedYellow}\verb!ok!} und die Funktion {\color{solarizedYellow}\verb!check_state!} befinden sich somit
+im Namensraum {\color{solarizedYellow}\verb!ccont!}
 \end{block}
 \begin{itemize}
 \item Ein Namespace muss nicht am Stück deklariert werden. Wir können
-jederzeit durch einen neuen {\color{solarizedYellow}\texttt{namespace} }Block einem bereits
+jederzeit durch einen neuen {\color{solarizedYellow}\verb!namespace!} Block einem bereits
 existierenden Namensraum \alert{Elemente hinzufügen}. Auch in
 \alert{unterschiedlichen Dateien}!
 \end{itemize}
 \end{frame}
-\begin{frame}[fragile,label={sec:org9c05804}]{Namespace - Zugriff}
+\begin{frame}[label={sec:orgf44c814},fragile]{Namespace - Zugriff}
  Auf Elemente eines Namensraums wird folgendermaßen zugegriffen:
-{\color{solarizedYellow}\texttt{<namespace>::<element>}}
+{\color{solarizedYellow}\verb!<namespace>::<element>!}
 \begin{block}{Beispiel}
-Wir wollen ausserhalb von {\color{solarizedYellow}\texttt{ccont} }auf die Funktion {\color{solarizedYellow}\texttt{check\_status()}}
+Wir wollen ausserhalb von {\color{solarizedYellow}\verb!ccont!} auf die Funktion {\color{solarizedYellow}\verb!check_status()!}
 zugreifen.
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 std::cout << ccont::check_state(); // Gibt 47 zurück
 \end{minted}
 \end{block}
 \begin{block}{Standardnamensraum}
-Alle Standardfunktionen von C++ liegen im Namensraum {\color{solarizedYellow}\texttt{std} }(für
+Alle Standardfunktionen von C++ liegen im Namensraum {\color{solarizedYellow}\verb!std!} (für
 Standard).
 \end{block}
 \end{frame}
-\begin{frame}[fragile,label={sec:org6eb249e}]{Namespace - Import}
+\begin{frame}[label={sec:orgc9ed359},fragile]{Namespace - Import}
  Manchmal möchte man den Namespace nicht immer explizit angeben
-(besonders beim {\color{solarizedYellow}\texttt{std} }Namensraum üblich)
+(besonders beim {\color{solarizedYellow}\verb!std!} Namensraum üblich)
 \begin{block}{{\color{solarizedYellow}\texttt{using}}}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 std::cout << "Hello World!" << std::endl;
 using std::cout; // Ab hier können wir einfach cout verwenden
 cout << "Hello Simple World!" << std::endl;
 \end{minted}
 \end{block}
 \begin{block}{{\color{solarizedYellow}\texttt{using namespace}}}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 using namespace std; // Ab hier können wir überall std:: weglassen
 cout << "Hello Really Simple World!" << endl;
 \end{minted}
 \end{block}
 \begin{itemize}
-\item {\color{solarizedYellow}\texttt{using} }importiert ein Element
-\item {\color{solarizedYellow}\texttt{using namespace} }importiert den ganzen Namensraum
-\item Man muss mit {\color{solarizedYellow}\texttt{using namespace} }vorsichtig sein, da man die ganzen
+\item {\color{solarizedYellow}\texttt{using}} importiert ein Element
+\item {\color{solarizedYellow}\texttt{using namespace}} importiert den ganzen Namensraum
+\item Man muss mit {\color{solarizedYellow}\verb!using namespace!} vorsichtig sein, da man die ganzen
 Vorteile von Namespaces verliert!
 \end{itemize}
 \end{frame}
-\begin{frame}[fragile,label={sec:orgbd64942}]{Namespace - Verschachtelung}
+\begin{frame}[label={sec:orgf9022b4},fragile]{Namespace - Verschachtelung}
  Ein Namespace kann innerhalb eines anderen Namespaces deklariert
 werden. Wir greifen auf verschachtelte Namensräume durch wiederholtes
-{\color{solarizedYellow}\texttt{::} }zu. Z.b. {\color{solarizedYellow}\texttt{ns1::ns2::ns3::function()}}.
+{\color{solarizedYellow}\verb!::!} zu. Z.b. {\color{solarizedYellow}\verb!ns1::ns2::ns3::function()!}.
 \begin{block}{Beispiel}
-\begin{minted}[fontsize=\scriptsize,numberblanklines=false]{c++}
+\begin{minted}[numberblanklines=false,fontsize=\scriptsize]{c++}
 #include <iostream>
 
 namespace ns1 {
