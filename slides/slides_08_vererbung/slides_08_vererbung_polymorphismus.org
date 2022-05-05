@@ -1,0 +1,533 @@
+#+TITLE:     Vererbung, das Slicing Problem und Polymorphismus
+#+AUTHOR:    Thomas Hausberger, Matthias Panny @@latex:\\@@ Ursprünglich erstellt von Sebastian Stabinger
+#+DATE:      SS2022
+
+* Das Problem
+** Beispiel
+- Wir wollen Klassen für verschiedene Elemente eines Spiels
+  deklarieren (z.B. Spieler, Ladenbesitzer, Objekt, ...)
+- Viele Aspekte dieser Klassen sind gleich oder zumindest ähnlich.
+  Alle haben eine aktuelle Position und ein Bild das angezeigt werden
+  soll
+- Ein paar Aspekte sind aber anders. z.B. hat ein Spieler evtl.
+  Lebenspunkte und kann sich bewegen. Ein Ladenbesitzer hat ein
+  Inventar das er verkaufen kann und ein Objekt kann passierbar sein
+  oder nicht
+- Mit unserem aktuellen Wissen müssten wir die gemeinsamen
+  Eigenschaften in der Spieler-, Ladenbesitzer- und Objekt-Klasse
+  manuell wiederholen.
+** Beispiel Code --- Spieler
+#+BEGIN_SRC c++
+  class Player {
+  private:
+    string _image;
+    int _xpos, _ypos, _health;
+
+  public:
+    Player(int xpos, int ypos, int health, string image) {
+      _xpos = xpos;
+      _ypos = ypos;
+      _image = image;
+      _health = health;
+    }
+
+    void move_up() { ypos--; }
+    void move_down() { ypos++; }
+    void move_left() { xpos--; }
+    void move_right() { xpos++; }
+
+    bool isdead() { return health <= 0; }
+    void draw() { draw_img(_image, _xpos * 16, _ypos * 16); }
+  };
+#+END_SRC
+** Beispiel Code --- Ladenbesitzer
+#+BEGIN_SRC c++
+  class Shopkeep {
+  private:
+    string _image;
+    int _xpos, _ypos;
+    vector<string> _inventory;
+
+  public:
+    Shopkeep(int xpos, int ypos, string image, vector<string> inventory) {
+      _xpos = xpos;
+      _ypos = ypos;
+      _image = image;
+      _inventory = inventory;
+    }
+
+    vector<string> get_inventory() { return _inventory; }
+
+    void draw() { draw_img(_image, _xpos * 16, _ypos * 16); }
+  };
+#+END_SRC
+** Beispiel Code --- Objekt
+#+BEGIN_SRC c++
+  class Object {
+  private:
+    int _xpos, _ypos;
+    string _image;
+    bool _solid;
+
+  public:
+    Object(int xpos, int ypos, string image, bool solid) {
+      _xpos = xpos;
+      _ypos = ypos;
+      _image = image;
+      _solid = solid;
+    }
+
+    bool issolid() { return solid; }
+    void draw() { draw_img(_image, _xpos * 16, _ypos * 16); }
+  };
+#+END_SRC
+** COMMENT Problem --- vector
+#+BEGIN_SRC C++
+  #include <iostream>
+  #include <vector>
+  #include <string>
+
+  int main() {
+    Player p(10, 10, 200, "spieler.bmp");
+    vector<string> inventory = {"Schwert", "Schuhe", "Pferd"};
+    Shopkeep s(20, 20, "shopkeep.bmp", inventory);
+    Object o(5, 12, "rock.bmp", true);
+
+    // vector<Player> vec; ??
+    // vector<Shopkeep> vec; ??
+    // vector<Object> vec; ??
+
+    vec.pushback(p);
+    vec.pushback(s);
+    vec.pushback(o);
+
+    ___MCILOOPSTART___
+    // Wir wollen hier alle Spielfiguren zeichen
+    for (auto e : vec) {
+      e.draw();
+    }
+    ___MCILOOPEND___
+  }
+#+END_SRC
+** COMMENT Problem --- vector
+- Das Problem mit vorherigem Code ist, dass wir beim deklarieren eines
+  Vektors (oder auch eines Arrays) einen Datentyp angeben müssen
+- Jede Klasse ist aber ein eigener Datentyp, wir können also keinen
+  Vektor erzeugen in dem man unterschiedliche Klassen speichern kann
+  ...
+- ... obwohl ja jede der Klassen eine Funktion ~draw()~ hat und das
+  rein intuitiv kein Problem sein sollte
+* Die Lösung --- Vererbung
+** Vererbung
+- Mittels Vererbung kann eine Klasse (die *abgeleitete Klasse*)
+  Variablen und Memberfunktionen einer anderen Klasse (der
+  *Basisklasse*) erben und somit verwenden.
+- Wir erweitern und/oder ändern also die Funktionalität einer bereits
+  existierenden Klasse (die *Basisklasse*) und geben dieser geänderten
+  Klasse (die *abgeleitete Klasse*) einen neuen Namen.
+- Wir sagen *die abgeleitete Klasse erweitert die Basisklasse*
+*** Syntax
+#+BEGIN_SRC c++
+  class AbgeleiteteKlasse : public Basisklasse {
+    // ... Definition der abgeleiteten Klasse
+  }
+#+END_SRC
+*** Out :B_ignoreheading:
+:PROPERTIES:
+:BEAMER_env: ignoreheading
+:END:
+- *Achtung*: Die abgeleitete Klasse hat nur Zugriff auf Variablen und
+  Memberfunktionen der Basisklasse welche ~public~ sind!
+** Vererbung --- Kurzes Beispiel
+#+INCLUDE: simple_inheritance.cpp SRC c++
+** Vererbung --- Kurzes Beispiel
+Grafisch kann man sich die Vererbung folgendermaßen vorstellen (Die
+Basisklasse ist in die abgeleitete Klasse eingebettet):
+[[file:imgs/helloworldbasisabgeleitet.png]]
+* Überladen von Funktionen
+** Funktionsweise
+Wir können eine Funktion der Basisklasse in der abgeleiteten Klasse
+überschreiben indem wir sie gleich benennen.
+#+INCLUDE: overload.cpp SRC c++
+** Überladen von Funktionen
+file:imgs/overload.png
+- Das System sucht sozusagen von *Außen nach Innen* und führt die
+  erste Funktion aus welche hinsichtlich Namen und Parametern passt
+** Verwendung überschriebener Funktionen
+*** Problem
+- Wir haben in ~HelloWorldAbgeleitet~ das vererbte ~print~ von
+  ~HelloWorldBasis~ überschrieben
+- Wir wollen irgendwo in ~HelloWorldAbgeleitet~ trotzdem das ~print~
+  von ~HelloWorldBasis~ aufrufen
+- Was z.B. häufig vorkommt: Wir erweitern eine Funktion der
+  Basisklasse indem wir sie überschreiben. In der neuen Funktion rufen
+  wir die überschiebene Funktion der Basisklasse auf.
+*** Lösung
+- *Wir können auf die Basisklasse wie auf einen Namespace zugreifen.*
+- Bsp. ~HelloWorldBasis::print()~
+** Verwendung überschriebener Funktionen
+  
+#+INCLUDE: overload_basecall.cpp SRC c++
+* Konstruktoren und Vererbung
+** Standardkonstruktoren
+Der Standardkonstruktor einer Basisklasse wird automatisch aufgerufen
+wenn die abgeleiteten Klasse erzeugt wird.
+#+INCLUDE: default_constructor.cpp SRC c++
+** Konstruktoren mit Parametern
+Ein Konstruktor der Basisklasse welcher Parameter erwartet *muss
+explizit aufgerufen werden*. Dies geschieht durch Anhängen mittels ~:~
+an den Konstruktor.
+*** Syntax --- Beispiel                                    :B_exampleblock:
+:PROPERTIES: 
+:BEAMER_env: exampleblock
+:END:      
+#+BEGIN_SRC c++
+  class C1 {
+  public:
+    int a;
+    C1(int pa) { a = 2 * pa; }
+  };
+
+  class C2 : public C1 {
+  public:
+    C2(int i) : C1(3 * i) { a = a + 10; }
+  };
+
+  int main() {
+    C2 c(4); // c.a == 34 [(2*(3*4))+10]
+    cout << c.a << endl;
+  }
+#+END_SRC
+* Ein größeres Beispiel
+** Code Beispiel --- Ein Ding
+#+BEGIN_SRC c++
+  class Thing {
+  private:
+    int _xpos, _ypos;
+    string _image;
+
+  public:
+    Thing(int xpos, int ypos, string image) {
+      _xpos = xpos;
+      _ypos = ypos;
+      _image = image;
+    }
+
+    int get_xpos() { return _xpos; }
+    int get_ypos() { return _ypos; }
+    void set_xpos(int x) { _xpos = x; }
+    void set_ypos(int y) { _ypos = y; }
+
+    void draw() { draw_image(_image, _xpos * 16, _ypos * 16); }
+  };
+#+END_SRC
+** Code Beispiel --- Spieler
+#+BEGIN_SRC c++
+  class Player : public Thing {
+  private:
+    int _health;
+
+  public:
+    Player(int xpos, int ypos, int health, string image)
+        : Thing(xpos, ypos, image) {
+      _health = health;
+    }
+
+    void move_up() { set_ypos(get_ypos() - 1); }
+    void move_down() { set_ypos(get_ypos() + 1); }
+    void move_left() { set_xpos(get_xpos() - 1); }
+    void move_right() { set_xpos(get_xpos() - 1); }
+
+    void draw() { // Erweitere draw Funktion von Thing
+      Thing::draw();
+      // Zeichne Gesundheitsanzeige ...
+    }
+  };
+#+END_SRC
+** Graphische Visualisierung --- Thing - Player
+file:imgs/thingplayer.png
+** Code Beispiel --- Ladenbesitzer
+#+BEGIN_SRC c++
+  class Shopkeep : public Thing {
+  private:
+    vector<string> _inventory;
+
+  public:
+    Shopkeep(int xpos, int ypos, string image, vector<string> inventory)
+        : Thing(xpos, ypos, image) {
+      _inventory = inventory;
+    }
+
+    vector<string> get_inventory() { return _inventory; }
+  };
+#+END_SRC
+** Code Beispiel --- Objekt
+#+BEGIN_SRC c++
+  class Object : public Thing {
+  private:
+    bool _solid;
+
+  public:
+    Object(int xpos, int ypos, string image, bool solid)
+        : Thing(xpos, ypos, image) {
+      _solid = solid;
+    }
+
+    bool issolid() { return _solid; }
+  };
+#+END_SRC
+* Kontrolle der Sichtbarkeit
+** Das Problem
+- Wir haben bereits gelernt: Die abgeleitete Klasse hat Zugriff auf
+  alle Elemente der Basisklasse welche ~public~ sind. Auf die
+  ~private~ Elemente hat sie *keinen* Zugriff.
+- Wir wollen aber häufig in der abgeleiteten Klasse direkt auf
+  Elemente der Basisklasse zugreifen welche von außerhalb nicht
+  sichtbar sind.
+*** Beispiel                                                 :B_exampleblock:
+:PROPERTIES: 
+:BEAMER_env: exampleblock
+:END:      
+#+BEGIN_SRC c++
+  class C1 {
+  private:
+    int secret;
+  };
+
+  class C2 : public C1 {
+  public:
+    void change_secret(int newsecret) { secret = newsecret; }
+    // Error!! Kein Zugriff auf secret
+  };
+#+END_SRC
+Wir könnten ~secret~ in den ~public~ Bereich schieben, aber dann kann
+jeder darauf zugreifen ...
+** Die Lösung: protected
+- Um dieses Problem zu lösen gibt es einen dritten
+  Sichtbarkeitsbereich innerhalb einer Klasse namens ~protected~
+- Er verhält sich von Außerhalb so wie ~private~, aber eine
+  abgeleitete Klasse kann direkt darauf zugreifen.
+*** Beispiel                                                 :B_exampleblock:
+:PROPERTIES: 
+:BEAMER_env: exampleblock
+:END:      
+#+BEGIN_SRC c++
+  class C1 {
+  protected:
+    int secret;
+  };
+
+  class C2 : public C1 {
+  public:
+    void change_secret(int newsecret) { secret = newsecret; }
+  };
+
+  int main() {
+    C2 c;
+    c.change_secret(42); // Alles OK
+    c.secret;            // Error!! Kein Zugriff auf secret
+  }
+
+#+END_SRC
+* Übungen
+** Gemeinsame Übung
+Wir schreiben die beim letzten Termin entwickelte Version des Spiels
+so um, dass es eine *Spieler- und eine Monsterklasse* gibt.
+- Der Spieler bekommt eine Gesundheitsanzeige
+- Die Monster verschwinden wie gehabt nach einer gewissen Zeit, wir
+  lösen das dieses mal aber in der Monsterklasse selbst
+* Casten
+** Casten "normaler" Datentypen
+Casten einer "normalen" Variable konvertiert (so gut wie möglich) den
+Inhalt einer Variable in einen anderen Datentyp
+#+BEGIN_SRC C++
+  int i1 = 23;
+  double d1 = (double)i; // Konvertiert i explizit nach double
+  double d2 = 23.42;
+  int i2 = d2; // Hier wird implizit von double nach int konvertiert
+#+END_SRC
+** COMMENT Casten von Zeigern
+- Wie bereits erwähnt gibt der Typ eines Zeigers nur an, was an der
+  Speicherstelle auf die der Zeiger verweist gespeichert ist
+- Wenn wir einen Zeiger in einen anderen Typ casten teilen wir dem
+  Compiler nur mit, dass an der Speicherstelle jetzt ein anderer
+  Datentyp liegt. Es wird aber keine Konvertierung der Werte an der
+  Speicherstelle vorgenommen.
+- Das Casten von Zeigern kann also sehr riskant sein! Siehe folgendes
+  Beispiel
+** COMMENT Casten von Zeigern --- Beispiel
+#+BEGIN_SRC C++
+  #include <iostream>
+  using namespace std;
+
+  int main() {
+    double d = 12.32;
+    cout << "Adresse von d = " << &d << endl;
+    double *dp = &d; // Verweist auf Speicheradresse von d
+    cout << "Wert von dp = " << dp << endl;
+    int *ip = (int *)dp; // Verweist auch auf Speicheradresse von d
+    cout << "Wert von ip = " << ip << endl;
+    cout << "Wert auf den dp verweist (double an Adresse " << dp << " ) = "
+         << *dp << endl;
+    cout << "Wert auf den ip verweist (int an Adresse " << ip << " ) = "
+         << *ip << endl;
+  }
+#+END_SRC
+*** Ausgabe
+#+BEGIN_SRC text
+  Adresse von d = 0x7ffc03b27970
+  Wert von dp = 0x7ffc03b27970
+  Wert von ip = 0x7ffc03b27970
+  Wert auf den dp verweist (double an Adresse 0x7ffc03b27970 ) = 12.32
+  Wert auf den ip verweist (int an Adresse 0x7ffc03b27970 ) = 171798692
+#+END_SRC
+* Der Upcast
+** Upcast
+- Wenn sich Klassen in einer Vererbungshierarchie befinden, kann ohne
+  weiteres von einer abgeleiteten Klasse zu einer Basisklasse gecastet
+  werden
+- Das ist kein Problem, weil bei der abgeleiteten Klasse ja nur Sachen
+  zur Basisklasse hinzugekommen sind
+- Man bezeichnet so eine Konvertierung von einer abgeleiteten Klasse
+  zu einer Basisklasse als *upcast* (weil man in der Klassenhierarchie
+  nach Oben wandert)
+- Wir werden uns solche Upcasts an Hand von impliziten casts anschauen
+  (also Konvertierungen die automatisch passieren)
+** Der Upcast --- Beispiel
+#+INCLUDE: upcast.cpp SRC c++
+** Der Upcast --- Graphische Visualisierung
+file:img/slizing_full.png
+** Das Slicing Problem
+- Aus Sicht der Referenz ~b~ haben wir es nun mit einer Instanz der
+  Klasse ~Basis~ zu tun.
+  
+  file:img/slizing_small.png
+- ~b~ hat also "vergessen", dass es auf einen Teil einer
+  ~Abgeleitet~-Klasse verweist
+- Beim kopieren für die Variable ~bc~ wurde nur der Basis-Teil kopiert
+- Man bezeichnet das als Slicing-Problem, weil Teile einer Klasse
+  tatsächlich, oder scheinbar abgeschnitten werden
+** Der Upcast --- Was passiert
+#+ATTR_LATEX: :width 0.65\textwidth
+file:img/upcast.png
+** Der Upcast --- Parameter Beispiel
+#+INCLUDE: upcast_param.cpp SRC c++
+** Effekt eines Upcasts
+- Wird eine abgeleitete Klasse in den Typ einer Basisklasse
+  konvertiert, vergisst die Instanz was sie vorher einmal war und
+  verhält sich dann als wäre es schon immer eine Basisklasse gewesen
+- Dieses Verhalten bezeichnet mal als *slicing* und ist oft nicht was
+  man will
+- Auf den nächsten Slides werden wir uns das Problem näher ansehen und
+  mit sogenanntem *Polymorphismus* eine Lösung finden
+* Polymorphismus
+** Ein kleines Beispiel
+#+INCLUDE: polymorph_example.cpp SRC c++
+** Was ist das Problem?
+- Wir hätten gerne, dass sich die Klassen mit ihren tatsächlichen
+  ~print~ Funktionen melden und nicht mit der Standardimplementierung
+  der Basisklasse
+- Das funktioniert aber auf Grund des Slicing-Problems nicht
+*** Lösung
+Die Lösung ist das Schlüsselwort ~virtual~. Wenn in einer Basisklasse
+vor einer Funktion ~virtual~ steht, so merkt sich die Klasse welche
+Funktion einer abgeleiteten Klasse tatsächlich aufgerufen werden muss.
+*** Warum ist virtual nicht Standard?
+Der Aufruf einer ~virtual~-Funktion ist langsamer, weil das System
+zuerst nachsehen muss welche Funktion tatsächlich aufgerufen werden
+muss. Zudem verbraucht eine ~virtual~-Funktion Speicher in jeder
+Instanz einer Klasse, weil irgendwo gespeichert werden muss welche
+Funktion wirklich aufzurufen ist.
+** Virtual --- Beispiel
+#+INCLUDE: virtual_example.cpp SRC c++
+** Wann verwendet man Polymorphismus
+- Man hat eine Basisklasse die ein bestimmtes Verhalten implementiert
+- Davon leitet man mehrere Klassen ab die dieses Verhalten erweitern
+- Man kann jetzt eine Funktion für die Basisklasse schreiben, und als
+  Parameter alle abgeleiteten Klassen verwenden, oder ...
+- wir können in einem Vektor oder in einem Array vom Typ der
+  Basisklasse auch alle abgeleiteten Klassen speichern (als Zeiger
+  oder Referenz)
+** Beispiel --- Vektor mit Zeigern
+#+INCLUDE: vector_pointer.cpp SRC c++
+** Beispiel --- Vektor mit Referenzen
+#+INCLUDE: vector_ref.cpp SRC c++
+** Übung --- Employee und Manager
+\footnotesize
+- Implementieren Sie die beiden Klassen ~Employee~ und ~Manager~
+- ~Employee~ ist die Basisklasse, ~Manager~ ist die abgeleitete
+  Klasse. Ein Manager ist also auch ein Angestellter
+- ~Employee~ hat eine Variable ~salary~ die speichert wie viel der
+  jeweilige Mitarbeiten verdient
+- ~Employee~ hat eine Funktion ~raise~ mit der man einem Mitarbeiter
+  eine Gehaltserhöhung geben kann. Damit der unsere Mitarbeiter nicht
+  zu viel verdienen, wird der maximale Gehalt auf ~3500~ beschränkt
+- ~Employee~ hat auch eine Funktion ~print~ die ausgibt: ~Der
+  Mitarbeiter hat einen Gehalt von ...~
+- Im ~Manager~ wird die Funktion ~raise~ überladen und das Gehalt ist
+  nicht beschränkt
+*** Verwendung
+- Erzeugen Sie einen Vektor und füllen Sie ihn mit einigen ~Employee~
+  sowie ~Manager~ Instanzen (entweder mit Zeigern oder Referenzen)
+- Iterieren Sie über den Vektor und rufen ~raise~ sowie ~print~ auf
+  und beobachten Sie das Verhalten
+** Hinweis
+- *Polymorphismus* ist ein weiterführendes Thema der
+  Objektorientierten Programmierung und uns fehlen einige Grundlagen
+  um das Konzept wirklich gut nützen zu können (z.B. dynamische
+  Speicherverwaltung)
+- Es geht in erster Linie darum, *dass sie das Konzept gehört haben*
+  und sich zumindest ungefähr vorstellen können um was es geht
+- Sie müssen Polymorphismus im Abschlussprojekt nicht verwenden.
+
+* Export settings etc.                                             :noexport:
+#+LANGUAGE:  ger
+#+OPTIONS:   texht:t H:2 toc:nil
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+STARTUP: beamer
+
+#+LATEX_CLASS: beamer
+
+#+LATEX_HEADER: \usepackage[utf8]{inputenc}
+#+LATEX_HEADER: \usepackage{color}
+#+LATEX_HEADER: \usetheme[height=7mm]{Rochester}
+
+#+LATEX_HEADER: \setbeamertemplate{footline}[frame number]
+#+LATEX_HEADER: \usecolortheme[accent=red, light]{solarized}
+#+LATEX_HEADER: \setbeamercolor{frametitle}{bg=solarizedRebase02,fg=solarizedAccent}
+#+LATEX_HEADER: \setbeamercolor{author in head/foot}{bg=solarizedRebase02,fg=solarizedRebase01}
+#+LATEX_HEADER: \setbeamercolor{title in head/foot}{bg=solarizedRebase02,fg=solarizedRebase01}
+#+LATEX_HEADER: \setbeamercolor{block title}{bg=solarizedRebase0,fg=solarizedRebase02}
+#+LATEX_HEADER: \setbeamercolor{block body}{bg=solarizedRebase02,fg=solarizedRebase0}
+#+LATEX_HEADER: \setbeamercolor{item}{bg=solarizedRebase02,fg=solarizedAccent}
+
+#+LATEX_HEADER: \beamertemplatenavigationsymbolsempty
+
+#+LATEX_HEADER: \usemintedstyle{manni}
+
+#+LATEX_HEADER: \AtBeginSection[]{
+#+LATEX_HEADER:   \begin{frame}
+#+LATEX_HEADER:   \vfill
+#+LATEX_HEADER:   \centering
+#+LATEX_HEADER:   \begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
+#+LATEX_HEADER:     \Huge\insertsectionhead\par%
+#+LATEX_HEADER:   \end{beamercolorbox}
+#+LATEX_HEADER:   \vfill
+#+LATEX_HEADER:   \end{frame}
+#+LATEX_HEADER: }
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;; Allow binding of emacs variables on export. You might have to evaluate that so that #+BIND: works
+  (setq org-export-allow-bind-keywords t)
+  ;; Set F12 to compile
+  (global-set-key (kbd "<f12>") 'org-beamer-export-to-pdf)
+
+  ;; Export all verbatim text in certain color
+  (defun latex-export-colored-verbatim (contents backend info)
+    (when (eq backend 'beamer)
+      (concat "{\\color{solarizedYellow}" contents "}")))
+  ;; Register
+  (add-to-list 'org-export-filter-code-functions
+               'latex-export-colored-verbatim)
+#+END_SRC
