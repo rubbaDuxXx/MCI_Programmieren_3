@@ -24,6 +24,9 @@ function Pandoc(doc)
       end
     end
 
+    -- override authors
+    authorsStr = 'Thomas Hausberger, Matthias Panny, Sebastian Stabinger'
+
     --print(authorsStr)
     
     titleStr = ''

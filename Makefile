@@ -19,7 +19,7 @@ all: $(objects)
 		--include-in-header=header.yaml \
 		--lua-filter=fix_img_org2md.lua \
 		--lua-filter=fix_add_author_title.lua \
-		--atx-headers \
+		--markdown-headings=atx \
 		--wrap=none \
 		--highlight=kate \
 		-f org $< \
