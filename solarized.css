@@ -1,0 +1,94 @@
+  /* @theme solarized */
+  
+  @import 'gaia';
+
+
+  p {
+    text-align: left !important;
+    margin: 0 0 0 0;
+  }
+
+  .title p {
+    text-align: center !important;
+  }
+
+  ul, ol {
+    margin: 0;
+  }
+
+  ul {
+    list-style-type: square;
+  }
+
+  ul li::marker {
+    color: #DC322F;
+    font-size: 1.4em;
+  }
+
+  h1, h2, h3 {
+    color: #DC322F;
+    font-weight: normal;
+  }
+
+  h2, h3 {
+    text-align:left !important;
+    padding: 0px;
+  }
+
+  h2 {
+    position: absolute;
+    padding-left: 20px;
+    padding-right: 20px;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    background-color: #eee8d5;
+  }
+
+  h3 {
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: #657b83;
+    color: #fdf6df;
+  }
+
+  h3 ~ p, h3 ~ ul, h3 ~ ol, h3 ~ table, h3 ~ pre, h3 ~ pre code {
+    margin: 0px;
+    background-color: #eee8d5;
+  }
+
+  strong {
+    color: #DC322F;
+    font-weight: normal;
+  }
+
+  a {
+    color: #455a64;
+    text-decoration: underline;
+  }
+
+  /* Add "Page" prefix and total page number */
+  section::after {
+    content: attr(data-marpit-pagination) '\200A/\200A' attr(data-marpit-pagination-total);
+    color: #93a1a1;
+    font-size: 65%;
+    position: absolute;
+    padding-right:10px;
+    bottom: -20px;
+  }
+
+  pre code {
+    color: #455a64;
+    background-color: #eee8d5;
+  }
+
+  code {
+    color: #b5890f;
+    background-color: transparent;
+    line-height: 120%;
+  }
+
+  pre {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
