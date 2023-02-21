@@ -1,5 +1,5 @@
 #+TITLE:     Programmaufteilung
-#+AUTHOR:    Thomas Hausberger, Matthias Panny @@latex:\\@@ Ursprünglich erstellt von Sebastian Stabinger
+#+AUTHOR:    Thomas Hausberger, Matthias Panny, Sebastian Stabinger
 #+DATE:      SS2022
 
 * Wozu sollte man ein Programm aufteilen?
@@ -196,7 +196,7 @@ in der Quellcodedatei erzeugt werden
   Quellcodedatei aus
 * Export settings etc.                                             :noexport:
 #+LANGUAGE:  ger
-#+OPTIONS:   texht:t H:2 toc:nil
+#+OPTIONS:   texht:t H:5 toc:nil
 #+EXPORT_SELECT_TAGS: export
 #+EXPORT_EXCLUDE_TAGS: noexport
 #+STARTUP: beamer

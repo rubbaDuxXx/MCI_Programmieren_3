@@ -19,11 +19,12 @@ all: $(objects)
 		--include-in-header=header.yaml \
 		--lua-filter=fix_img_org2md.lua \
 		--lua-filter=fix_add_author_title.lua \
+		--lua-filter=fix_remove_header_tags.lua \
 		--markdown-headings=atx \
 		--wrap=none \
 		--highlight=kate \
 		-f org $< \
-		-t markdown_strict+backtick_code_blocks+pipe_tables+tex_math_dollars+raw_html \
+		-t markdown_strict+backtick_code_blocks+pipe_tables+tex_math_dollars+raw_html+fancy_lists \
 		-o $@
 
 .PHONY : clean

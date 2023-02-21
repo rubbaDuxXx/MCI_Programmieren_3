@@ -13,21 +13,8 @@ function Pandoc(doc)
     -- get authors as comma separated string from metadata
     authorsStr = ""
     if not isempty(meta.author) then
-      for k, v in pairs(meta.author) do
-        --print(pandoc.utils.stringify(v))
-        --print(k)
-        author = pandoc.utils.stringify(v)
-        if k > 1 then
-          author = ', ' .. author
-        end 
-        authorsStr = authorsStr .. author
-      end
+      authorsStr = pandoc.utils.stringify(meta.author)
     end
-
-    -- override authors
-    authorsStr = 'Thomas Hausberger, Matthias Panny, Sebastian Stabinger'
-
-    --print(authorsStr)
     
     titleStr = ''
     if not isempty(meta.title) then

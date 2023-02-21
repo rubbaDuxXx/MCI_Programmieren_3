@@ -1,5 +1,5 @@
 #+TITLE:     2D Arrays
-#+AUTHOR:    Thomas Hausberger, Matthias Panny @@latex:\\@@ Ursprünglich erstellt von Sebastian Stabinger
+#+AUTHOR:    Thomas Hausberger, Matthias Panny, Sebastian Stabinger
 #+DATE:      SS2022
 
 * 2D Arrays im Speicher
@@ -227,7 +227,7 @@ Position als Hintergrund gezeichnet werden soll
 [[file:data/00/1df613-db63-4675-993c-1159913a0378/screenshot-20200507-214418.png]]
 * Export settings etc.                                             :noexport:
 #+LANGUAGE:  ger
-#+OPTIONS:   texht:t H:2 toc:nil
+#+OPTIONS:   texht:t H:5 toc:nil
 #+EXPORT_SELECT_TAGS: export
 #+EXPORT_EXCLUDE_TAGS: noexport
 #+STARTUP: beamer

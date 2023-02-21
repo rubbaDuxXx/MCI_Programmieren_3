@@ -1,5 +1,5 @@
 #+TITLE:     Dynamische Speicherverwaltung
-#+AUTHOR:    Thomas Hausberger, Matthias Panny @@latex:\\@@ Ursprünglich erstellt von Sebastian Stabinger
+#+AUTHOR:    Thomas Hausberger, Matthias Panny, Sebastian Stabinger
 #+DATE:      SS2022
 
 * Stack vs. Heap
@@ -467,7 +467,7 @@ Erweitern Sie unser Spieleprojekt folgendermaßen:
 [[file:data/ef/50772b-6721-4bd5-a274-efaba137299f/screenshot-20200406-225138.png]]
 * Export settings etc.                                             :noexport:
 #+LANGUAGE:  ger
-#+OPTIONS:   texht:t H:2 toc:nil
+#+OPTIONS:   texht:t H:5 toc:nil
 #+EXPORT_SELECT_TAGS: export
 #+EXPORT_EXCLUDE_TAGS: noexport
 #+STARTUP: beamer

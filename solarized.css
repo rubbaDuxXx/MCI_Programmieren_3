@@ -2,13 +2,30 @@
   
   @import 'gaia';
 
-
-  p {
-    text-align: left !important;
-    margin: 0 0 0 0;
+  /* 4:3 slides */
+  section {
+    width: 1280px;
+    height: 960px;
+    font-family: 'Roboto', 'Segoe UI', 'Liberation Sans', 'Helvetica', 'Arial', sans-serif;
+    line-height: 1.2em;
+    padding: 60px 70px 20px 70px;
   }
 
-  .title p {
+  p {
+    text-align: left;
+    margin: 0;
+  }
+
+  p img { /* center images */
+    margin: auto;
+    display: block;
+  }
+
+  section.title h1 {
+    line-height: 1.2em;
+  }
+
+  section.title p {
     text-align: center !important;
   }
 
@@ -20,41 +37,99 @@
     list-style-type: square;
   }
 
+  /* list items */
+  ul li, ol li {
+    margin: 0.4em 0;
+  }
+
+  /* sublist items */
+  li ul li {
+    margin: 0.1em 0;
+  }
+
   ul li::marker {
     color: #DC322F;
-    font-size: 1.4em;
   }
+
+  ol li::marker {
+    background-color: #DC322F;
+  }
+
+  /* custom list item for ordered list */
+    ol {
+      list-style: none;
+      counter-reset: item;
+      padding-left: 20px;
+    }
+    ol li {
+      counter-increment: item;
+      margin-bottom: 5px;
+    }
+
+    ol li:before {
+      margin-right: 10px;
+      content: counter(item);
+      background: #DC322F;
+      color: white;
+      width: 1.2em;
+      text-align: center;
+      display:
+      inline-block;
+    }
+  /* end custom ordered list markers */
 
   h1, h2, h3 {
     color: #DC322F;
     font-weight: normal;
   }
 
-  h2, h3 {
+  h2, h3, h4 {
     text-align:left !important;
     padding: 0px;
   }
 
   h2 {
     position: absolute;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding: 10px 10px;
     top: 0px;
     left: 0px;
     width: 100%;
+    font-size: 1.3em;
     background-color: #eee8d5;
   }
 
   h3 {
-    padding-left: 10px;
-    padding-right: 10px;
+    padding: 10px 10px;
+    font-size: 1.1em;
     background-color: #657b83;
     color: #fdf6df;
   }
 
-  h3 ~ p, h3 ~ ul, h3 ~ ol, h3 ~ table, h3 ~ pre, h3 ~ pre code {
+  h4 {
+    color: #DC322F;
+    background-color: inherit;
+    font-weight: normal;
+    margin: 0px;
+    margin-top: 0.5em;
+  }
+
+  /* blocks following a h3 */
+  h3 ~ p, h3 ~ ul, h3 ~ ol, h3 ~ table, h3 ~ pre, h3 ~ pre code, h3 ~ h4 {
     margin: 0px;
     background-color: #eee8d5;
+  }
+
+  h3 ~ p {
+    padding-left: 0.3em;
+    padding-top: 0.2em;
+    text-align: left;
+  }
+
+  h4 ~ p {
+    padding-left: 1em;
+    padding-top: 0.2em;
+    text-align: left;
+    margin: 0px;
   }
 
   strong {
@@ -77,18 +152,82 @@
     bottom: -20px;
   }
 
+  /* block code */
   pre code {
     color: #455a64;
-    background-color: #eee8d5;
+    background-color: transparent;
+    /*line-height: 120%;*/
   }
 
+  /* inline code */
   code {
+    font-size: 0.9em;
+    margin: 0;
+    padding: 0;
+    line-height: 1em;
     color: #b5890f;
     background-color: transparent;
-    line-height: 120%;
   }
 
   pre {
     margin-top: 10px;
     margin-bottom: 10px;
+    background-color: transparent;
+  }
+
+  /* table style */
+    table {
+      font-size: 0.9em;
+      border: 2px solid transparent;
+      width: 100%;
+      border-collapse: collapse;
+    }
+    table td, table th {
+      border: 3px solid transparent;
+      padding: 0px 0px 0px 30px;
+    }
+    table tbody td {
+      border: 3px solid transparent;
+    }
+    table tr {
+      background: transparent;
+      margin: 0px;
+    }
+    table thead {
+      border-bottom: 4px solid #455a64;
+    }
+    table thead th {
+      font-weight: normal;
+      color: #455a64;
+      background-color: transparent;
+      text-align: left;
+    }
+  /* end table style */
+
+  /* dense text style */
+  section.dense p, section.dense ul, section.dense ol {
+    font-size: 0.9em;
+    line-height: 1.15em;
+  }
+
+  section.dense h3, section.dense h4 {
+    font-size: 1em;
+    padding-top: 0.0em;
+  }
+
+  section.dense ul li, section.dense ol li {
+    margin: 0.2em 0;
+  }
+
+  /* clear block style with h5 heading */
+  h5 ~ p, h5 ~ ul, h5 ~ ol {
+    background-color: transparent !important;
+  }
+
+  /* two column code */
+  section.two-column pre {
+    float: left;
+    width: 49%;
+    margin: 5px;
+    background-color: #eee8d5;
   }

@@ -1,5 +1,5 @@
 #+TITLE:     Templates
-#+AUTHOR:    Thomas Hausberger, Matthias Panny @@latex:\\@@ Ursprünglich erstellt von Sebastian Stabinger
+#+AUTHOR:    Thomas Hausberger, Matthias Panny, Sebastian Stabinger
 #+DATE:      SS2022
 
 * Problem
@@ -180,7 +180,7 @@ kann z.B. auf der _[[https://en.wikipedia.org/wiki/Template_metaprogramming][\co
 
 * Export settings etc.                                             :noexport:
 #+LANGUAGE:  ger
-#+OPTIONS:   texht:t H:2 toc:nil
+#+OPTIONS:   texht:t H:5 toc:nil
 #+EXPORT_SELECT_TAGS: export
 #+EXPORT_EXCLUDE_TAGS: noexport
 #+STARTUP: beamer

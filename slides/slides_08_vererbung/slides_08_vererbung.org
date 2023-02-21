@@ -1,5 +1,5 @@
 #+TITLE:     Vererbung
-#+AUTHOR:    Thomas Hausberger, Matthias Panny @@latex:\\@@ Ursprünglich erstellt von Sebastian Stabinger
+#+AUTHOR:    Thomas Hausberger, Matthias Panny, Sebastian Stabinger
 #+DATE:      SS2022
 
 * Das Problem
@@ -338,7 +338,7 @@ so um, dass es eine *Spieler- und eine Monsterklasse* gibt.
   lösen das dieses mal aber in der Monsterklasse selbst
 * Export settings etc.                                             :noexport:
 #+LANGUAGE:  ger
-#+OPTIONS:   texht:t H:2 toc:nil
+#+OPTIONS:   texht:t H:5 toc:nil
 #+EXPORT_SELECT_TAGS: export
 #+EXPORT_EXCLUDE_TAGS: noexport
 #+STARTUP: beamer

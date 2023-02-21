@@ -1,6 +1,6 @@
 #+TITLE:     Programmieren 3
 #+SUBTITLE:  Erweiterte Konzepte in C, Einführung in objektorientierte Programmierung
-#+AUTHOR:    Thomas Hausberger, Matthias Panny @@latex:\\@@ Ursprünglich erstellt von Sebastian Stabinger
+#+AUTHOR:    Thomas Hausberger, Matthias Panny, Sebastian Stabinger
 #+DATE:      SS 2022
 
 * Allgemeine Info
@@ -58,7 +58,7 @@ In der Praxis ist C++ meistens einfacher zu verwenden als C
 [[file:schroedinger.jpg]]
 * Export settings etc.                                             :noexport:
 #+LANGUAGE:  ger
-#+OPTIONS:   texht:t H:2 toc:nil
+#+OPTIONS:   texht:t H:5 toc:nil
 #+EXPORT_SELECT_TAGS: export
 #+EXPORT_EXCLUDE_TAGS: noexport
 #+STARTUP: beamer
