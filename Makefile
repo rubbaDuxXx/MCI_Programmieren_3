@@ -19,6 +19,7 @@ all: $(objects)
 		--include-in-header=header.yaml \
 		--lua-filter=fix_img_org2md.lua \
 		--lua-filter=fix_add_author_title.lua \
+		--lua-filter=fix_includes.lua \
 		--lua-filter=fix_remove_header_tags.lua \
 		--markdown-headings=atx \
 		--wrap=none \
